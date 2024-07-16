@@ -11,7 +11,7 @@ export default function Login() {
     <>
       <Header />
       <main
-        className='w-full h-[calc(100vh-73px-75px)] md:h-[calc(100vh-94px-75px)] bg-cover bg-center'
+        className='w-full h-[828px] bg-cover bg-center'
         style={{ backgroundImage: `url(${bgAuth})` }}
       >
         <div className='container mx-auto px-6 flex items-center justify-center md:justify-end h-full'>
