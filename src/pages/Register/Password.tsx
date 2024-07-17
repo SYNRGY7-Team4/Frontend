@@ -40,7 +40,7 @@ export default function Password() {
                 </div>
               </div>
               <div className='flex flex-col items-center'>
-                <Button aria-label='Tombol masuk' className='my-9'>Masuk</Button>
+                <Button aria-label='Tombol Lanjut' className='my-9'>Lanjut</Button>
               </div>
             </form>
           </div>
