@@ -2,6 +2,7 @@ import { Route, Routes, useLocation } from "react-router-dom"
 import Button from "@/components/Button/Button"
 import { Login } from "@/pages"
 import AturPin from "./pages/Register/AturPin"
+import Password from "./pages/Register/Password"
 
 function App() {
   const location = useLocation()
@@ -28,9 +29,8 @@ function App() {
         />
 
         <Route path='/login' element={<Login />} />
-
-
         <Route path='/atur-pin' element={<AturPin />} />
+        <Route path='/password' element={<Password/>}/>
 
       </Routes>
     </>
