@@ -5,6 +5,7 @@ import Header from "@/components/Header/Header"
 import Footer from "@/components/Footer/Footer"
 import Input from "@/components/Input/Input"
 import Label from "@/components/Label/Label"
+import PhoneNumberInput from "@/components/Input/PhoneNumberInput";
 
 export default function Register() {
   return (
@@ -30,13 +31,12 @@ export default function Register() {
                     aria-label='Masukkan email Anda'
                   />
                 </div>
-                <div className='flex flex-col gap-y-1'>
+                <div className='flex flex-col gap-y-1 '>
                   <Label htmlFor='phoneNumber'>No. HP</Label>
-                  <Input
-                    type='phoneNumber'
+                  <PhoneNumberInput
                     id='phoneNumber'
-                    placeholder='+628123456789'
-                    aria-label='Masukkan nomor handphone anda! '
+                    placeholder='8123456789'
+                    ariaLabel='Masukkan nomor handphone anda!'
                   />
                 </div>
               </div>
@@ -53,7 +53,7 @@ export default function Register() {
                   </Link>
                 </p>
               </div>
-            </form>
+            </form>x
           </div>
         </div>
       </main>
