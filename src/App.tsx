@@ -1,6 +1,7 @@
 import { Route, Routes, useLocation } from "react-router-dom"
 import Button from "@/components/Button/Button"
 import { Login } from "@/pages"
+import { Register } from "@/pages"
 
 function App() {
   const location = useLocation()
@@ -27,6 +28,7 @@ function App() {
         />
 
         <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
       </Routes>
     </>
   )
