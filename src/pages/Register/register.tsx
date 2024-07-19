@@ -53,7 +53,7 @@ export default function Register() {
                   </Link>
                 </p>
               </div>
-            </form>x
+            </form>
           </div>
         </div>
       </main>
