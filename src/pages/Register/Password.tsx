@@ -152,7 +152,7 @@ export default function Password() {
                     <div className="absolute right-[15px] flex items-center h-full">
                       <Button onClick={(event) => toggleVisibility(event, 'confirmPassword')} className=" w-fit h-fit hover:shadow-none bg-transparent">
                         <img 
-                          src={visibility.password ? eyeClose : eyeOpen} 
+                          src={visibility.confirmPassword ? eyeClose : eyeOpen} 
                           alt={visibility.confirmPassword ? 'eye-close' : 'eye-open'} 
                           className="w-[25px] cursor-pointer z-1"/>
                       </Button>
