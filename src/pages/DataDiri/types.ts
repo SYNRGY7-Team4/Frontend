@@ -1,5 +1,5 @@
 export interface IFormInput {
-  noKtp: number;
+  noKtp: string;
   nama: string;
   tanggalLahir: string;
 }

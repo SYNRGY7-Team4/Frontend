@@ -1,4 +1,3 @@
-import { useState } from "react";
 import bgAuth from "@/assets/bg-auth.jpg";
 import Button from "@/components/Button/Button";
 import Footer from "@/components/Footer/Footer";
@@ -6,23 +5,23 @@ import Header from "@/components/Header/Header";
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
 import { IFormInput } from "./types";
+import { MdOutlineErrorOutline } from "react-icons/md";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
 const DataDiri = () => {
-  const [data, setData] = useState<IFormInput>({
-    noKtp: 0,
-    nama: "",
-    tanggalLahir: "",
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>({
+    defaultValues: {
+      noKtp: "",
+      nama: "",
+      tanggalLahir: "",
+    },
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit: SubmitHandler<IFormInput> = (data) => {
     console.log({ data });
   };
 
@@ -38,35 +37,127 @@ const DataDiri = () => {
             <h1 className="mb-10 text-3xl text-primary-blue font-bold">
               Data Diri
             </h1>
-            <form className="flex flex-col gap-y-8" onSubmit={handleSubmit}>
+            <form
+              className="flex flex-col gap-y-8"
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <div className="flex flex-col gap-y-3">
                 <div className="flex flex-col gap-y-1">
-                  <Label htmlFor="email">No KTP</Label>
-                  <Input
-                    type="number"
-                    name="noKtp"
-                    placeholder="1234567891011"
-                    aria-label="Masukkan no KTP Anda"
-                    onChange={handleChange}
-                  />
+                  <div className="flex items-center gap-1">
+                    <Label htmlFor="noKtp">No KTP</Label>
+                    {errors.noKtp && (
+                      <span className="text-secondary-red">
+                        <MdOutlineErrorOutline />
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    <Controller
+                      name="noKtp"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          id="noKtp"
+                          type="number"
+                          placeholder="1234567891011"
+                          aria-label="Masukkan no KTP Anda"
+                          className={
+                            errors.noKtp
+                              ? "border-2 border-secondary-red focus:outline-secondary-red"
+                              : ""
+                          }
+                          {...field}
+                        />
+                      )}
+                      rules={{
+                        required: "Input no KTP tidak boleh kosong",
+                        pattern: {
+                          value: /^\d{16}$/,
+                          message: "No KTP harus terdiri dari 16 angka",
+                        },
+                      }}
+                    />
+                    {errors.noKtp && (
+                      <p className="text-secondary-red">
+                        {errors.noKtp.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <div className="flex flex-col gap-y-1">
-                  <Label htmlFor="password">Nama</Label>
-                  <Input
-                    name="nama"
-                    placeholder="John Doe"
-                    aria-label="Masukkan nama Anda"
-                    onChange={handleChange}
-                  />
+                  <div className="flex items-center gap-1">
+                    <Label htmlFor="nama">Nama</Label>
+                    {errors.nama && (
+                      <span className="text-secondary-red">
+                        <MdOutlineErrorOutline />
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    <Controller
+                      name="nama"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          id="nama"
+                          type="text"
+                          placeholder="John Doe"
+                          aria-label="Masukkan nama Anda"
+                          className={
+                            errors.nama
+                              ? "border-2 border-secondary-red focus:outline-secondary-red"
+                              : ""
+                          }
+                          {...field}
+                        />
+                      )}
+                      rules={{
+                        required: "Input nama tidak boleh kosong",
+                      }}
+                    />
+                    {errors.nama && (
+                      <p className="text-secondary-red">
+                        {errors.nama.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <div className="flex flex-col gap-y-1">
-                  <Label htmlFor="password">Tanggal Lahir</Label>
-                  <Input
-                    type="date"
-                    name="tanggalLahir"
-                    aria-label="Masukkan tanggal lahir Anda"
-                    onChange={handleChange}
-                  />
+                  <div className="flex items-center gap-1">
+                    <Label htmlFor="tanggalLahir">Tanggal Lahir</Label>
+                    {errors.tanggalLahir && (
+                      <span className="text-secondary-red">
+                        <MdOutlineErrorOutline />
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    <Controller
+                      name="tanggalLahir"
+                      control={control}
+                      render={({ field }) => (
+                        <Input
+                          id="tanggalLahir"
+                          type="date"
+                          aria-label="Masukkan tanggal lahir Anda"
+                          className={
+                            errors.tanggalLahir
+                              ? "border-2 border-secondary-red focus:outline-secondary-red"
+                              : ""
+                          }
+                          {...field}
+                        />
+                      )}
+                      rules={{
+                        required: "Input tanggal lahir tidak boleh kosong",
+                      }}
+                    />
+                    {errors.tanggalLahir && (
+                      <p className="text-secondary-red">
+                        {errors.tanggalLahir.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col gap-y-2 items-center">
