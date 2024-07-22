@@ -1,5 +1,4 @@
 import bgAuth from "@/assets/bg-auth.jpg"
-import { Link } from "react-router-dom"
 import Button from "@/components/Button/Button"
 import Header from "@/components/Header/Header"
 import Footer from "@/components/Footer/Footer"
@@ -14,8 +13,8 @@ export default function AturPin() {
         className='w-full h-[calc(100vh-73px-75px)] md:h-[calc(100vh-94px-75px)] bg-cover bg-center'
         style={{ backgroundImage: `url(${bgAuth})` }}
       >
-        <div className='container mx-auto pr-[120px] flex items-center justify-center md:justify-end h-full py-[152px]'>
-          <div className='bg-neutral-01 px-8 pt-12 md:px-14 rounded-lg w-[450px] h-[480px]'>
+        <div className='container mx-auto px-6 flex items-center justify-center md:justify-end h-full'>
+        <div className='bg-neutral-01 px-8 py-14 md:px-14 rounded-lg w-[450px]'>
             <h1 className='mb-10 text-3xl text-primary-blue font-bold'>
               Atur Pin
             </h1>
