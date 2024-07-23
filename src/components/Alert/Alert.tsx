@@ -19,8 +19,8 @@ const alertVariant = cva(
   }
 )
 
-export default function Alert({ className, variant, children }: AlertProps) {
-  const [isOpen, setIsOpen] = useState(true)
+export default function Alert({ className, variant, children, isOpen, onClose  }: AlertProps) {
+  // const [isOpen, setIsOpen] = useState(true)
 
   return (
     <div
@@ -32,8 +32,8 @@ export default function Alert({ className, variant, children }: AlertProps) {
         <button
           type='button'
           aria-label='Tutup'
-          className='absolute top-5 left-5'
-          onClick={() => setIsOpen(false)}
+          className='absolute top-5 right-5'
+          onClick={onClose}
         >
           <MdClose size={48} color='#1C1B1F' />
         </button>
