@@ -6,9 +6,9 @@ import {
   Register,
   Verification_E_KTP,
   Verification_OTP,
+  Password,
 } from "@/pages";
 import AturPin from "./pages/Register/AturPin";
-import Password from "./pages/Register/Password";
 
 function App() {
   const location = useLocation();
