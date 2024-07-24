@@ -2,7 +2,6 @@ import { cva } from "class-variance-authority"
 import { AlertProps } from "./types"
 import cn from "@/utils/cn"
 import { MdCheckCircleOutline, MdClose, MdWarningAmber } from "react-icons/md"
-import { useState } from "react"
 
 const alertVariant = cva(
   "relative w-[calc(100%-3rem)] max-w-[450px] rounded-lg bg-neutral-01 p-11 flex flex-col items-center gap-2 mb-3 text-3xl font-bold tracking-tight text-center",
@@ -19,9 +18,13 @@ const alertVariant = cva(
   }
 )
 
-export default function Alert({ className, variant, children, isOpen, onClose  }: AlertProps) {
-  // const [isOpen, setIsOpen] = useState(true)
-
+export default function Alert({
+  className,
+  variant,
+  children,
+  isOpen,
+  onClose,
+}: AlertProps) {
   return (
     <div
       className={`${
