@@ -5,8 +5,43 @@ import Header from "@/components/Header/Header"
 import Footer from "@/components/Footer/Footer"
 import Input from "@/components/Input/Input"
 import Label from "@/components/Label/Label"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+
+const loginSchema = z.object({
+  email: z
+    .string({
+      required_error: "Input email tidak boleh kosong",
+    })
+    .email("Harap isi dengan email yang valid"),
+  password: z
+    .string({
+      required_error: "Input password tidak boleh kosong",
+    })
+    .regex(
+      new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/),
+      "Password harus terdiri dari 8-15 karakter dan harus mengandung kombinasi huruf dan angka"
+    ),
+})
+
+type TLoginSchema = z.infer<typeof loginSchema>
 
 export default function Login() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<TLoginSchema>({
+    resolver: zodResolver(loginSchema),
+  })
+
+  const onSubmit = (data: TLoginSchema) => {
+    console.log(data)
+    reset()
+  }
+
   return (
     <>
       <Header />
@@ -19,7 +54,10 @@ export default function Login() {
             <h1 className='mb-10 text-3xl text-primary-blue font-bold'>
               Selamat Datang,
             </h1>
-            <form className='flex flex-col gap-y-8'>
+            <form
+              className='flex flex-col gap-y-8'
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <div className='flex flex-col gap-y-3'>
                 <div className='flex flex-col gap-y-1'>
                   <Label htmlFor='email'>Email</Label>
@@ -28,7 +66,21 @@ export default function Login() {
                     id='email'
                     placeholder='*****@email.com'
                     aria-label='Masukkan email Anda'
+                    {...register("email")}
+                    className={`${
+                      errors.email
+                        ? "focus:outline-secondary-red border-secondary-red"
+                        : ""
+                    }`}
                   />
+                  {errors.email && (
+                    <span
+                      className='text-red-500 text-sm'
+                      aria-label={errors.email.message}
+                    >
+                      {errors.email.message}
+                    </span>
+                  )}
                 </div>
                 <div className='flex flex-col gap-y-1'>
                   <Label htmlFor='password'>Password</Label>
@@ -37,7 +89,21 @@ export default function Login() {
                     id='password'
                     placeholder='Password'
                     aria-label='Masukkan password Anda'
+                    {...register("password")}
+                    className={`${
+                      errors.password
+                        ? "focus:outline-secondary-red border-secondary-red"
+                        : ""
+                    }`}
                   />
+                  {errors.password && (
+                    <span
+                      className='text-red-500 text-sm'
+                      aria-label={errors.password.message}
+                    >
+                      {errors.password.message}
+                    </span>
+                  )}
                 </div>
                 <div className='flex justify-end'>
                   <Link
