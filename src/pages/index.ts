@@ -1,11 +1,13 @@
-import Login from "@/pages/Login/Login";
-import Register from "@/pages/Register/Registrasi/Register";
-import Verification_E_KTP from "@/pages/Register/EKTP/Verification_E_KTP";
-import Verification_OTP from "@/pages/Register/OTP/Verification_OTP";
-import DataDiri from "@/pages/Register/DataDiri/DataDiri";
-import DataDiriDua from "@/pages/Register/DataDiriDua/DataDiriDua";
-import Password from "@/pages/Register/Password/Password";
-import AturPin from "@/pages/Register/AturPin/AturPin";
+import Login from "./Login/Login";
+import Register from "./Register/Registrasi/Register";
+import Verification_E_KTP from "./Register/EKTP/Verification_E_KTP";
+import Verification_OTP from "./Register/OTP/Verification_OTP";
+import DataDiri from "./Register/DataDiri/DataDiri";
+import DataDiriDua from "./Register/DataDiriDua/DataDiriDua";
+import Password from "./Register/Password/Password";
+import AturPin from "./Register/AturPin/AturPin";
+import Notifikasi from "./Dashboard/Notifikasi";
+import Dashboard from "./Dashboard/Dashboard";
 
 export {
   Login,
@@ -16,4 +18,6 @@ export {
   DataDiri,
   DataDiriDua,
   AturPin,
+  Notifikasi,
+  Dashboard,
 };
