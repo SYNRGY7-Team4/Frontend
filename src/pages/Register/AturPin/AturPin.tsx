@@ -89,7 +89,7 @@ export default function AturPin() {
                     placeholder="Pin"
                     aria-label="Pin"
                     {...register("pin")}
-                    className={`${
+                    className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
                       errors.pin
                         ? "focus:outline-secondary-red border-secondary-red"
                         : ""
@@ -112,7 +112,7 @@ export default function AturPin() {
                     placeholder="Konfirmasi Ulang Pin"
                     aria-label="Konfirmasi Ulang Pin"
                     {...register("konfirmasiPin")}
-                    className={`${
+                    className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
                       errors.konfirmasiPin
                         ? "focus:outline-secondary-red border-secondary-red"
                         : ""
