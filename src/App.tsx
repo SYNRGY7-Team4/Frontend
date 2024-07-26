@@ -8,9 +8,9 @@ import {
   Verification_E_KTP,
   DataDiri,
   AturPin,
+  Dashboard,
+  Notifikasi,
 } from "@/pages"
-import Notifikasi from "./pages/Dashboard/Notifikasi"
-import Dashboard from "./pages/Dashboard/Dashboard"
 
 function App() {
   const location = useLocation()
