@@ -107,7 +107,7 @@ const DataDiriDua = () => {
                           />
                         )}
                         rules={{
-                          required: "Input jenis kelamin tidak boleh kosong",
+                          required: "Input jenis kelamin tidak boleh kosong ",
                         }}
                       />
                       Laki-Laki
