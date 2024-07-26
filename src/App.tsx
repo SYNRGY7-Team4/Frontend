@@ -10,6 +10,7 @@ import {
   AturPin,
   Dashboard,
   Notifikasi,
+  DataDiriDua,
 } from "@/pages";
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
         <Route path="/register/otp" element={<Verification_OTP />} />
         <Route path="/register/password" element={<Password />} />
         <Route path="/register/data-diri" element={<DataDiri />} />
+        <Route path="/register/data-diri-dua" element={<DataDiriDua />} />
         <Route path="/register/ktp" element={<Verification_E_KTP />} />
         <Route path="/register/atur-pin" element={<AturPin />} />
 
