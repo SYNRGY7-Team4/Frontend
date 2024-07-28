@@ -1,14 +1,17 @@
 import { Route, Routes, useLocation } from "react-router-dom";
 import Button from "@/components/Button/Button";
 import {
-  DataDiri,
   Login,
   Register,
-  Verification_E_KTP,
   Verification_OTP,
   Password,
+  Verification_E_KTP,
+  DataDiri,
+  AturPin,
+  Dashboard,
+  Notifikasi,
+  DataDiriDua,
 } from "@/pages";
-import AturPin from "./pages/Register/AturPin";
 
 function App() {
   const location = useLocation();
@@ -37,11 +40,15 @@ function App() {
         <Route path="/login" element={<Login />} />
 
         <Route path="/register" element={<Register />} />
-        <Route path="/register/password" element={<Password />} />
         <Route path="/register/otp" element={<Verification_OTP />} />
+        <Route path="/register/password" element={<Password />} />
+        <Route path="/register/data-diri" element={<DataDiri />} />
+        <Route path="/register/data-diri-dua" element={<DataDiriDua />} />
         <Route path="/register/ktp" element={<Verification_E_KTP />} />
         <Route path="/register/atur-pin" element={<AturPin />} />
-        <Route path="/register/data-diri" element={<DataDiri />} />
+
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/notifikasi" element={<Notifikasi />} />
       </Routes>
     </>
   );

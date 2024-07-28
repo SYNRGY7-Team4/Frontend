@@ -126,7 +126,9 @@ export default function Login() {
                 </div>
               </div>
               <div className="flex flex-col gap-y-2 items-center">
-                <Button aria-label="Tombol masuk">Masuk</Button>
+                <Button id="btnLogin" aria-label="Tombol masuk">
+                  Masuk
+                </Button>
                 <p>
                   Belum punya akun?{" "}
                   <Link

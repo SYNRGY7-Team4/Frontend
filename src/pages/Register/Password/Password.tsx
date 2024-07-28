@@ -10,8 +10,10 @@ import { IoEye, IoEyeOff } from "react-icons/io5";
 import { IconContext } from "react-icons";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { IPasswordInput } from "./types";
+import { useNavigate } from "react-router-dom";
 
 export default function Password() {
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
@@ -42,6 +44,7 @@ export default function Password() {
 
   const onSubmit: SubmitHandler<IPasswordInput> = (data) => {
     console.log({ data });
+    navigate("/register/data-diri");
   };
 
   return (
@@ -187,7 +190,11 @@ export default function Password() {
                 </div>
               </div>
               <div className="flex flex-col items-center">
-                <Button aria-label="Tombol Lanjut" className="my-9">
+                <Button
+                  id="btnPasswordLanjut"
+                  aria-label="Tombol Lanjut"
+                  className="my-9"
+                >
                   Lanjut
                 </Button>
               </div>

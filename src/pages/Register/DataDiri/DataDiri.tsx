@@ -7,8 +7,10 @@ import Label from "@/components/Label/Label";
 import { IFormInput } from "./types";
 import { MdOutlineErrorOutline } from "react-icons/md";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const DataDiri = () => {
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
@@ -23,6 +25,7 @@ const DataDiri = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
     console.log({ data });
+    navigate("/register/ktp");
   };
 
   return (
