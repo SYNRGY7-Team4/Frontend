@@ -1,7 +1,7 @@
-import { cva } from "class-variance-authority"
-import { AlertProps } from "./types"
-import cn from "@/utils/cn"
-import { MdCheckCircleOutline, MdClose, MdWarningAmber } from "react-icons/md"
+import { cva } from "class-variance-authority";
+import { AlertProps } from "./types";
+import cn from "@/utils/cn";
+import { MdCheckCircleOutline, MdClose, MdWarningAmber } from "react-icons/md";
 
 const alertVariant = cva(
   "relative w-[calc(100%-3rem)] max-w-[450px] rounded-lg bg-neutral-01 p-11 flex flex-col items-center gap-2 mb-3 text-3xl font-bold tracking-tight text-center",
@@ -16,7 +16,7 @@ const alertVariant = cva(
       variant: "success",
     },
   }
-)
+);
 
 export default function Alert({
   className,
@@ -33,17 +33,17 @@ export default function Alert({
     >
       <div className={cn(alertVariant({ className, variant }))}>
         <button
-          type='button'
-          aria-label='Tutup'
-          className='absolute top-5 right-5'
+          type="button"
+          aria-label="Tutup"
+          className="absolute top-5 right-5"
           onClick={onClose}
         >
-          <MdClose size={48} color='#1C1B1F' />
+          <MdClose size={48} color="#1C1B1F" />
         </button>
         {variant === "danger" && <MdWarningAmber size={132} />}
         {variant === "success" && <MdCheckCircleOutline size={132} />}
-        <div>{children}</div>
+        <div className="w-full">{children}</div>
       </div>
     </div>
-  )
+  );
 }

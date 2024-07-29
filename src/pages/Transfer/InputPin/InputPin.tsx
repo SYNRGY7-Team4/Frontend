@@ -6,10 +6,8 @@ import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { IconContext } from "react-icons";
 import { IoEye, IoEyeOff } from "react-icons/io5";
-
-type TPinInput = {
-  pin: number;
-};
+import { TIsStatus, TPinInput } from "./types";
+import Alert from "@/components/Alert/Alert";
 
 const InputPin = () => {
   const {
@@ -23,6 +21,8 @@ const InputPin = () => {
   });
 
   const [visibility, setVisibility] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isStatus, setIsStatus] = useState<TIsStatus>(undefined);
 
   const toggleVisibility = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -31,7 +31,13 @@ const InputPin = () => {
   };
 
   const onSubmit: SubmitHandler<TPinInput> = (data) => {
-    console.log({ data });
+    setIsOpen(true);
+
+    if (+data.pin === 123) {
+      return setIsStatus("success");
+    }
+
+    setIsStatus("danger");
   };
 
   return (
@@ -53,7 +59,7 @@ const InputPin = () => {
                   <div className="w-64 flex relative">
                     <Input
                       id="pin"
-                      type={visibility ? "number" : "password"}
+                      type={visibility ? "text" : "password"}
                       placeholder="Pin"
                       aria-label="Pin"
                       className={
@@ -95,6 +101,68 @@ const InputPin = () => {
         </div>
       </main>
       <FooterDashboard />
+      <Alert
+        className="p-8"
+        variant={isStatus}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      >
+        {isStatus === "danger" ? (
+          <p>Pin Salah</p>
+        ) : (
+          <>
+            <h1>Transfer Berhasil</h1>
+            <div className="text-neutral-09 text-base font-medium">
+              <span>13 Juli 2024 22:30:19 WIB</span>
+            </div>
+            <div className="my-8 text-base font-medium">
+              <table className="w-full">
+                <tr className="align-top">
+                  <td className="w-2/4 text-neutral-03 text-left">
+                    No Referensi
+                  </td>
+                  <td className="text-neutral-09 text-right pb-2">
+                    12982928391
+                  </td>
+                </tr>
+                <tr className="align-top">
+                  <td className="text-neutral-03 text-left">
+                    Nomor Rekening Tujuan
+                  </td>
+                  <td className="text-neutral-09 text-right pb-2">
+                    Nostalgia Inside Out 321456987102
+                  </td>
+                </tr>
+                <tr className="align-top">
+                  <td className="text-neutral-03 text-left">Bank Tujuan</td>
+                  <td className="text-neutral-09 text-right pb-2">
+                    Bank Central Asia
+                  </td>
+                </tr>
+                <tr className="align-top">
+                  <td className="text-neutral-03 text-left">Jumlah Transfer</td>
+                  <td className="text-neutral-09 text-right pb-2">
+                    Rp 500.000
+                  </td>
+                </tr>
+                <tr className="align-top">
+                  <td className="text-neutral-03 text-left">Waktu Proses</td>
+                  <td className="text-neutral-09 text-right pb-2">Realtime</td>
+                </tr>
+                <tr className="align-top">
+                  <td className="text-neutral-03 text-left">Berita</td>
+                  <td className="text-neutral-09 text-right">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <Button id="btnOke" className="w-full py-0" aria-label="Tombol oke">
+              Oke
+            </Button>
+          </>
+        )}
+      </Alert>
     </div>
   );
 };

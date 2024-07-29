@@ -50,7 +50,8 @@ function App() {
 
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/notifikasi" element={<Notifikasi />} />
-        <Route path="/dashboard/input-pin" element={<InputPin />} />
+
+        <Route path="/transfer/input-pin" element={<InputPin />} />
       </Routes>
     </>
   );
