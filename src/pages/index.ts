@@ -8,6 +8,7 @@ import Password from "./Register/Password/Password";
 import AturPin from "./Register/AturPin/AturPin";
 import Notifikasi from "./Dashboard/Notifikasi";
 import Dashboard from "./Dashboard/Dashboard";
+import InputPin from "./Transfer/InputPin/InputPin";
 
 export {
   Login,
@@ -20,4 +21,5 @@ export {
   AturPin,
   Notifikasi,
   Dashboard,
+  InputPin,
 };

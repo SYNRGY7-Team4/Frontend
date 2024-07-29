@@ -11,6 +11,7 @@ import {
   Dashboard,
   Notifikasi,
   DataDiriDua,
+  InputPin,
 } from "@/pages";
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
 
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/notifikasi" element={<Notifikasi />} />
+        <Route path="/dashboard/input-pin" element={<InputPin />} />
       </Routes>
     </>
   );
