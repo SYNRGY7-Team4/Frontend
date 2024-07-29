@@ -42,7 +42,7 @@ export default function Alert({
         </button>
         {variant === "danger" && <MdWarningAmber size={132} />}
         {variant === "success" && <MdCheckCircleOutline size={132} />}
-        <p>{children}</p>
+        <div>{children}</div>
       </div>
     </div>
   )
