@@ -8,7 +8,8 @@ import Label from "@/components/Label/Label";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
+import axiosInstance from "@/axios/axios";
+import { AxiosError } from "axios";
 
 const loginSchema = z.object({
   email: z
@@ -16,14 +17,13 @@ const loginSchema = z.object({
       required_error: "Input email tidak boleh kosong",
     })
     .email("Harap isi dengan email yang valid"),
-  password: z
-    .string({
-      required_error: "Input password tidak boleh kosong",
-    })
-    .regex(
-      new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/),
-      "Password harus terdiri dari 8-15 karakter dan harus mengandung kombinasi huruf dan angka"
-    ),
+  password: z.string({
+    required_error: "Input password tidak boleh kosong",
+  }),
+  // .regex(
+  //   new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/),
+  //   "Password harus terdiri dari 8-15 karakter dan harus mengandung kombinasi huruf dan angka"
+  // ),
 });
 
 type TLoginSchema = z.infer<typeof loginSchema>;
@@ -40,15 +40,21 @@ export default function Login() {
 
   const onSubmit = async (data: TLoginSchema) => {
     try {
-      const res = await axios.post(
-        "https://backend-dev-synrgy-team4.koyeb.app/api/auth/login",
-        data
-      );
+      const formData = new FormData();
+      formData.append("email", data.email);
+      formData.append("password", data.password);
 
-      console.log({ data: res.data });
-      reset();
-    } catch (error) {
-      console.log(error);
+      const res = await axiosInstance.post("/auth/login", formData);
+
+      if (res.data.status === 200) {
+        console.log({ data: res.data });
+      }
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        if (err.response?.data) {
+          console.log("Email atau Password Salah");
+        } else console.log(err.message);
+      }
     }
   };
 
