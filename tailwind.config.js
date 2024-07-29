@@ -29,6 +29,9 @@ export default {
         "05": "0px 16px 24px 0px rgba(96, 97, 112, 0.16), 0px 2px 8px 0px rgba(40, 41, 61, 0.04)",
         "06": "0px 20px 32px 0px rgba(96, 97, 112, 0.24), 0px 2px 8px 0px rgba(40, 41, 61, 0.08)",
       },
+      backgroundImage: {
+        'custom-gradient': 'linear-gradient(119.69deg, #0066AE 15.4%, #0A3967 84.03%)',
+      },
     },
     fontFamily: {
       sans: ["Calibri", "sans-serif"],
