@@ -13,6 +13,7 @@ import {
   DataDiriDua,
   NotFound,
   UnderDevelopment,
+  TransferForm,
 } from "@/pages"
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
 
         <Route path='/under-development' element={<UnderDevelopment />} />
         <Route path='*' element={<NotFound />} />
+        <Route path='/transfer' element={<TransferForm />} />
       </Routes>
     </>
   )

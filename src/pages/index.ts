@@ -10,6 +10,7 @@ import Notifikasi from "./Dashboard/Notifikasi"
 import Dashboard from "./Dashboard/Dashboard"
 import NotFound from "./Error/NotFound"
 import UnderDevelopment from "./Error/UnderDevelopment"
+import TransferForm from "./Transfer/FormTransfer"
 
 export {
   Login,
@@ -24,4 +25,5 @@ export {
   Notifikasi,
   NotFound,
   UnderDevelopment,
+  TransferForm,
 }
