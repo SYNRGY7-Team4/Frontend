@@ -13,28 +13,28 @@ export default function BayarCard() {
       <div className='h-full flex items-center justify-center'>
         <div className='grid grid-cols-2 gap-2 md:grid-cols-4'>
           <Link
-            to='#'
+            to='/under-development'
             className='flex flex-col items-center bg-neutral-01 rounded-xl border border-neutral-02 shadow-02 p-2 w-20 h-20 hover:scale-105 transition duration-150 ease-in-out'
           >
             <MdOutlineBolt size={40} />
             <p>Listrik</p>
           </Link>
           <Link
-            to='#'
+            to='/under-development'
             className='flex flex-col items-center bg-neutral-01 rounded-xl border border-neutral-02 shadow-02 p-2 w-20 h-20 hover:scale-105 transition duration-150 ease-in-out'
           >
             <MdOutlineAddToHomeScreen size={40} />
             <p>Pulsa</p>
           </Link>
           <Link
-            to='#'
+            to='/under-development'
             className='flex flex-col items-center bg-neutral-01 rounded-xl border border-neutral-02 shadow-02 p-2 w-20 h-20 hover:scale-105 transition duration-150 ease-in-out'
           >
             <MdOutlineWifi size={40} />
             <p>Data</p>
           </Link>
           <Link
-            to='#'
+            to='/under-development'
             className='flex flex-col items-center bg-neutral-01 rounded-xl border border-neutral-02 shadow-02 p-2 w-20 h-20 hover:scale-105 transition duration-150 ease-in-out'
           >
             <MdOutlineWallet size={40} />
