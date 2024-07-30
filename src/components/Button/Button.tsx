@@ -25,17 +25,19 @@ const buttonVariant = cva("rounded-xl", {
   },
 });
 
-const Button = ({
+const Button: React.FC<ButtonProps> = ({
   children,
   disabled,
   className,
   variant,
   size,
+  type = 'button', // Set default value for type
   ...props
 }: ButtonProps) => {
   return (
     <button
       {...props}
+      type={type}
       disabled={disabled}
       className={cn(buttonVariant({ variant, size, className }))}
     >

@@ -5,4 +5,5 @@ export interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   disabled?: boolean;
   variant?: "primary" | "secondary" | "gradient";
   size?: "sm" | "md" | "lg" | "xl";
+  type?: 'button' | 'submit' | 'reset'; 
 }
