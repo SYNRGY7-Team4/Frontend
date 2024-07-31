@@ -13,6 +13,8 @@ import { AxiosError } from "axios";
 import { useState } from "react";
 import { TIsStatus } from "./types";
 import Alert from "@/components/Alert/Alert";
+import { useLoading } from "@/hooks/useLoading";
+import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 
 const loginSchema = z.object({
   email: z
@@ -33,6 +35,7 @@ type TLoginSchema = z.infer<typeof loginSchema>;
 
 export default function Login() {
   const navigate = useNavigate();
+  const { isLoading, withLoading } = useLoading();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isStatus, setIsStatus] = useState<TIsStatus>(undefined);
   const [errorMsg, setErrorMsg] = useState<string>("");
@@ -51,10 +54,12 @@ export default function Login() {
       formData.append("email", data.email);
       formData.append("password", data.password);
 
-      await axiosInstance.post("/auth/login", formData);
+      await withLoading(async () => {
+        await axiosInstance.post("/auth/login", formData);
 
-      reset();
-      navigate("/dashboard");
+        reset();
+        navigate("/dashboard");
+      });
     } catch (err) {
       if (err instanceof AxiosError) {
         if (err.response?.data) {
@@ -67,7 +72,7 @@ export default function Login() {
   };
 
   return (
-    <>
+    <SpinnerWrapper isLoading={isLoading}>
       <Header />
       <main
         className="w-full min-h-[828px] h-[calc(100vh-73px-75px)] md:h-[calc(100vh-94px-75px)] bg-cover bg-center"
@@ -163,9 +168,11 @@ export default function Login() {
         variant={isStatus}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
+        showCloseButton={false}
+        autoDismiss={true}
       >
         {errorMsg}
       </Alert>
-    </>
+    </SpinnerWrapper>
   );
 }
