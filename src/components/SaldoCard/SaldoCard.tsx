@@ -1,7 +1,15 @@
-import { MdVisibility } from "react-icons/md"
+import { MdVisibility, MdVisibilityOff } from "react-icons/md"
 import balanceCardAccent from "@/assets/balance_card_accent.svg"
+import { useState } from "react"
+import currencyFormat from "@/utils/currencyFormat"
 
 export default function SaldoCard() {
+  const [accountNumber, setAccountNumber] = useState<string>("7293109283")
+  const [balance, setBalance] = useState<number>(3492203)
+  const [isAccountNumberVisible, setIsAccountNumberVisible] =
+    useState<boolean>(false)
+  const [isBalanceVisible, setIsBalanceVisible] = useState<boolean>(false)
+
   return (
     <div className='w-full h-full bg-neutral-01 p-6 rounded-lg shadow-02 flex flex-col gap-y-2.5'>
       <h2 className='text-2xl font-bold'>Saldo</h2>
@@ -14,11 +22,40 @@ export default function SaldoCard() {
         }}
       >
         <p className='text-2xl font-bold mb-1.5'>Tunas Bangsa</p>
-        <p className='mb-3'>7293 **** **** 9283</p>
-        <div className='flex items-center gap-x-4'>
-          <p className='text-2xl font-bold'>Rp. 3.492.203</p>
-          <button type='button'>
-            <MdVisibility size={20} color='#B7B9C8' />
+        <div className='flex items-center gap-x-2 mb-3'>
+          <p>
+            {isAccountNumberVisible
+              ? accountNumber
+              : accountNumber.replace(/\d(?=\d{3})/g, "*")}
+          </p>
+          <button
+            type='button'
+            onClick={() => setIsAccountNumberVisible(!isAccountNumberVisible)}
+            aria-label='Tampilkan nomor rekening'
+          >
+            {isAccountNumberVisible ? (
+              <MdVisibility size={18} color='#B7B9C8' />
+            ) : (
+              <MdVisibilityOff size={18} color='#B7B9C8' />
+            )}
+          </button>
+        </div>
+        <div className='flex items-center gap-x-2'>
+          <p className='text-2xl font-bold'>
+            {isBalanceVisible
+              ? currencyFormat(balance, "id-ID", "IDR")
+              : currencyFormat(balance, "id-ID", "IDR").replace(/[0-9.]/g, "*")}
+          </p>
+          <button
+            type='button'
+            onClick={() => setIsBalanceVisible(!isBalanceVisible)}
+            aria-label='Tampilkan saldo rekening'
+          >
+            {isBalanceVisible ? (
+              <MdVisibility size={20} color='#B7B9C8' />
+            ) : (
+              <MdVisibilityOff size={20} color='#B7B9C8' />
+            )}
           </button>
         </div>
         <span className='absolute bottom-2 right-4'>BCA</span>
