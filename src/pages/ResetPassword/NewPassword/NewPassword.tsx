@@ -54,7 +54,7 @@ export default function NewPassword() {
 
     withLoading(async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      navigate("/register/data-diri");
+      navigate("/dashboard");
     });
   };
 
@@ -208,7 +208,7 @@ export default function NewPassword() {
                     aria-label="Tombol Lanjut"
                     className="my-9"
                   >
-                    Lanjut
+                    Simpan Perubahan
                   </Button>
                 </div>
               </form>
