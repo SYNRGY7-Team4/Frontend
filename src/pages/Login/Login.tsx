@@ -1,5 +1,5 @@
 import bgAuth from "@/assets/bg-auth.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "@/components/Button/Button";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
@@ -8,6 +8,13 @@ import Label from "@/components/Label/Label";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axiosInstance from "@/axios/axios";
+import { AxiosError } from "axios";
+import { useState } from "react";
+import { TIsStatus } from "./types";
+import Alert from "@/components/Alert/Alert";
+import { useLoading } from "@/hooks/useLoading";
+import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 
 const loginSchema = z.object({
   email: z
@@ -15,19 +22,23 @@ const loginSchema = z.object({
       required_error: "Input email tidak boleh kosong",
     })
     .email("Harap isi dengan email yang valid"),
-  password: z
-    .string({
-      required_error: "Input password tidak boleh kosong",
-    })
-    .regex(
-      new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/),
-      "Password harus terdiri dari 8-15 karakter dan harus mengandung kombinasi huruf dan angka"
-    ),
+  password: z.string({
+    required_error: "Input password tidak boleh kosong",
+  }),
+  // .regex(
+  //   new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/),
+  //   "Password harus terdiri dari 8-15 karakter dan harus mengandung kombinasi huruf dan angka"
+  // ),
 });
 
 type TLoginSchema = z.infer<typeof loginSchema>;
 
 export default function Login() {
+  const navigate = useNavigate();
+  const { isLoading, withLoading } = useLoading();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isStatus, setIsStatus] = useState<TIsStatus>(undefined);
+  const [errorMsg, setErrorMsg] = useState<string>("");
   const {
     register,
     handleSubmit,
@@ -37,13 +48,31 @@ export default function Login() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: TLoginSchema) => {
-    console.log(data);
-    reset();
+  const onSubmit = async (data: TLoginSchema) => {
+    try {
+      const formData = new FormData();
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+
+      await withLoading(async () => {
+        await axiosInstance.post("/auth/login", formData);
+
+        reset();
+        navigate("/dashboard");
+      });
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        if (err.response?.data) {
+          setErrorMsg("Email atau Password Salah");
+          setIsStatus("danger");
+          setIsOpen(true);
+        } else console.log(err.message);
+      }
+    }
   };
 
   return (
-    <>
+    <SpinnerWrapper isLoading={isLoading}>
       <Header />
       <main
         className="w-full min-h-[828px] h-[calc(100vh-73px-75px)] md:h-[calc(100vh-94px-75px)] bg-cover bg-center"
@@ -135,6 +164,15 @@ export default function Login() {
         </div>
       </main>
       <Footer />
-    </>
+      <Alert
+        variant={isStatus}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        showCloseButton={false}
+        autoDismiss={true}
+      >
+        {errorMsg}
+      </Alert>
+    </SpinnerWrapper>
   );
 }

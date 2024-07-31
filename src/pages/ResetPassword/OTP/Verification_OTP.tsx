@@ -195,10 +195,11 @@ export default function Verification_OTP() {
       </main>
       <Footer />
       <Alert
-        className=""
         variant={alertStatus}
         isOpen={isAlertOpen}
+        autoDismiss={true}
         onClose={handleCloseAlert}
+        showCloseButton={false}
       >
         {alertMessage}
       </Alert>
