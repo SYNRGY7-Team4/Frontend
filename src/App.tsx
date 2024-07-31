@@ -8,6 +8,8 @@ import {
   Verification_E_KTP,
   DataDiri,
   AturPin,
+  ForgotPassword,
+  FPVerification_OTP,
   Dashboard,
   Notifikasi,
   DataDiriDua,
@@ -50,6 +52,9 @@ function App() {
         <Route path="/register/data-diri-dua" element={<DataDiriDua />} />
         <Route path="/register/ktp" element={<Verification_E_KTP />} />
         <Route path="/register/atur-pin" element={<AturPin />} />
+
+        <Route path="/reset/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset/otp" element={<FPVerification_OTP />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/notifikasi" element={<Notifikasi />} />
