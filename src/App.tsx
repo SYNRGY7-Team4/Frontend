@@ -1,35 +1,74 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Route, Routes, useLocation } from "react-router-dom";
+import Button from "@/components/Button/Button";
+import {
+  Login,
+  Register,
+  Verification_OTP,
+  Password,
+  Verification_E_KTP,
+  DataDiri,
+  AturPin,
+  ForgotPassword,
+  FPVerification_OTP,
+  Dashboard,
+  Notifikasi,
+  DataDiriDua,
+  InputPin,
+  NotFound,
+  UnderDevelopment,
+  TransferForm,
+  NewPassword,
+} from "@/pages";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const location = useLocation();
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Routes key={location.pathname} location={location}>
+        <Route
+          path="/"
+          element={
+            <>
+              <div className="text-secondary-red shadow-03">Hello World</div>
+
+              <Button
+                variant="primary"
+                className="bg-primary-darkBlue"
+                disabled={false}
+                size="md"
+              >
+                Custom Button
+              </Button>
+            </>
+          }
+        />
+
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/register" element={<Register />} />
+        <Route path="/register/otp" element={<Verification_OTP />} />
+        <Route path="/register/password" element={<Password />} />
+        <Route path="/register/data-diri" element={<DataDiri />} />
+        <Route path="/register/data-diri-dua" element={<DataDiriDua />} />
+        <Route path="/register/ktp" element={<Verification_E_KTP />} />
+        <Route path="/register/atur-pin" element={<AturPin />} />
+
+        <Route path="/reset/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset/otp" element={<FPVerification_OTP />} />
+        <Route path="/reset/new-password" element={<NewPassword />} />
+
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/notifikasi" element={<Notifikasi />} />
+
+        <Route path="/transfer" element={<TransferForm />} />
+        <Route path="/transfer/input-pin" element={<InputPin />} />
+
+        <Route path="/under-development" element={<UnderDevelopment />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
