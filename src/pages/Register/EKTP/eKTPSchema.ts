@@ -4,7 +4,7 @@ export const MAX_FILE_SIZE = 1048576;
 export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const eKTPSchema = z.object({
-  file_eKTP: z
+  fileEKTP: z
     .any()
     .refine((files) => files?.length == 1, "File foto eKTP wajib diupload")
     .refine(
