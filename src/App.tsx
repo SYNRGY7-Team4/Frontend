@@ -17,6 +17,7 @@ import {
   NotFound,
   UnderDevelopment,
   TransferForm,
+  NewPassword,
 } from "@/pages";
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
 
         <Route path="/reset/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset/otp" element={<FPVerification_OTP />} />
+        <Route path="/reset/new-password" element={<NewPassword />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/notifikasi" element={<Notifikasi />} />
