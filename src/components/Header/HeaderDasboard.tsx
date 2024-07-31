@@ -2,7 +2,6 @@ import logo from "@/assets/logo.png";
 import notifikasiEmptyState from "@/assets/no_notification.svg";
 import { NavLink } from "react-router-dom";
 import {
-  MdNotifications,
   MdLogout,
   MdOutlineAccountCircle,
   MdLens,
@@ -12,6 +11,7 @@ import {
   MdOutlineClose,
   MdCreditCard,
   MdOutlineDescription,
+  MdOutlineNotifications,
 } from "react-icons/md";
 import { useState } from "react";
 
@@ -134,7 +134,7 @@ export default function Header() {
                   aria-describedby="Icon notifikasi"
                   onClick={() => toggleDropdown("notifikasi")}
                 >
-                  <MdNotifications size={"24"} />
+                  <MdOutlineNotifications size={"24"} />
                   <MdLens
                     size={"6"}
                     className="absolute top-0 right-0 text-secondary-red"

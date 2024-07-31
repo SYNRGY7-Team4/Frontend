@@ -15,7 +15,7 @@ import { useRegistrationStore } from "@/store/RegisterStore";
 import { useLoading } from "@/hooks/useLoading";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 
-export default function Password() {
+export default function NewPassword() {
   const setField = useRegistrationStore((state) => state.setField);
   const { isLoading, withLoading } = useLoading();
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ export default function Password() {
 
     withLoading(async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      navigate("/register/data-diri");
+      navigate("/dashboard");
     });
   };
 
@@ -69,7 +69,7 @@ export default function Password() {
           <div className="container mx-auto px-6 flex items-center justify-center md:justify-end h-full">
             <div className="bg-neutral-01 px-8 py-14 md:px-14 rounded-lg w-[450px] min-h-[480px]">
               <h1 className="mb-10 text-3xl text-primary-blue font-bold">
-                Buat Password
+                Buat Password Baru
               </h1>
               <form
                 className="flex flex-col gap-y-8"
@@ -101,7 +101,7 @@ export default function Password() {
                             type={visibility.password ? "text" : "password"}
                             id="password"
                             placeholder="Password"
-                            aria-label="Masukkan Password Anda"
+                            aria-label="Masukkan Password Baru Anda"
                             autoComplete="off"
                             {...field}
                           />
@@ -138,7 +138,7 @@ export default function Password() {
                   </div>
                   <div className="flex flex-col gap-y-1">
                     <div className="flex gap-1 items-center">
-                      <Label htmlFor="password">Ulangi Password</Label>
+                      <Label htmlFor="password">Confirm Password</Label>
                       {errors.confirmPassword && (
                         <IconContext.Provider
                           value={{ size: "13px", color: "#CB3A31" }}
@@ -162,8 +162,8 @@ export default function Password() {
                               visibility.confirmPassword ? "text" : "password"
                             }
                             id="confirmPassword"
-                            placeholder="Konfirmasi Password"
-                            aria-label="Masukkan Password Anda"
+                            placeholder="Password"
+                            aria-label="Masukkan Kembali Password Baru Anda"
                             autoComplete="off"
                             {...field}
                           />
@@ -208,7 +208,7 @@ export default function Password() {
                     aria-label="Tombol Lanjut"
                     className="my-9"
                   >
-                    Lanjut
+                    Simpan Perubahan
                   </Button>
                 </div>
               </form>

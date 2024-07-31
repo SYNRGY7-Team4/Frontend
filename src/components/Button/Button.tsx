@@ -25,7 +25,7 @@ const buttonVariant = cva("rounded-xl", {
   },
 });
 
-const Button = ({
+const Button: React.FC<ButtonProps> = ({
   children,
   disabled,
   className,
