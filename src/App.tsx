@@ -11,6 +11,10 @@ import {
   Dashboard,
   Notifikasi,
   DataDiriDua,
+  InputPin,
+  NotFound,
+  UnderDevelopment,
+  TransferForm,
 } from "@/pages";
 
 function App() {
@@ -49,6 +53,12 @@ function App() {
 
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/dashboard/notifikasi" element={<Notifikasi />} />
+
+        <Route path="/transfer" element={<TransferForm />} />
+        <Route path="/transfer/input-pin" element={<InputPin />} />
+
+        <Route path="/under-development" element={<UnderDevelopment />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

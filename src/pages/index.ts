@@ -8,6 +8,10 @@ import Password from "./Register/Password/Password";
 import AturPin from "./Register/AturPin/AturPin";
 import Notifikasi from "./Dashboard/Notifikasi";
 import Dashboard from "./Dashboard/Dashboard";
+import InputPin from "./Transfer/InputPin/InputPin";
+import NotFound from "./Error/NotFound";
+import UnderDevelopment from "./Error/UnderDevelopment";
+import TransferForm from "./Transfer/FormTransfer";
 
 export {
   Login,
@@ -18,6 +22,10 @@ export {
   DataDiri,
   DataDiriDua,
   AturPin,
-  Notifikasi,
   Dashboard,
+  InputPin,
+  Notifikasi,
+  NotFound,
+  UnderDevelopment,
+  TransferForm,
 };

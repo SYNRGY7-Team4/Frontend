@@ -1,5 +1,5 @@
 import bgAuth from "@/assets/bg-auth.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "@/components/Button/Button";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
@@ -10,6 +10,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axiosInstance from "@/axios/axios";
 import { AxiosError } from "axios";
+import { useState } from "react";
+import { TIsStatus } from "./types";
+import Alert from "@/components/Alert/Alert";
 
 const loginSchema = z.object({
   email: z
@@ -29,6 +32,10 @@ const loginSchema = z.object({
 type TLoginSchema = z.infer<typeof loginSchema>;
 
 export default function Login() {
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isStatus, setIsStatus] = useState<TIsStatus>(undefined);
+  const [errorMsg, setErrorMsg] = useState<string>("");
   const {
     register,
     handleSubmit,
@@ -44,15 +51,16 @@ export default function Login() {
       formData.append("email", data.email);
       formData.append("password", data.password);
 
-      const res = await axiosInstance.post("/auth/login", formData);
+      await axiosInstance.post("/auth/login", formData);
 
-      if (res.data.status === 200) {
-        console.log({ data: res.data });
-      }
+      reset();
+      navigate("/dashboard");
     } catch (err) {
       if (err instanceof AxiosError) {
         if (err.response?.data) {
-          console.log("Email atau Password Salah");
+          setErrorMsg("Email atau Password Salah");
+          setIsStatus("danger");
+          setIsOpen(true);
         } else console.log(err.message);
       }
     }
@@ -151,6 +159,13 @@ export default function Login() {
         </div>
       </main>
       <Footer />
+      <Alert
+        variant={isStatus}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      >
+        {errorMsg}
+      </Alert>
     </>
   );
 }
