@@ -150,7 +150,9 @@ export default function Verification_E_KTP() {
           <Alert
             variant={alertVariant}
             isOpen={isAlertOpen}
+            autoDismiss={true}
             onClose={handleCloseAlert}
+            showCloseButton={false}
           >
             {alertMessage}
           </Alert>
