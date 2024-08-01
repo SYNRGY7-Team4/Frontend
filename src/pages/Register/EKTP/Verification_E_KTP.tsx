@@ -50,6 +50,9 @@ export default function Verification_E_KTP() {
       setAlertVariant("danger");
       setAlertMessage((errors.fileEKTP?.message as string) || "Terjadi error");
       setIsAlertOpen(true);
+    } else {
+      setIsAlertOpen(false);
+      setAlertMessage("");
     }
   }, [errors]);
 
@@ -65,24 +68,48 @@ export default function Verification_E_KTP() {
     if (fileList && fileList.length > 0) {
       const selectedFile = fileList[0];
       setFile(selectedFile);
+      setIsAlertOpen(false);
+      setAlertMessage("");
     } else {
       setFile(null);
       setPreview(imgPreviewPlaceholder);
     }
   };
 
-  const onSubmit = (data: eKTPInput) => {
-    if (Object.keys(errors).length === 0) {
-      console.log(data);
+  async function getBase64(file: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          resolve(reader.result);
+        } else {
+          reject(new Error("Gagal membaca file sebagai string"));
+        }
+      };
+      reader.onerror = reject;
+    });
+  }
 
-      setField("ektp_photo", data.fileEKTP[0]);
-      withLoading(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+  const onSubmit = async (data: eKTPInput) => {
+    if (data) {
+      try {
+        const base64Data = await getBase64(data.fileEKTP[0]);
+        setField("ektp_photo", base64Data);
 
-        setAlertVariant("primary");
-        setAlertMessage("Harap menunggu, e-KTP anda sedang diverifikasi");
+        withLoading(async () => {
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+
+          setAlertVariant("primary");
+          setAlertMessage("Harap menunggu, e-KTP anda sedang diverifikasi");
+          setIsAlertOpen(true);
+        });
+      } catch (err) {
+        console.error("Error:", err);
+        setAlertVariant("danger");
+        setAlertMessage("Terjadi kesalahan saat memproses foto e-KTP");
         setIsAlertOpen(true);
-      });
+      }
     }
   };
 
@@ -150,9 +177,9 @@ export default function Verification_E_KTP() {
           <Alert
             variant={alertVariant}
             isOpen={isAlertOpen}
-            autoDismiss={true}
+            autoDismiss={false}
             onClose={handleCloseAlert}
-            showCloseButton={false}
+            showCloseButton={true}
           >
             {alertMessage}
           </Alert>

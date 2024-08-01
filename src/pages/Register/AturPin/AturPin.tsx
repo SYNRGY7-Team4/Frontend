@@ -4,7 +4,6 @@ import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
@@ -16,48 +15,11 @@ import { useLoading } from "@/hooks/useLoading";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 import { useState } from "react";
 import Alert from "@/components/Alert/Alert";
-
-const PinSchema = z
-  .object({
-    pin: z.coerce
-      .string()
-      .min(1, { message: "Input pin tidak boleh kosong" })
-      .refine((val) => /^\d{6}$/.test(val), {
-        message: "Pin harus terdiri dari 6 angka",
-      }),
-    konfirmasiPin: z.coerce
-      .string()
-      .min(1, { message: "Input konfirmasi pin tidak boleh kosong" }),
-  })
-  .superRefine(({ konfirmasiPin, pin }, ctx) => {
-    if (konfirmasiPin.length < 6) {
-      if (konfirmasiPin === pin) {
-        ctx.addIssue({
-          code: "custom",
-          message: "Konfirmasi pin harus terdiri dari 6 angka",
-          path: ["konfirmasiPin"],
-        });
-      } else {
-        ctx.addIssue({
-          code: "custom",
-          message: "Konfirmasi pin dan pin tidak sama",
-          path: ["konfirmasiPin"],
-        });
-      }
-    } else if (konfirmasiPin !== pin) {
-      ctx.addIssue({
-        code: "custom",
-        message: "Konfirmasi pin dan pin tidak sama",
-        path: ["konfirmasiPin"],
-      });
-    }
-  });
-
-type TPinSchema = z.infer<typeof PinSchema>;
+import { PinSchema, TPinSchema } from "./PinSchema";
 
 export default function AturPin() {
   const navigate = useNavigate();
-  const { setField, reset, ...formData } = useRegistrationStore();
+  const { reset, ...formData } = useRegistrationStore();
   const { isLoading, withLoading } = useLoading();
 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -78,32 +40,35 @@ export default function AturPin() {
     setIsAlertOpen(false);
     if (alertVariant === "success") {
       navigate("/login");
+    } else {
+      navigate("/register");
     }
   };
 
   const onSubmit = async (data: TPinSchema) => {
-    console.log(data);
-    setField("pin", data.pin);
-    setField("confirm_pin", data.konfirmasiPin);
-
     try {
       await withLoading(async () => {
         const response = await registerAPI({
           ...formData,
           pin: data.pin,
-          confirm_pin: data.konfirmasiPin,
         });
-        console.log("Registrasi berhasil", response);
 
-        // setAlertVariant("success");
-        // setAlertMessage("Anda berhasil membuka rekening");
-        // setIsAlertOpen(true);
-        reset();
-
-        navigate("/login");
+        if (response.success === false) {
+          setAlertVariant("danger");
+          // setAlertMessage(response.message);
+          setAlertMessage(
+            "Registrasi gagal. Terjadi kesalahan yang tidak terduga. Silakan coba lagi"
+          );
+          setIsAlertOpen(true);
+        } else {
+          setAlertVariant("success");
+          setAlertMessage("Anda berhasil membuka rekening");
+          setIsAlertOpen(true);
+          reset();
+        }
       });
     } catch (error) {
-      console.error("Registrasi gagal", error);
+      console.log(error);
     }
   };
 

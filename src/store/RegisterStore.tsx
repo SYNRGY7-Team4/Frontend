@@ -4,14 +4,12 @@ interface RegistrationState {
   email: string;
   no_hp: string;
   password: string;
-  confirm_password: string;
   no_ktp: string;
   name: string;
   date_of_birth: string;
-  ektp_photo: File | null;
+  ektp_photo: string;
   pin: string;
-  confirm_pin: string;
-  setField: (field: string, value: string | File) => void;
+  setField: (field: string, value: string) => void;
   reset: () => void;
 }
 
@@ -19,13 +17,11 @@ const initialState = {
   email: "",
   no_hp: "",
   password: "",
-  confirm_password: "",
   no_ktp: "",
   name: "",
   date_of_birth: "",
-  ektp_photo: null,
+  ektp_photo: "",
   pin: "",
-  confirm_pin: "",
 };
 
 export const useRegistrationStore = create<RegistrationState>((set) => ({

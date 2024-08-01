@@ -8,26 +8,25 @@ import { useState } from "react";
 import { RiErrorWarningLine } from "react-icons/ri";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { IconContext } from "react-icons";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { IPasswordInput } from "./types";
 import { useNavigate } from "react-router-dom";
 import { useRegistrationStore } from "@/store/RegisterStore";
 import { useLoading } from "@/hooks/useLoading";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { PasswordSchema, TPasswordSchema } from "./PasswordSchema";
 
 export default function Password() {
   const setField = useRegistrationStore((state) => state.setField);
   const { isLoading, withLoading } = useLoading();
   const navigate = useNavigate();
   const {
-    control,
+    register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IPasswordInput>({
-    defaultValues: {
-      password: "",
-      confirmPassword: "",
-    },
+  } = useForm<TPasswordSchema>({
+    resolver: zodResolver(PasswordSchema),
   });
 
   const [visibility, setVisibility] = useState({
@@ -47,10 +46,8 @@ export default function Password() {
     }));
   };
 
-  const onSubmit: SubmitHandler<IPasswordInput> = (data) => {
-    console.log({ data });
+  const onSubmit = (data: IPasswordInput) => {
     setField("password", data.password);
-    setField("confirm_password", data.confirmPassword);
 
     withLoading(async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -87,49 +84,35 @@ export default function Password() {
                         </IconContext.Provider>
                       ) : null}
                     </div>
-                    <Controller
-                      name="password"
-                      control={control}
-                      render={({ field }) => (
-                        <div className=" w-full flex relative">
-                          <Input
-                            className={`w-full bg-neutral-02 py-3 pl-5 pr-12 rounded-lg ${
-                              errors.password
-                                ? "focus:outline-secondary-red"
-                                : "focus:outline-primary-blue"
-                            } `}
-                            type={visibility.password ? "text" : "password"}
-                            id="password"
-                            placeholder="Password"
-                            aria-label="Masukkan Password Anda"
-                            autoComplete="off"
-                            {...field}
-                          />
-                          <div className="absolute right-[15px] flex items-center h-full">
-                            <Button
-                              onClick={(event) =>
-                                toggleVisibility(event, "password")
-                              }
-                              className=" w-fit h-fit hover:shadow-none bg-transparent"
-                            >
-                              <IconContext.Provider
-                                value={{ color: "#B7B9C8", size: "25px" }}
-                              >
-                                {visibility.password ? <IoEyeOff /> : <IoEye />}
-                              </IconContext.Provider>
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                      rules={{
-                        required: "Input password tidak boleh kosong",
-                        pattern: {
-                          value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/,
-                          message:
-                            "Password harus terdiri dari 8-15 karakter dan harus mengandung kombinasi huruf dan angka",
-                        },
-                      }}
-                    />
+                    <div className=" w-full flex relative">
+                      <Input
+                        className={`w-full bg-neutral-02 py-3 pl-5 pr-12 rounded-lg ${
+                          errors.password
+                            ? "focus:outline-secondary-red"
+                            : "focus:outline-primary-blue"
+                        } `}
+                        type={visibility.password ? "text" : "password"}
+                        id="password"
+                        placeholder="Password"
+                        aria-label="Masukkan Password Anda"
+                        autoComplete="off"
+                        {...register("password")}
+                      />
+                      <div className="absolute right-[15px] flex items-center h-full">
+                        <Button
+                          onClick={(event) =>
+                            toggleVisibility(event, "password")
+                          }
+                          className=" w-fit h-fit hover:shadow-none bg-transparent"
+                        >
+                          <IconContext.Provider
+                            value={{ color: "#B7B9C8", size: "25px" }}
+                          >
+                            {visibility.password ? <IoEyeOff /> : <IoEye />}
+                          </IconContext.Provider>
+                        </Button>
+                      </div>
+                    </div>
                     {errors.password && (
                       <p className="text-secondary-red text-[12px]">
                         {errors.password.message}
@@ -147,54 +130,39 @@ export default function Password() {
                         </IconContext.Provider>
                       )}
                     </div>
-                    <Controller
-                      name="confirmPassword"
-                      control={control}
-                      render={({ field }) => (
-                        <div className=" w-full flex relative">
-                          <Input
-                            className={`w-full bg-neutral-02 py-3 pl-5 pr-12 rounded-lg ${
-                              errors.password
-                                ? "focus:outline-secondary-red"
-                                : "focus:outline-primary-blue"
-                            } `}
-                            type={
-                              visibility.confirmPassword ? "text" : "password"
-                            }
-                            id="confirmPassword"
-                            placeholder="Konfirmasi Password"
-                            aria-label="Masukkan Password Anda"
-                            autoComplete="off"
-                            {...field}
-                          />
-                          <div className="absolute right-[15px] flex items-center h-full">
-                            <Button
-                              onClick={(event) =>
-                                toggleVisibility(event, "confirmPassword")
-                              }
-                              className=" w-fit h-fit hover:shadow-none bg-transparent"
-                            >
-                              <IconContext.Provider
-                                value={{ color: "#B7B9C8", size: "25px" }}
-                              >
-                                {visibility.confirmPassword ? (
-                                  <IoEyeOff />
-                                ) : (
-                                  <IoEye />
-                                )}
-                              </IconContext.Provider>
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-                      rules={{
-                        required:
-                          "Input Konfirmasi password tidak boleh kosong",
-                        validate: (value) =>
-                          value === control._formValues.password ||
-                          "Konfirmasi password dan password tidak sama",
-                      }}
-                    />
+                    <div className=" w-full flex relative">
+                      <Input
+                        className={`w-full bg-neutral-02 py-3 pl-5 pr-12 rounded-lg ${
+                          errors.password
+                            ? "focus:outline-secondary-red"
+                            : "focus:outline-primary-blue"
+                        } `}
+                        type={visibility.confirmPassword ? "text" : "password"}
+                        id="confirmPassword"
+                        placeholder="Konfirmasi Password"
+                        aria-label="Masukkan Password Anda"
+                        autoComplete="off"
+                        {...register("confirmPassword")}
+                      />
+                      <div className="absolute right-[15px] flex items-center h-full">
+                        <Button
+                          onClick={(event) =>
+                            toggleVisibility(event, "confirmPassword")
+                          }
+                          className=" w-fit h-fit hover:shadow-none bg-transparent"
+                        >
+                          <IconContext.Provider
+                            value={{ color: "#B7B9C8", size: "25px" }}
+                          >
+                            {visibility.confirmPassword ? (
+                              <IoEyeOff />
+                            ) : (
+                              <IoEye />
+                            )}
+                          </IconContext.Provider>
+                        </Button>
+                      </div>
+                    </div>
                     {errors.confirmPassword && (
                       <p className="text-secondary-red text-[12px]">
                         {errors.confirmPassword.message}

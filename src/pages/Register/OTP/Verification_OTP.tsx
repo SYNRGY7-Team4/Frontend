@@ -202,9 +202,9 @@ export default function Verification_OTP() {
         <Alert
           variant={alertVariant}
           isOpen={isAlertOpen}
-          autoDismiss={true}
+          autoDismiss={false}
           onClose={handleCloseAlert}
-          showCloseButton={false}
+          showCloseButton={true}
         >
           {alertMessage}
         </Alert>

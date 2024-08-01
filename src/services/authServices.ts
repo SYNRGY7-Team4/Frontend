@@ -1,5 +1,6 @@
-import axios from "axios";
+import { AxiosError } from "axios";
 import { Response, RegisterFormData } from "./type";
+import axiosInstance from "@/axios/axios";
 
 export const registerAPI = async (
   formData: RegisterFormData
@@ -8,32 +9,29 @@ export const registerAPI = async (
   form.append("email", formData.email);
   form.append("no_hp", formData.no_hp);
   form.append("password", formData.password);
-  form.append("confirm_password", formData.confirm_password);
   form.append("no_ktp", formData.no_ktp);
   form.append("name", formData.name);
   form.append("date_of_birth", formData.date_of_birth);
   form.append("ektp_photo", formData.ektp_photo);
   form.append("pin", formData.pin);
-  form.append("confirm_pin", formData.confirm_pin);
-  Object.entries(formData).forEach(([key, value]) => {
-    if (value !== null) {
-      form.append(key, value);
-    }
-  });
 
   try {
-    const response = await axios.post<Response>(
-      "https://backend-dev-synrgy-team4.koyeb.app/api/auth/register",
-      form,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await axiosInstance.post<Response>("/auth/register", form);
     return response.data;
   } catch (error) {
-    console.log(error);
-    throw new Error("Registration failed. Please try again.");
+    if (error instanceof AxiosError) {
+      if (error.response?.data) {
+        console.error("API Error:", error.response.data);
+        return error.response.data;
+      } else {
+        console.error("Error jaringan:", error.message);
+        throw new Error("Terjadi kesalahan jaringan. Silakan coba lagi.");
+      }
+    } else {
+      console.error("Error tidak terduga:", error);
+      throw new Error(
+        "Terjadi kesalahan yang tidak terduga. Silakan coba lagi."
+      );
+    }
   }
 };

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-export const MAX_FILE_SIZE = 1048576;
-export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+const MAX_FILE_SIZE = 1048576;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const eKTPSchema = z.object({
   fileEKTP: z

@@ -136,7 +136,7 @@ export default function Login() {
                 </div>
                 <div className="flex justify-end">
                   <Link
-                    to="/forgot-password"
+                    to="/reset/forgot-password"
                     className="text-primary-blue"
                     aria-label="Link menuju halaman lupa password"
                   >
