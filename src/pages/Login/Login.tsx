@@ -22,13 +22,14 @@ const loginSchema = z.object({
       required_error: "Input email tidak boleh kosong",
     })
     .email("Harap isi dengan email yang valid"),
-  password: z.string({
-    required_error: "Input password tidak boleh kosong",
-  }),
-  // .regex(
-  //   new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/),
-  //   "Password harus terdiri dari 8-15 karakter dan harus mengandung kombinasi huruf dan angka"
-  // ),
+  password: z
+    .string({
+      required_error: "Input password tidak boleh kosong",
+    })
+    .regex(
+      new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/),
+      "Password harus terdiri dari 8-15 karakter dan harus mengandung kombinasi huruf dan angka"
+    ),
 });
 
 type TLoginSchema = z.infer<typeof loginSchema>;
