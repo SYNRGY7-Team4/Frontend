@@ -85,7 +85,7 @@ const InputPin = () => {
                   </div>
                 )}
                 rules={{
-                  required: "Input pin kosong",
+                  required: "Input pin tidak boleh kosong",
                 }}
               />
               {errors.pin && (
@@ -106,6 +106,7 @@ const InputPin = () => {
         variant={isStatus}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
+        showCloseButton={true}
       >
         {isStatus === "danger" ? (
           <p>Pin Salah</p>
