@@ -105,7 +105,9 @@ const InputPin = () => {
         className="p-8"
         variant={isStatus}
         isOpen={isOpen}
+        autoDismiss={false}
         onClose={() => setIsOpen(false)}
+        showCloseButton={true}
       >
         {isStatus === "danger" ? (
           <p>Pin Salah</p>
