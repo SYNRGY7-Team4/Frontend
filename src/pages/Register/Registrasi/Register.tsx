@@ -5,30 +5,14 @@ import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MaterialSymbol } from "react-material-symbols";
 import "react-material-symbols/rounded";
 import { useRegistrationStore } from "@/store/RegisterStore";
-
 import { useLoading } from "@/hooks/useLoading";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
-
-const RegisterSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: "Input email tidak boleh kosong" })
-    .email("Harap isi dengan email yang valid"),
-  phoneNumber: z.coerce
-    .string()
-    .min(1, { message: "Input nomor handphone tidak boleh kosong" })
-    .refine((val) => /^\d{11,13}$/.test(val), {
-      message: "Nomor handphone harus terdiri dari 11-13 angka",
-    }),
-});
-
-type TRegisterSchema = z.infer<typeof RegisterSchema>;
+import { RegisterSchema, TRegisterSchema } from "./RegisterSchema";
 
 export default function Register() {
   const setField = useRegistrationStore((state) => state.setField);
@@ -45,7 +29,6 @@ export default function Register() {
   });
 
   const onSubmit = async (data: TRegisterSchema) => {
-    console.log(data);
     setField("email", data.email);
     setField("no_hp", data.phoneNumber);
 
@@ -118,26 +101,38 @@ export default function Register() {
                         </span>
                       )}
                     </div>
-                    <Input
-                      type="number"
-                      id="phoneNumber"
-                      placeholder="Masukkan nomor handphone anda!"
-                      aria-label="Masukkan nomor handphone anda!"
-                      {...register("phoneNumber")}
-                      className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
-                        errors.phoneNumber
-                          ? "focus:outline-secondary-red border-secondary-red"
-                          : ""
-                      }`}
-                    />
-                    {errors.phoneNumber && (
-                      <span
-                        className="text-red-500 text-sm"
-                        aria-label={errors.phoneNumber.message}
+
+                    <div className="relative">
+                      <div
+                        className={`h-fit pointer-events-none absolute inset-y-0 left-0 py-[13px] flex items-center pl-5 ${
+                          errors.phoneNumber
+                            ? "focus:outline-secondary-red border-secondary-red "
+                            : ""
+                        }`}
                       >
-                        {errors.phoneNumber.message}
-                      </span>
-                    )}
+                        <span className="">+62</span>
+                      </div>
+                      <Input
+                        type="number"
+                        id="phoneNumber"
+                        placeholder="812 3456 7890"
+                        aria-label="Masukkan nomor handphone anda!"
+                        {...register("phoneNumber")}
+                        className={`block pl-12 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
+                          errors.phoneNumber
+                            ? "focus:outline-secondary-red border-secondary-red"
+                            : ""
+                        }`}
+                      />
+                      {errors.phoneNumber && (
+                        <span
+                          className="text-red-500 text-sm"
+                          aria-label={errors.phoneNumber.message}
+                        >
+                          {errors.phoneNumber.message}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className="flex flex-col gap-y-2 items-center">
@@ -146,7 +141,7 @@ export default function Register() {
                     type="submit"
                     aria-label="Tombol register"
                   >
-                    Register
+                    Lanjut
                   </Button>
                   <p>
                     Sudah punya akun?{" "}

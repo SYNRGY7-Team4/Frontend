@@ -31,7 +31,6 @@ const DataDiri = () => {
   });
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    console.log({ data });
     setField("no_ktp", data.noKtp);
     setField("name", data.nama);
     setField("date_of_birth", data.tanggalLahir.split("-").reverse().join("-"));
@@ -79,11 +78,12 @@ const DataDiri = () => {
                             type="number"
                             placeholder="1234567891011"
                             aria-label="Masukkan no KTP Anda"
-                            className={
-                              errors.noKtp
-                                ? "border-2 border-secondary-red focus:outline-secondary-red"
-                                : ""
-                            }
+                            className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
+                              ${
+                                errors.noKtp
+                                  ? "border-2 border-secondary-red focus:outline-secondary-red"
+                                  : ""
+                              }`}
                             {...field}
                           />
                         )}
