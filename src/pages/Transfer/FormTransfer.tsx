@@ -45,7 +45,7 @@ const TransferForm: React.FC = () => {
       setMsgError("Nomor Rekening Tidak Valid");
       setIsOpen(true);
       return;
-    } else if (+formData.amount < saldo) {
+    } else if (+formData.amount > saldo) {
       setMsgError("Saldo Tidak Cukup");
       setIsOpen(true);
       return;
