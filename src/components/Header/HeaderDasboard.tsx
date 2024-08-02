@@ -64,7 +64,8 @@ export default function HeaderDashboard() {
             <li className="font-bold text-lg tracking-wide relative">
               <div
                 className={`cursor-pointer ${
-                  location.pathname === "/transaksi"
+                  location.pathname === "/transfer" ||
+                  location.pathname === "/mutasi"
                     ? "text-primary-darkBlue border-b-2 border-b-primary-darkBlue"
                     : "text-black relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary-darkBlue after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left"
                 }`}
@@ -94,7 +95,7 @@ export default function HeaderDashboard() {
                     </span>
                     <div className="flex justify-around px-4 py-3 text-center">
                       <NavLink
-                        to="/transaksi/transfer"
+                        to="/transfer"
                         aria-label="Menu transfer"
                         className={"flex flex-col"}
                       >
@@ -106,7 +107,7 @@ export default function HeaderDashboard() {
                         <span>Transfer</span>
                       </NavLink>
                       <NavLink
-                        to={"/transaksi/mutasi"}
+                        to={"/mutasi"}
                         aria-label="Menu mutasi rekening"
                         className={"flex flex-col"}
                       >
@@ -144,7 +145,7 @@ export default function HeaderDashboard() {
             <li className="font-bold text-lg tracking-wide relative">
               <div className="cursor-pointer" aria-label="Menu notifikasi">
                 <div
-                  className="relative flex items-center "
+                  className="relative flex items-center relative w-fit block after:block after:content-[''] after:absolute after:h-[1px] after:bg-primary-darkBlue after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left after:bottom-0"
                   aria-describedby="Icon notifikasi"
                   onClick={() => toggleDropdown("notifikasi")}
                 >
@@ -226,7 +227,8 @@ export default function HeaderDashboard() {
             <li className="py-3 px-3 text-l font-bold">
               <div
                 className={`cursor-pointer ${
-                  location.pathname === "/transaksi/transfer"
+                  location.pathname === "/transfer" ||
+                  location.pathname === "/mutasi"
                     ? "text-primary-darkBlue border-b-2 border-b-primary-darkBlue w-fit"
                     : "text-black relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary-darkBlue after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left"
                 }`}
@@ -257,7 +259,7 @@ export default function HeaderDashboard() {
                   </span>
                   <div className="flex justify-around px-4 py-3 text-center">
                     <NavLink
-                      to="/transaksi/transfer"
+                      to="/transfer"
                       aria-label="Menu transfer"
                       className={"flex flex-col"}
                     >
@@ -269,7 +271,7 @@ export default function HeaderDashboard() {
                       <span>Transfer</span>
                     </NavLink>
                     <NavLink
-                      to={"/transaksi/mutasi"}
+                      to={"/mutasi"}
                       aria-label="Menu mutasi rekening"
                       className={"flex flex-col"}
                     >
