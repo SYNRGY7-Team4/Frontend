@@ -18,7 +18,9 @@ import {
   UnderDevelopment,
   TransferForm,
   NewPassword,
+  Mutasi,
 } from "@/pages";
+import ProtectedRoutes from "./utils/ProtectedRoutes";
 
 function App() {
   const location = useLocation();
@@ -58,11 +60,15 @@ function App() {
         <Route path="/reset/otp" element={<FPVerification_OTP />} />
         <Route path="/reset/new-password" element={<NewPassword />} />
 
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/dashboard/notifikasi" element={<Notifikasi />} />
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/notifikasi" element={<Notifikasi />} />
 
-        <Route path="/transfer" element={<TransferForm />} />
-        <Route path="/transfer/input-pin" element={<InputPin />} />
+          <Route path="/transfer" element={<TransferForm />} />
+          <Route path="/transfer/input-pin" element={<InputPin />} />
+
+          <Route path="/mutasi" element={<Mutasi />} />
+        </Route>
 
         <Route path="/under-development" element={<UnderDevelopment />} />
         <Route path="*" element={<NotFound />} />

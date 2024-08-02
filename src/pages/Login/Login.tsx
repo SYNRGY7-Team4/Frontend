@@ -26,10 +26,14 @@ const loginSchema = z.object({
     .string({
       required_error: "Input password tidak boleh kosong",
     })
-    .regex(
-      new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/),
-      "Password harus terdiri dari 8-15 karakter dan harus mengandung kombinasi huruf dan angka"
-    ),
+    .refine((val) => /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/.test(val), {
+      message:
+        "Password harus terdiri dari 8-15 karakter dan harus mengandung kombinasi huruf dan angka",
+    }),
+  // .regex(
+  //   new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/),
+  //   "Password harus terdiri dari 8-15 karakter dan harus mengandung kombinasi huruf dan angka"
+  // ),
 });
 
 type TLoginSchema = z.infer<typeof loginSchema>;
@@ -56,8 +60,8 @@ export default function Login() {
       formData.append("password", data.password);
 
       await withLoading(async () => {
-        await axiosInstance.post("/auth/login", formData);
-
+        const response = await axiosInstance.post("/auth/login", formData);
+        localStorage.setItem("token", response.data.data.jwt_token);
         reset();
         navigate("/dashboard");
       });

@@ -1,5 +1,5 @@
-import Footer from "@/components/Footer/Footer";
-import Header from "@/components/Header/Header";
+import FooterDasboard from "@/components/Footer/FooterDasboard";
+import HeaderDasboard from "@/components/Header/HeaderDasboard";
 import transferIcon from "@/assets/vektor_transfer.png";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
@@ -68,7 +68,7 @@ export default function Notifikasi() {
 
   return (
     <>
-      <Header />
+      <HeaderDasboard />
       <main className="w-full min-h-[828px] h-[calc(100vh-73px-75px)] md:h-[calc(100vh-94px-75px)] bg-cover bg-center">
         <div className="flex flex-col pt-8">
           <div className="container mx-auto w-[1056px] ">
@@ -148,7 +148,7 @@ export default function Notifikasi() {
         </div>
       </main>
 
-      <Footer />
+      <FooterDasboard />
     </>
   );
 }
