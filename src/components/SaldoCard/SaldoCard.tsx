@@ -1,14 +1,25 @@
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
 import balanceCardAccent from "@/assets/balance_card_accent.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import currencyFormat from "@/utils/currencyFormat";
+import { useUserStore } from "@/store/UserStore";
 
 export default function SaldoCard() {
-  const [accountNumber] = useState<string>("7293109283");
-  const [balance] = useState<number>(3492203);
+  const { userData, balance: userBalance } = useUserStore();
+  const [accountNumber, setAccountNumber] = useState<string>("");
+  const [balance, setBalance] = useState<number>(0);
   const [isAccountNumberVisible, setIsAccountNumberVisible] =
     useState<boolean>(false);
   const [isBalanceVisible, setIsBalanceVisible] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (userData?.account_number) {
+      setAccountNumber(userData.account_number.toString());
+    }
+    if (userBalance !== null) {
+      setBalance(userBalance);
+    }
+  }, [userData, userBalance]);
 
   return (
     <div className="w-full h-full bg-neutral-01 p-6 rounded-lg shadow-02 flex flex-col gap-y-2.5">
@@ -21,7 +32,7 @@ export default function SaldoCard() {
           backgroundSize: "contain",
         }}
       >
-        <p className="text-2xl font-bold mb-1.5">Tunas Bangsa</p>
+        <p className="text-2xl font-bold mb-1.5 capitalize">{userData?.name}</p>
         <div className="flex items-center gap-x-2 mb-3">
           <p>
             {isAccountNumberVisible

@@ -18,6 +18,7 @@ import {
   UnderDevelopment,
   TransferForm,
   NewPassword,
+  Mutasi,
 } from "@/pages";
 
 function App() {
@@ -63,6 +64,8 @@ function App() {
 
         <Route path="/transfer" element={<TransferForm />} />
         <Route path="/transfer/input-pin" element={<InputPin />} />
+
+        <Route path="/mutasi" element={<Mutasi />} />
 
         <Route path="/under-development" element={<UnderDevelopment />} />
         <Route path="*" element={<NotFound />} />
