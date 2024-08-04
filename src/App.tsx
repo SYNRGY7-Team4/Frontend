@@ -22,6 +22,7 @@ import {
 } from "@/pages";
 import ProtectedRoutes from "@/utils/ProtectedRoutes";
 import UserSession from "@/components/UserSession/UserSession";
+import NotifikasiPage from "./pages/Dashboard/Notifikasi";
 
 function App() {
   const location = useLocation();
@@ -64,7 +65,7 @@ function App() {
 
         <Route element={<ProtectedRoutes />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/notifikasi" element={<Notifikasi />} />
+          <Route path="/dashboard/notifikasi" element={<NotifikasiPage />} />
 
           <Route path="/transfer" element={<TransferForm />} />
           <Route path="/transfer/input-pin" element={<InputPin />} />
