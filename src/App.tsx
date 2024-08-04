@@ -20,13 +20,15 @@ import {
   NewPassword,
   Mutasi,
 } from "@/pages";
-import ProtectedRoutes from "./utils/ProtectedRoutes";
+import ProtectedRoutes from "@/utils/ProtectedRoutes";
+import UserSession from "@/components/UserSession/UserSession";
 
 function App() {
   const location = useLocation();
 
   return (
     <>
+      <UserSession />
       <Routes key={location.pathname} location={location}>
         <Route
           path="/"
