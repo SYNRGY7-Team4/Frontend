@@ -85,7 +85,7 @@ const InputPin = () => {
                   </div>
                 )}
                 rules={{
-                  required: "Input pin kosong",
+                  required: "Input pin tidak boleh kosong",
                 }}
               />
               {errors.pin && (

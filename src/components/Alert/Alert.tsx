@@ -34,7 +34,7 @@ export default function Alert({
     if (autoDismiss && isOpen) {
       const timer = setTimeout(() => {
         onClose();
-      }, 2000);
+      }, 1500);
 
       return () => clearTimeout(timer);
     }

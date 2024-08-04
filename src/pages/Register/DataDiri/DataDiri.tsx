@@ -164,6 +164,7 @@ const DataDiri = () => {
                                 : ""
                             }
                             {...field}
+                            max={`${new Date().toLocaleDateString("en-ca")}`}
                           />
                         )}
                         rules={{

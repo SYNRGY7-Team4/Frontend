@@ -15,6 +15,7 @@ import InputPin from "./Transfer/InputPin/InputPin";
 import NotFound from "./Error/NotFound";
 import UnderDevelopment from "./Error/UnderDevelopment";
 import TransferForm from "./Transfer/FormTransfer";
+import Mutasi from "./Mutasi/Mutasi";
 
 export {
   Login,
@@ -34,4 +35,5 @@ export {
   NotFound,
   UnderDevelopment,
   TransferForm,
+  Mutasi,
 };

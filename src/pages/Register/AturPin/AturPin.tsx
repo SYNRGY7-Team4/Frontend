@@ -21,6 +21,8 @@ export default function AturPin() {
   const navigate = useNavigate();
   const { reset, ...formData } = useRegistrationStore();
   const { isLoading, withLoading } = useLoading();
+  const [isPinVisibility, setPinVisibility] = useState(false);
+  const [isConfirmPinVisibility, setConfirmPinVisibility] = useState(false);
 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertVariant, setAlertVariant] = useState<
@@ -53,7 +55,7 @@ export default function AturPin() {
           pin: data.pin,
         });
 
-        if (response.success === false) {
+        if (response?.success === false) {
           setAlertVariant("danger");
           // setAlertMessage(response.message);
           setAlertMessage(
@@ -99,26 +101,51 @@ export default function AturPin() {
                         </span>
                       )}
                     </div>
-                    <Input
-                      type="number"
-                      id="pin"
-                      placeholder="Pin"
-                      aria-label="Pin"
-                      {...register("pin")}
-                      className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
-                        errors.pin
-                          ? "focus:outline-secondary-red border-secondary-red"
-                          : ""
-                      }`}
-                    />
-                    {errors.pin && (
-                      <span
-                        className="text-red-500 text-sm"
-                        aria-label={errors.pin.message}
+                    <div className="flex items-center relative">
+                      <Input
+                        type="number"
+                        id="pin"
+                        placeholder="Pin"
+                        aria-label="Pin"
+                        {...register("pin")}
+                        className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
+                          errors.pin
+                            ? "focus:outline-secondary-red border-secondary-red"
+                            : ""
+                        } ${isPinVisibility ? "" : "text-security-disc"}`}
+                      />
+                      <div
+                        className="absolute right-[15px] cursor-pointer"
+                        onClick={() => setPinVisibility(!isPinVisibility)}
+                        aria-label={
+                          isPinVisibility ? "Sembunyikan pin" : "Tampilkan pin"
+                        }
                       >
-                        {errors.pin.message}
-                      </span>
-                    )}
+                        {isPinVisibility ? (
+                          <MaterialSymbol
+                            icon="visibility"
+                            size={20}
+                            title="visibility"
+                            className="py-3 text-neutral-03"
+                          />
+                        ) : (
+                          <MaterialSymbol
+                            icon="visibility_off"
+                            size={20}
+                            title="visibility_off"
+                            className="py-3 text-neutral-03"
+                          />
+                        )}
+                      </div>
+                      {errors.pin && (
+                        <span
+                          className="text-red-500 text-sm"
+                          aria-label={errors.pin.message}
+                        >
+                          {errors.pin.message}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="flex flex-col gap-y-1">
                     <div className="flex items-center gap-1">
@@ -129,26 +156,59 @@ export default function AturPin() {
                         </span>
                       )}
                     </div>
-                    <Input
-                      type="number"
-                      id="konfirmasiPin"
-                      placeholder="Konfirmasi Ulang Pin"
-                      aria-label="Konfirmasi Ulang Pin"
-                      {...register("konfirmasiPin")}
-                      className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
-                        errors.konfirmasiPin
-                          ? "focus:outline-secondary-red border-secondary-red"
-                          : ""
-                      }`}
-                    />
-                    {errors.konfirmasiPin && (
-                      <span
-                        className="text-red-500 text-sm"
-                        aria-label={errors.konfirmasiPin.message}
+
+                    <div className="flex items-center relative">
+                      <Input
+                        type="number"
+                        id="konfirmasiPin"
+                        placeholder="Konfirmasi Ulang Pin"
+                        aria-label="Konfirmasi Ulang Pin"
+                        {...register("konfirmasiPin")}
+                        className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
+                          errors.konfirmasiPin
+                            ? "focus:outline-secondary-red border-secondary-red"
+                            : ""
+                        } ${
+                          isConfirmPinVisibility ? "" : "text-security-disc"
+                        }`}
+                        autoComplete="off"
+                      />
+                      <div
+                        className="absolute right-[15px] cursor-pointer"
+                        onClick={() =>
+                          setConfirmPinVisibility(!isConfirmPinVisibility)
+                        }
+                        aria-label={
+                          isConfirmPinVisibility
+                            ? "Sembunyikan konfirmasi pin"
+                            : "Tampilkan konfirmasi pin"
+                        }
                       >
-                        {errors.konfirmasiPin.message}
-                      </span>
-                    )}
+                        {isConfirmPinVisibility ? (
+                          <MaterialSymbol
+                            icon="visibility"
+                            size={20}
+                            title="visibility"
+                            className="py-3 text-neutral-03"
+                          />
+                        ) : (
+                          <MaterialSymbol
+                            icon="visibility_off"
+                            size={20}
+                            title="visibility_off"
+                            className="py-3 text-neutral-03"
+                          />
+                        )}
+                      </div>
+                      {errors.konfirmasiPin && (
+                        <span
+                          className="text-red-500 text-sm"
+                          aria-label={errors.konfirmasiPin.message}
+                        >
+                          {errors.konfirmasiPin.message}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className="flex flex-col gap-y-2 items-center">

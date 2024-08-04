@@ -29,7 +29,7 @@ export default function Register() {
   });
 
   const onSubmit = async (data: TRegisterSchema) => {
-    setField("email", data.email);
+    setField("emailRegister", data.emailRegister);
     setField("no_hp", data.phoneNumber);
 
     withLoading(async () => {
@@ -59,31 +59,31 @@ export default function Register() {
                 <div className="flex flex-col gap-y-3">
                   <div className="flex flex-col gap-y-1">
                     <div className="flex items-center gap-1">
-                      <Label htmlFor="email">Email</Label>
-                      {errors.email && (
+                      <Label htmlFor="emailRegister">emailRegister</Label>
+                      {errors.emailRegister && (
                         <span className="text-secondary-red flex items-center">
                           <MaterialSymbol icon="error" title="error" />
                         </span>
                       )}
                     </div>
                     <Input
-                      type="email"
-                      id="email"
-                      placeholder="*****@email.com"
-                      aria-label="Masukkan email Anda"
-                      {...register("email")}
+                      type="emailRegister"
+                      id="emailRegister"
+                      placeholder="*****@emailRegister.com"
+                      aria-label="Masukkan emailRegister Anda"
+                      {...register("emailRegister")}
                       className={`${
-                        errors.email
+                        errors.emailRegister
                           ? "focus:outline-secondary-red border-secondary-red"
                           : ""
                       }`}
                     />
-                    {errors.email && (
+                    {errors.emailRegister && (
                       <span
                         className="text-red-500 text-sm"
-                        aria-label={errors.email.message}
+                        aria-label={errors.emailRegister.message}
                       >
-                        {errors.email.message}
+                        {errors.emailRegister.message}
                       </span>
                     )}
                   </div>
