@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 
-export const useLoading = (minDuration = 3000) => {
+export const useLoading = (minDuration = 800) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const startLoading = useCallback(() => {
