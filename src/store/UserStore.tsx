@@ -36,11 +36,6 @@ export const useUserStore = create<UserState>((set) => ({
       const data = response?.data as UserData;
       if (data) {
         set({ userData: data, isLoading: false });
-        const userObj = {
-          name: data.name,
-          account_number: data.account_number,
-        };
-        localStorage.setItem("user", JSON.stringify(userObj));
       } else {
         set({ error: "Invalid response from API", isLoading: false });
       }

@@ -19,13 +19,11 @@ export default function Mutasi() {
               <Label htmlFor="jenisTransaksi">Jenis Transaksi</Label>
               <select
                 id="jenisTransaksi"
-                className="w-full h-[42px] bg-neutral-01 px-5 rounded-lg focus:outline-primary-blue border border-primary-blue focus:ring-primary-blue focus:border-primary-blue block dark:bg-neutral-01 dark:border-primary-blue dark:placeholder-gray-400 dark:text-black dark:focus:ring-primary-blue dark:focus:border-primary-blue"
+                className="w-full h-[42px] bg-neutral-01 px-5 rounded-lg focus:outline-primary-blue border border-primary-blue appearance-none focus:ring-primary-blue focus:border-primary-blue block "
                 aria-label="Jenis Transaksi"
-                value="semua"
+                defaultValue="semua"
               >
-                <option selected value="semua">
-                  Semua
-                </option>
+                <option value="semua">Semua</option>
                 <option value="debit">Uang Masuk</option>
                 <option value="kredit">Uang Keluar</option>
               </select>

@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 export const RegisterSchema = z.object({
-  email: z
+  emailRegister: z
     .string()
     .min(1, { message: "Input email tidak boleh kosong" })
-    .email("Harap isi dengan email yang valid"),
+    .email("Harap isi dengan emai yang valid"),
   phoneNumber: z.coerce
     .string()
     .min(1, { message: "Input nomor handphone tidak boleh kosong" })

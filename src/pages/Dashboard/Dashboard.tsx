@@ -5,14 +5,13 @@ import TransaksiTerbaruCard from "@/components/TransaksiTerbaruCard/TransaksiTer
 import BayarCard from "@/components/BayarCard/BayarCard";
 import RiwayatTransaksiTable from "@/components/RiwayatTransaksiTable/RiwayatTransaksiTable";
 import { useUserStore } from "@/store/UserStore";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   const { userData, isLoading, fetchUserData, fetchBalance } = useUserStore();
   const [lastLogin, setLastLogin] = useState("");
-  const prevUserDataRef = useRef(userData);
 
   useEffect(() => {
     const now = new Date();
@@ -29,18 +28,14 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchUserData();
-    };
-    fetchData();
-  }, [fetchUserData]);
+    if (!userData) {
+      fetchUserData();
+    }
+  }, [fetchUserData, userData]);
 
   useEffect(() => {
-    if (userData && userData !== prevUserDataRef.current) {
-      prevUserDataRef.current = userData;
-      if (userData.account_number) {
-        fetchBalance(userData.account_number);
-      }
+    if (userData && userData.account_number) {
+      fetchBalance(userData.account_number);
     }
   }, [userData, fetchBalance]);
 
