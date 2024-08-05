@@ -42,7 +42,7 @@ const handleMarkAllAsRead = () => {
   alert("All notifications marked as read.");
 };
 
-const NotifikasiPage: React.FC = () => {
+const Notifikasi: React.FC = () => {
   return (
     <>
       <HeaderDasboard />
@@ -122,4 +122,4 @@ const NotifikasiPage: React.FC = () => {
   );
 };
 
-export default NotifikasiPage;
+export default Notifikasi;

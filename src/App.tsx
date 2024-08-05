@@ -11,7 +11,6 @@ import {
   ForgotPassword,
   FPVerification_OTP,
   Dashboard,
-  Notifikasi,
   DataDiriDua,
   InputPin,
   NotFound,
@@ -19,10 +18,10 @@ import {
   TransferForm,
   NewPassword,
   Mutasi,
+  Notifikasi,
 } from "@/pages";
 import ProtectedRoutes from "@/utils/ProtectedRoutes";
 import UserSession from "@/components/UserSession/UserSession";
-import NotifikasiPage from "./pages/Dashboard/Notifikasi";
 
 function App() {
   const location = useLocation();
@@ -65,7 +64,7 @@ function App() {
 
         <Route element={<ProtectedRoutes />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/notifikasi" element={<NotifikasiPage />} />
+          <Route path="/dashboard/notifikasi" element={<Notifikasi />} />
 
           <Route path="/transfer" element={<TransferForm />} />
           <Route path="/transfer/input-pin" element={<InputPin />} />
