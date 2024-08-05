@@ -19,6 +19,8 @@ import { PinSchema, TPinSchema } from "./PinSchema";
 
 export default function AturPin() {
   const navigate = useNavigate();
+
+  const setField = useRegistrationStore((state) => state.setField);
   const { reset, ...formData } = useRegistrationStore();
   const { isLoading, withLoading } = useLoading();
   const [isPinVisibility, setPinVisibility] = useState(false);
@@ -49,18 +51,22 @@ export default function AturPin() {
 
   const onSubmit = async (data: TPinSchema) => {
     try {
+      setField("pin", data.pin);
+      console.log(formData);
       await withLoading(async () => {
         const response = await registerAPI({
           ...formData,
           pin: data.pin,
         });
 
+        console.log(response);
+
         if (response?.success === false) {
           setAlertVariant("danger");
-          // setAlertMessage(response.message);
-          setAlertMessage(
-            "Registrasi gagal. Terjadi kesalahan yang tidak terduga. Silakan coba lagi"
-          );
+          setAlertMessage(response.message);
+          // setAlertMessage(
+          //   "Registrasi gagal. Terjadi kesalahan yang tidak terduga. Silakan coba lagi"
+          // );
           setIsAlertOpen(true);
         } else {
           setAlertVariant("success");
@@ -137,15 +143,15 @@ export default function AturPin() {
                           />
                         )}
                       </div>
-                      {errors.pin && (
-                        <span
-                          className="text-red-500 text-sm"
-                          aria-label={errors.pin.message}
-                        >
-                          {errors.pin.message}
-                        </span>
-                      )}
                     </div>
+                    {errors.pin && (
+                      <span
+                        className="text-red-500 text-sm"
+                        aria-label={errors.pin.message}
+                      >
+                        {errors.pin.message}
+                      </span>
+                    )}
                   </div>
                   <div className="flex flex-col gap-y-1">
                     <div className="flex items-center gap-1">
@@ -200,15 +206,15 @@ export default function AturPin() {
                           />
                         )}
                       </div>
-                      {errors.konfirmasiPin && (
-                        <span
-                          className="text-red-500 text-sm"
-                          aria-label={errors.konfirmasiPin.message}
-                        >
-                          {errors.konfirmasiPin.message}
-                        </span>
-                      )}
                     </div>
+                    {errors.konfirmasiPin && (
+                      <span
+                        className="text-red-500 text-sm"
+                        aria-label={errors.konfirmasiPin.message}
+                      >
+                        {errors.konfirmasiPin.message}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-col gap-y-2 items-center">

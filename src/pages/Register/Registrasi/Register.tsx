@@ -29,7 +29,7 @@ export default function Register() {
   });
 
   const onSubmit = async (data: TRegisterSchema) => {
-    setField("emailRegister", data.emailRegister);
+    setField("email", data.emailRegister);
     setField("no_hp", data.phoneNumber);
 
     withLoading(async () => {
@@ -59,7 +59,7 @@ export default function Register() {
                 <div className="flex flex-col gap-y-3">
                   <div className="flex flex-col gap-y-1">
                     <div className="flex items-center gap-1">
-                      <Label htmlFor="emailRegister">emailRegister</Label>
+                      <Label htmlFor="emailRegister">Email</Label>
                       {errors.emailRegister && (
                         <span className="text-secondary-red flex items-center">
                           <MaterialSymbol icon="error" title="error" />

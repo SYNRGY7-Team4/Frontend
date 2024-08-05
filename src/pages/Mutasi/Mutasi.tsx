@@ -5,8 +5,40 @@ import Input from "@/components/Input/Input";
 import Button from "@/components/Button/Button";
 import Label from "@/components/Label/Label";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { useForm, Controller, FieldValues } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TMutasi, mutasiSchema } from "./mutasiSchema";
+import { useState } from "react";
+import Alert from "@/components/Alert/Alert";
 
 export default function Mutasi() {
+  const [formError, setFormError] = useState<string | null>(null);
+  const [hasValidationErrors, setHasValidationErrors] = useState(false);
+
+  const { handleSubmit, control} = useForm<TMutasi>({
+    resolver: zodResolver(mutasiSchema)
+  })
+
+  const onSubmit = (data: TMutasi) => {
+    console.log(data)
+    setFormError(null);
+    setHasValidationErrors(false);
+  }
+
+  const onError = (errors: FieldValues) => {
+    for (const key in errors) {
+      if (errors[key]?.message) {
+        setFormError(errors[key].message);
+        break;
+      }
+    }
+    setHasValidationErrors(true);
+  };
+
+  const onClose = () => {
+    setHasValidationErrors(false)
+  }
+
   return (
     <>
       <HeaderDashboard />
@@ -14,40 +46,65 @@ export default function Mutasi() {
         <h1 className="text-4xl font-bold mb-8">Mutasi</h1>
 
         <div className="w-full h-full bg-neutral-01 p-6 rounded-lg shadow-02 mb-8">
-          <form className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <form onSubmit={handleSubmit(onSubmit, onError)} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="w-full">
               <Label htmlFor="jenisTransaksi">Jenis Transaksi</Label>
-              <select
-                id="jenisTransaksi"
-                className="w-full h-[42px] bg-neutral-01 px-5 rounded-lg focus:outline-primary-blue border border-primary-blue appearance-none focus:ring-primary-blue focus:border-primary-blue block "
-                aria-label="Jenis Transaksi"
+              <Controller
+                name="jenisTransaksi"
+                control={control}
                 defaultValue="semua"
-              >
-                <option value="semua">Semua</option>
-                <option value="debit">Uang Masuk</option>
-                <option value="kredit">Uang Keluar</option>
-              </select>
+                render={({ field }) => (
+                  <select
+                    {...field}
+                    id="jenisTransaksi"
+                    className="w-full h-[42px] bg-neutral-01 px-5 rounded-lg focus:outline-primary-blue border border-primary-blue appearance-none focus:ring-primary-blue focus:border-primary-blue block"
+                    aria-label="Jenis Transaksi"
+                  >
+                    <option value="semua">Semua</option>
+                    <option value="debit">Uang Masuk</option>
+                    <option value="kredit">Uang Keluar</option>
+                  </select>
+                )}
+              />
             </div>
             <div className="w-full">
               <Label htmlFor="dariTanggal">Dari Tanggal</Label>
-              <Input
-                id="dariTanggal"
-                type="date"
-                aria-label="Masukkan dari tanggal mutasi"
-                className="w-full h-[42px] !bg-neutral-01 border-primary-blue !py-2"
+              <Controller
+                name="dariTanggal"
+                control={control}
+                defaultValue=""
+                render={({field}) => (
+                  <Input
+                    {...field}
+                    id="dariTanggal"
+                    type="date"
+                    aria-label="Masukkan dari tanggal mutasi"
+                    className="w-full h-[42px] !bg-neutral-01 border-primary-blue !py-2"
+                  />
+                )}
               />
+              
             </div>
             <div className="w-full">
               <Label htmlFor="sampaiTanggal">Sampai Tanggal</Label>
-              <Input
-                id="sampaiTanggal"
-                type="date"
-                aria-label="Masukkan sampai tanggal mutasi"
-                className="w-full h-[42px] !bg-neutral-01 border-primary-blue !py-2"
+              <Controller 
+                name="sampaiTanggal"
+                control={control}
+                defaultValue=""
+                render={({field}) => (
+                  <Input
+                    {...field}
+                    id="sampaiTanggal"
+                    type="date"
+                    aria-label="Masukkan sampai tanggal mutasi"
+                    className="w-full h-[42px] !bg-neutral-01 border-primary-blue !py-2"
+                  />
+                )}
               />
+              
             </div>
             <div className="w-full flex items-end">
-              <Button id="btnMutasi" aria-label="Tombol Mutasi" className="">
+              <Button type="submit" id="btnMutasi" aria-label="Tombol Mutasi" className="">
                 Cari Mutasi
               </Button>
             </div>
@@ -115,6 +172,15 @@ export default function Mutasi() {
         </div>
       </main>
       <FooterDashboard />
+      <Alert
+        isOpen={hasValidationErrors}
+        showCloseButton={true}
+        autoDismiss={false}
+        variant="danger"
+        onClose={onClose}
+      >
+        {formError}
+      </Alert>
     </>
   );
 }
