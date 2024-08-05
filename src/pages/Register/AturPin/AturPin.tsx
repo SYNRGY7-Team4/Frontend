@@ -4,7 +4,7 @@ import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { MaterialSymbol } from "react-material-symbols";
@@ -20,6 +20,7 @@ import { PinSchema, TPinSchema } from "./PinSchema";
 export default function AturPin() {
   const navigate = useNavigate();
 
+  const { pin } = useRegistrationStore((state) => state);
   const setField = useRegistrationStore((state) => state.setField);
   const { reset, ...formData } = useRegistrationStore();
   const { isLoading, withLoading } = useLoading();
@@ -33,11 +34,15 @@ export default function AturPin() {
   const [alertMessage, setAlertMessage] = useState("");
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<TPinSchema>({
     resolver: zodResolver(PinSchema),
+    defaultValues: {
+      pin: pin || "",
+      konfirmasiPin: pin || "",
+    },
   });
 
   const handleCloseAlert = () => {
@@ -49,35 +54,34 @@ export default function AturPin() {
     }
   };
 
+  const extractMessage = (fullMessage: string): string => {
+    const match = fullMessage.match(/"([^"]+)"/);
+    return match ? match[1] : "";
+  };
+
   const onSubmit = async (data: TPinSchema) => {
-    try {
-      setField("pin", data.pin);
-      console.log(formData);
-      await withLoading(async () => {
-        const response = await registerAPI({
-          ...formData,
-          pin: data.pin,
-        });
-
-        console.log(response);
-
-        if (response?.success === false) {
-          setAlertVariant("danger");
-          setAlertMessage(response.message);
-          // setAlertMessage(
-          //   "Registrasi gagal. Terjadi kesalahan yang tidak terduga. Silakan coba lagi"
-          // );
-          setIsAlertOpen(true);
-        } else {
-          setAlertVariant("success");
-          setAlertMessage("Anda berhasil membuka rekening");
-          setIsAlertOpen(true);
-          reset();
-        }
+    setField("pin", data.pin);
+    await withLoading(async () => {
+      const response = await registerAPI({
+        ...formData,
+        pin: data.pin,
       });
-    } catch (error) {
-      console.log(error);
-    }
+
+      if (response?.success === false) {
+        setAlertVariant("danger");
+        setAlertMessage(extractMessage(response.message));
+        // setAlertMessage(
+        //   "Registrasi gagal. Terjadi kesalahan yang tidak terduga. Silakan coba lagi"
+        // );
+        setIsAlertOpen(true);
+        reset();
+      } else {
+        setAlertVariant("success");
+        setAlertMessage("Anda berhasil membuka rekening");
+        setIsAlertOpen(true);
+        reset();
+      }
+    });
   };
 
   return (
@@ -108,17 +112,29 @@ export default function AturPin() {
                       )}
                     </div>
                     <div className="flex items-center relative">
-                      <Input
-                        type="number"
-                        id="pin"
-                        placeholder="Pin"
-                        aria-label="Pin"
-                        {...register("pin")}
-                        className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
-                          errors.pin
-                            ? "focus:outline-secondary-red border-secondary-red"
-                            : ""
-                        } ${isPinVisibility ? "" : "text-security-disc"}`}
+                      <Controller
+                        name="pin"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <Input
+                            type="text"
+                            id="pin"
+                            placeholder="Pin"
+                            aria-label="Pin"
+                            {...field}
+                            className={`${
+                              errors.pin
+                                ? "focus:outline-secondary-red border-secondary-red"
+                                : ""
+                            } ${isPinVisibility ? "" : "text-security-disc"}`}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value.replace(/[^0-9]/g, "")
+                              )
+                            }
+                          />
+                        )}
                       />
                       <div
                         className="absolute right-[15px] cursor-pointer"
@@ -129,16 +145,16 @@ export default function AturPin() {
                       >
                         {isPinVisibility ? (
                           <MaterialSymbol
-                            icon="visibility"
+                            icon="visibility_off"
                             size={20}
-                            title="visibility"
+                            title="Sembunyikan pin"
                             className="py-3 text-neutral-03"
                           />
                         ) : (
                           <MaterialSymbol
-                            icon="visibility_off"
+                            icon="visibility"
                             size={20}
-                            title="visibility_off"
+                            title="Tampilkan pin"
                             className="py-3 text-neutral-03"
                           />
                         )}
@@ -164,20 +180,32 @@ export default function AturPin() {
                     </div>
 
                     <div className="flex items-center relative">
-                      <Input
-                        type="number"
-                        id="konfirmasiPin"
-                        placeholder="Konfirmasi Ulang Pin"
-                        aria-label="Konfirmasi Ulang Pin"
-                        {...register("konfirmasiPin")}
-                        className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
-                          errors.konfirmasiPin
-                            ? "focus:outline-secondary-red border-secondary-red"
-                            : ""
-                        } ${
-                          isConfirmPinVisibility ? "" : "text-security-disc"
-                        }`}
-                        autoComplete="off"
+                      <Controller
+                        name="konfirmasiPin"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <Input
+                            type="text"
+                            id="konfirmasiPin"
+                            placeholder="Konfirmasi Ulang Pin"
+                            aria-label="Konfirmasi Ulang Pin"
+                            {...field}
+                            className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
+                              errors.konfirmasiPin
+                                ? "focus:outline-secondary-red border-secondary-red"
+                                : ""
+                            } ${
+                              isConfirmPinVisibility ? "" : "text-security-disc"
+                            }`}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value.replace(/[^0-9]/g, "")
+                              )
+                            }
+                            autoComplete="off"
+                          />
+                        )}
                       />
                       <div
                         className="absolute right-[15px] cursor-pointer"
@@ -192,16 +220,16 @@ export default function AturPin() {
                       >
                         {isConfirmPinVisibility ? (
                           <MaterialSymbol
-                            icon="visibility"
+                            icon="visibility_off"
                             size={20}
-                            title="visibility"
+                            title="Sembunyikan konfirmasi pin"
                             className="py-3 text-neutral-03"
                           />
                         ) : (
                           <MaterialSymbol
-                            icon="visibility_off"
+                            icon="visibility"
                             size={20}
-                            title="visibility_off"
+                            title="Tampilkan konfirmasi pin"
                             className="py-3 text-neutral-03"
                           />
                         )}

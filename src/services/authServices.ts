@@ -2,11 +2,11 @@ import { AxiosError } from "axios";
 import { Response, RegisterFormData } from "./type";
 import axiosInstance from "@/axios/axios";
 
-const handleError = (error: unknown): never => {
+const handleError = (error: unknown): any => {
   if (error instanceof AxiosError) {
     if (error.response?.data) {
       console.error("API Error:", error.response.data);
-      throw error.response.data;
+      return error.response?.data;
     } else {
       console.error("Error jaringan:", error.message);
       throw new Error("Terjadi kesalahan jaringan. Silakan coba lagi.");
@@ -32,7 +32,7 @@ export const registerAPI = async (formData: RegisterFormData) => {
     const response = await axiosInstance.post<Response>("/auth/register", form);
     return response.data;
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -42,7 +42,7 @@ export const fetchUserDataAPI = async () => {
     // console.log(response.data);
     return response.data;
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };
 
@@ -54,6 +54,6 @@ export const fetchUserBalanceDataAPI = async (account_number: string) => {
     // console.log(response.data);
     return response.data;
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 };

@@ -1,4 +1,3 @@
-// src/components/NotificationList.tsx
 import React from "react";
 import transferIcon from "@/assets/vektor_transfer.png";
 
@@ -43,7 +42,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
           <li
             key={notification.id}
             className={`flex items-center justify-start text-left border-b pb-4 ${
-              compact ? "pl-4" : "pl-12"
+              compact ? "pl-4" : "px-6 md:pl-12"
             }`}
           >
             <img src={transferIcon} alt="icon" className="w-10 h-10 mr-4" />

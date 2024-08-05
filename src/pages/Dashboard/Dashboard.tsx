@@ -67,7 +67,7 @@ export default function Dashboard() {
                 <div className="flex flex-col items-start sm:flex-row sm:items-center justify-between gap-3">
                   <h2 className="text-2xl font-bold">Riwayat Transaksi</h2>
                   <Link
-                    to="#"
+                    to="/mutasi"
                     className="bg-primary-blue text-neutral-01 py-2 px-5 rounded-full"
                   >
                     Lihat Selengkapnya

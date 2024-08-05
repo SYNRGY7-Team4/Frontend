@@ -46,74 +46,68 @@ const Notifikasi: React.FC = () => {
   return (
     <>
       <HeaderDasboard />
-      <main className="w-full min-h-[828px] h-[calc(100vh-73px-75px)] md:h-[calc(100vh-94px-75px)] bg-cover bg-center">
-        <div className="flex flex-col pt-8">
-          <div className="container mx-auto w-[1056px]">
-            <h2 className="text-[32px] font-black mb-[35px] flex justify-start">
-              Notifikasi
-            </h2>
-          </div>
-          <div className="mx-auto py-8 bg-white w-[1056px] rounded-[10px] shadow-lg">
-            <NotificationList
-              notifications={notifications}
-              onMarkAllAsRead={handleMarkAllAsRead}
-            />
-            <div className="flex justify-end mt-6 px-14">
-              <nav aria-label="Page navigation">
-                <ul className="inline-flex items-center -space-x-px">
-                  <li>
-                    <button className="py-2.5 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
-                      <IoIosArrowBack />
-                    </button>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                    >
-                      1
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                    >
-                      2
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                    >
-                      3
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                    >
-                      4
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="#"
-                      className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
-                    >
-                      5
-                    </a>
-                  </li>
-                  <li>
-                    <button className="py-2.5 px-3 leading-tight text-gray-500 bg-white border rounded-r-lg border-gray-300 hover:bg-gray-100 hover:text-gray-700">
-                      <IoIosArrowForward />
-                    </button>
-                  </li>
-                </ul>
-              </nav>
-            </div>
+      <main className="flex-grow w-[min(100%,1056px)] px-6 lg:mx-auto lg:px-0 py-10 mb-20">
+        <h1 className="text-4xl font-bold mb-8">Notifikasi</h1>
+        <div className="mx-auto py-8 bg-white flex-grow w-[min(100%,1056px)] rounded-[10px] shadow-03">
+          <NotificationList
+            notifications={notifications}
+            onMarkAllAsRead={handleMarkAllAsRead}
+          />
+          <div className="flex justify-center md:justify-end mt-6 md:px-14">
+            <nav aria-label="Page navigation">
+              <ul className="inline-flex items-center text-sm md:text-base -space-x-px">
+                <li>
+                  <button className="py-2.5 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                    <IoIosArrowBack />
+                  </button>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                  >
+                    1
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                  >
+                    2
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                  >
+                    3
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                  >
+                    4
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
+                  >
+                    5
+                  </a>
+                </li>
+                <li>
+                  <button className="py-2.5 px-3 leading-tight text-gray-500 bg-white border rounded-r-lg border-gray-300 hover:bg-gray-100 hover:text-gray-700">
+                    <IoIosArrowForward />
+                  </button>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </main>

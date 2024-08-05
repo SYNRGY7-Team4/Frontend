@@ -5,7 +5,7 @@ import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MaterialSymbol } from "react-material-symbols";
 import "react-material-symbols/rounded";
@@ -15,17 +15,22 @@ import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 import { RegisterSchema, TRegisterSchema } from "./RegisterSchema";
 
 export default function Register() {
+  const { email, no_hp } = useRegistrationStore((state) => state);
   const setField = useRegistrationStore((state) => state.setField);
   const navigate = useNavigate();
   const { isLoading, withLoading } = useLoading();
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm<TRegisterSchema>({
     resolver: zodResolver(RegisterSchema),
+    defaultValues: {
+      emailRegister: email || "",
+      phoneNumber: no_hp || "",
+    },
   });
 
   const onSubmit = async (data: TRegisterSchema) => {
@@ -66,17 +71,24 @@ export default function Register() {
                         </span>
                       )}
                     </div>
-                    <Input
-                      type="emailRegister"
-                      id="emailRegister"
-                      placeholder="*****@emailRegister.com"
-                      aria-label="Masukkan emailRegister Anda"
-                      {...register("emailRegister")}
-                      className={`${
-                        errors.emailRegister
-                          ? "focus:outline-secondary-red border-secondary-red"
-                          : ""
-                      }`}
+                    <Controller
+                      name="emailRegister"
+                      control={control}
+                      defaultValue=""
+                      render={({ field }) => (
+                        <Input
+                          type="emailRegister"
+                          id="emailRegister"
+                          placeholder="*****@email.com"
+                          aria-label="Masukkan email Anda"
+                          className={`${
+                            errors.emailRegister
+                              ? "focus:outline-secondary-red border-secondary-red"
+                              : ""
+                          }`}
+                          {...field}
+                        />
+                      )}
                     />
                     {errors.emailRegister && (
                       <span
@@ -112,17 +124,29 @@ export default function Register() {
                       >
                         <span className="">+62</span>
                       </div>
-                      <Input
-                        type="number"
-                        id="phoneNumber"
-                        placeholder="812 3456 7890"
-                        aria-label="Masukkan nomor handphone anda!"
-                        {...register("phoneNumber")}
-                        className={`block pl-12 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
-                          errors.phoneNumber
-                            ? "focus:outline-secondary-red border-secondary-red"
-                            : ""
-                        }`}
+                      <Controller
+                        name="phoneNumber"
+                        control={control}
+                        defaultValue=""
+                        render={({ field }) => (
+                          <Input
+                            type="text"
+                            id="phoneNumber"
+                            placeholder="812 3456 7890"
+                            aria-label="Masukkan nomor handphone anda!"
+                            className={`block pl-12 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
+                              errors.phoneNumber
+                                ? "focus:outline-secondary-red border-secondary-red"
+                                : ""
+                            }`}
+                            {...field}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value.replace(/[^0-9]/g, "")
+                              )
+                            }
+                          />
+                        )}
                       />
                       {errors.phoneNumber && (
                         <span
