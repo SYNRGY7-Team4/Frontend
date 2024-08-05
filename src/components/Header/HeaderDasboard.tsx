@@ -182,7 +182,11 @@ export default function HeaderDashboard() {
             <li className="font-bold text-lg tracking-wide relative">
               <div className="cursor-pointer" aria-label="Menu notifikasi">
                 <div
-                  className="relative flex items-center relative w-fit block after:block after:content-[''] after:absolute after:h-[1px] after:bg-primary-darkBlue after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left after:bottom-0"
+                  className={`relative flex items-center relative w-fit block ${
+                    location.pathname === "/notifikasi"
+                      ? "text-primary-darkBlue border-b-2 border-b-primary-darkBlue"
+                      : "after:block after:content-[''] after:absolute after:h-[1px] after:bg-primary-darkBlue after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left after:bottom-[-2px]"
+                  } `}
                   aria-describedby="Icon notifikasi"
                   onClick={() => toggleDropdown("notifikasi")}
                 >
@@ -222,7 +226,7 @@ export default function HeaderDashboard() {
                     </div>
                     <div className={"text-sm text-center pt-2 pb-1 w-full"}>
                       <NavLink
-                        to={"/dashboard/notifikasi"}
+                        to={"/notifikasi"}
                         aria-label="Ke halaman notifikasi"
                       >
                         Lihat Selengkapnya
@@ -301,7 +305,7 @@ export default function HeaderDashboard() {
                 </div>
               </div>
               {isOpenDropdownTransaksi && (
-                <div className="bg-neutral-01 w-[310px] rounded-lg shadow-02 z-[100] py-4 mt-2 right-0 text-primary-darkBlue">
+                <div className="bg-neutral-01 w-auto md:w-[310px] rounded-lg shadow-02 z-[100] md:py-4 mt-2 right-0 text-primary-darkBlue">
                   <span className="text-lg border-b top-20 flex flex-col items-start p-2 w-full px-4">
                     Transaksi
                   </span>
@@ -349,7 +353,7 @@ export default function HeaderDashboard() {
             </li>
             <li className="py-3 px-3 text-l font-bold">
               <NavLink
-                to={"/dashboard/notifikasi"}
+                to={"/notifikasi"}
                 className={({ isActive }) => {
                   return isActive
                     ? "text-primary-darkBlue border-b-2 border-b-primary-darkBlue"

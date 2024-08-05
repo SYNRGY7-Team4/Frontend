@@ -18,6 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { PasswordSchema, TPasswordSchema } from "./PasswordSchema";
 
 export default function Password() {
+  const { password } = useRegistrationStore((state) => state);
   const setField = useRegistrationStore((state) => state.setField);
   const { isLoading, withLoading } = useLoading();
   const navigate = useNavigate();
@@ -27,6 +28,10 @@ export default function Password() {
     formState: { errors },
   } = useForm<TPasswordSchema>({
     resolver: zodResolver(PasswordSchema),
+    defaultValues: {
+      password: password || "",
+      confirmPassword: password || "",
+    },
   });
 
   const [visibility, setVisibility] = useState({
@@ -104,6 +109,11 @@ export default function Password() {
                             toggleVisibility(event, "password")
                           }
                           className=" w-fit h-fit hover:shadow-none bg-transparent"
+                          aria-label={
+                            visibility.password
+                              ? "Sembunyikan pin"
+                              : "Tampilkan pin"
+                          }
                         >
                           <IconContext.Provider
                             value={{ color: "#B7B9C8", size: "25px" }}
@@ -150,6 +160,11 @@ export default function Password() {
                             toggleVisibility(event, "confirmPassword")
                           }
                           className=" w-fit h-fit hover:shadow-none bg-transparent"
+                          aria-label={
+                            visibility.confirmPassword
+                              ? "Sembunyikan pin"
+                              : "Tampilkan pin"
+                          }
                         >
                           <IconContext.Provider
                             value={{ color: "#B7B9C8", size: "25px" }}

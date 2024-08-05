@@ -65,7 +65,7 @@ export default function Verification_OTP() {
 
   const resendOTP = () => {
     setMinutes(1);
-    setSeconds(30);
+    setSeconds(0);
   };
 
   useEffect(() => {

@@ -14,6 +14,9 @@ import { useLoading } from "@/hooks/useLoading";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 
 const DataDiri = () => {
+  const { no_ktp, name, date_of_birth } = useRegistrationStore(
+    (state) => state
+  );
   const setField = useRegistrationStore((state) => state.setField);
   const navigate = useNavigate();
   const { isLoading, withLoading } = useLoading();
@@ -24,9 +27,9 @@ const DataDiri = () => {
     formState: { errors },
   } = useForm<IFormInput>({
     defaultValues: {
-      noKtp: "",
-      nama: "",
-      tanggalLahir: "",
+      noKtp: no_ktp || "",
+      nama: name || "",
+      tanggalLahir: date_of_birth.split("-").reverse().join("-") || "",
     },
   });
 
@@ -75,16 +78,20 @@ const DataDiri = () => {
                         render={({ field }) => (
                           <Input
                             id="noKtp"
-                            type="number"
+                            type="text"
                             placeholder="1234567891011"
                             aria-label="Masukkan no KTP Anda"
-                            className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
-                              ${
-                                errors.noKtp
-                                  ? "border-2 border-secondary-red focus:outline-secondary-red"
-                                  : ""
-                              }`}
+                            className={`${
+                              errors.noKtp
+                                ? "border-2 border-secondary-red focus:outline-secondary-red"
+                                : ""
+                            }`}
                             {...field}
+                            onChange={(e) =>
+                              field.onChange(
+                                e.target.value.replace(/[^0-9]/g, "")
+                              )
+                            }
                           />
                         )}
                         rules={{

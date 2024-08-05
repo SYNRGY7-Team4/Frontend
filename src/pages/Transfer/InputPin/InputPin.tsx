@@ -8,8 +8,10 @@ import { IconContext } from "react-icons";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { TIsStatus, TPinInput } from "./types";
 import Alert from "@/components/Alert/Alert";
+import { useNavigate } from "react-router-dom";
 
 const InputPin = () => {
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
@@ -59,15 +61,21 @@ const InputPin = () => {
                   <div className="w-64 flex relative">
                     <Input
                       id="pin"
-                      type={visibility ? "text" : "password"}
+                      type="text"
                       placeholder="Pin"
                       aria-label="Pin"
-                      className={
-                        errors.pin
-                          ? "border-2 border-secondary-red focus:outline-secondary-red"
-                          : ""
-                      }
+                      className={`
+                        ${
+                          errors.pin
+                            ? "border-2 border-secondary-red focus:outline-secondary-red"
+                            : ""
+                        }
+                          ${visibility ? "" : "text-security-disc"}
+                      `}
                       {...field}
+                      onChange={(e) =>
+                        field.onChange(e.target.value.replace(/[^0-9]/g, ""))
+                      }
                     />
                     <div className="absolute right-[15px] flex items-center h-full">
                       <Button
@@ -159,7 +167,12 @@ const InputPin = () => {
                 </tr>
               </table>
             </div>
-            <Button id="btnOke" className="w-full py-0" aria-label="Tombol oke">
+            <Button
+              id="btnOke"
+              className="w-full py-0"
+              aria-label="Tombol oke"
+              onClick={() => navigate("/transfer")}
+            >
               Oke
             </Button>
           </>

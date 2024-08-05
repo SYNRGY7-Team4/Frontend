@@ -64,7 +64,7 @@ function App() {
 
         <Route element={<ProtectedRoutes />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/notifikasi" element={<Notifikasi />} />
+          <Route path="/notifikasi" element={<Notifikasi />} />
 
           <Route path="/transfer" element={<TransferForm />} />
           <Route path="/transfer/input-pin" element={<InputPin />} />

@@ -11,6 +11,7 @@ interface UserData {
   no_hp: string;
   date_of_birth: string;
   account_number: string;
+  account_pin: string;
   ektp_photo: string;
 }
 

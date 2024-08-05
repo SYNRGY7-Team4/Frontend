@@ -10,11 +10,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axiosInstance from "@/axios/axios";
 import { AxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TIsStatus } from "./types";
 import Alert from "@/components/Alert/Alert";
 import { useLoading } from "@/hooks/useLoading";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
+import { MaterialSymbol } from "react-material-symbols";
+import "react-material-symbols/rounded";
 
 const loginSchema = z.object({
   email: z
@@ -40,10 +42,15 @@ type TLoginSchema = z.infer<typeof loginSchema>;
 
 export default function Login() {
   const navigate = useNavigate();
+  const [isAuthenticated] = useState(
+    localStorage.getItem("token") ? true : false
+  );
   const { isLoading, withLoading } = useLoading();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isStatus, setIsStatus] = useState<TIsStatus>(undefined);
   const [errorMsg, setErrorMsg] = useState<string>("");
+
+  const [isPasswordVisibility, setPasswordVisibility] = useState(false);
   const {
     register,
     handleSubmit,
@@ -52,6 +59,12 @@ export default function Login() {
   } = useForm<TLoginSchema>({
     resolver: zodResolver(loginSchema),
   });
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      window.location.href = "/dashboard";
+    }
+  }, [isAuthenticated]);
 
   const onSubmit = async (data: TLoginSchema) => {
     try {
@@ -118,18 +131,47 @@ export default function Login() {
                 </div>
                 <div className="flex flex-col gap-y-1">
                   <Label htmlFor="password">Password</Label>
-                  <Input
-                    type="password"
-                    id="password"
-                    placeholder="Password"
-                    aria-label="Masukkan password Anda"
-                    {...register("password")}
-                    className={`${
-                      errors.password
-                        ? "focus:outline-secondary-red border-secondary-red"
-                        : ""
-                    }`}
-                  />
+                  <div className="flex items-center relative">
+                    <Input
+                      type={isPasswordVisibility ? "text" : "password"}
+                      id="password"
+                      placeholder="Password"
+                      aria-label="Masukkan password Anda"
+                      {...register("password")}
+                      className={`${
+                        errors.password
+                          ? "focus:outline-secondary-red border-secondary-red"
+                          : ""
+                      }`}
+                    />
+                    <div
+                      className="absolute right-[15px] cursor-pointer"
+                      onClick={() =>
+                        setPasswordVisibility(!isPasswordVisibility)
+                      }
+                      aria-label={
+                        isPasswordVisibility
+                          ? "Sembunyikan pin"
+                          : "Tampilkan pin"
+                      }
+                    >
+                      {isPasswordVisibility ? (
+                        <MaterialSymbol
+                          icon="visibility_off"
+                          size={20}
+                          title="Sembunyikan pin"
+                          className="py-3 text-neutral-03"
+                        />
+                      ) : (
+                        <MaterialSymbol
+                          icon="visibility"
+                          size={20}
+                          title="Tampilkan pin"
+                          className="py-3 text-neutral-03"
+                        />
+                      )}
+                    </div>
+                  </div>
                   {errors.password && (
                     <span
                       className="text-red-500 text-sm"
