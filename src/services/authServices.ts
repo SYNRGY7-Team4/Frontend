@@ -57,3 +57,15 @@ export const fetchUserBalanceDataAPI = async (account_number: string) => {
     return handleError(error);
   }
 };
+
+export const fetchUserMutationDataAPI = async (account_number: string) => {
+  try {
+    const response = await axiosInstance.get<Response>(
+      `/transaction/mutations?accountNumber=${account_number}`
+    );
+    // console.log(response.data);
+    return response.data;
+  } catch (error) {
+    return handleError(error);
+  }
+};

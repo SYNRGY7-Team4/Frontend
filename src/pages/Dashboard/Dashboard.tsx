@@ -10,7 +10,7 @@ import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 import { Link } from "react-router-dom";
 
 export default function Dashboard() {
-  const { userData, isLoading, fetchUserData, fetchBalance } = useUserStore();
+  const { userData, isLoading, fetchUserData, fetchBalance, fetchMutations } = useUserStore();
   const [lastLogin, setLastLogin] = useState("");
 
   useEffect(() => {
@@ -36,8 +36,9 @@ export default function Dashboard() {
   useEffect(() => {
     if (userData && userData.account_number) {
       fetchBalance(userData.account_number);
+      fetchMutations(userData.account_number);
     }
-  }, [userData, fetchBalance]);
+  }, [userData, fetchBalance, fetchMutations]);
 
   return (
     <>

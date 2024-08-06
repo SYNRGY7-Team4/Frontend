@@ -75,6 +75,7 @@ export default function Login() {
       await withLoading(async () => {
         const response = await axiosInstance.post("/auth/login", formData);
         localStorage.setItem("token", response.data.data.jwt_token);
+        localStorage.setItem("refreshToken", response.data.data.refresh_token);
         reset();
         navigate("/dashboard");
       });

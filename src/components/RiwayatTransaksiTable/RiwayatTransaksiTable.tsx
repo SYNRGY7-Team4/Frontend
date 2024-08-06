@@ -1,41 +1,23 @@
 import noDocuments from "@/assets/no_documents.svg";
-
-const transactions = [
-  {
-    id: 1,
-    date: "7 Juli 2024",
-    description: "Transfer ke BANK BCA",
-    category: "Transfer",
-    mutation: "- Rp. 15.000",
-    balance: "Rp. 750.000",
-  },
-  {
-    id: 2,
-    date: "8 Juli 2024",
-    description: "Top Up ke Gopay",
-    category: "Top Up",
-    mutation: "- Rp. 250.000",
-    balance: "Rp. 500.000",
-  },
-  {
-    id: 3,
-    date: "8 Juli 2024",
-    description: "Transfer ke BANK BCA",
-    category: "Transfer",
-    mutation: "- Rp. 10.000",
-    balance: "Rp. 490.000",
-  },
-  {
-    id: 4,
-    date: "10 Juli 2024",
-    description: "Transfer ke BANK BCA",
-    category: "Transfer",
-    mutation: "- Rp. 10.000",
-    balance: "Rp. 480.000",
-  },
-];
+import { useUserStore } from "@/store/UserStore";
+import { useEffect, useState } from "react";
 
 export default function RiwayatTransaksiTable() {
+  const { balance: userBalance, userMutations } = useUserStore();
+  const [balance, setBalance] = useState<number>(0);
+
+  useEffect(() => {
+    if (userBalance !== null) {
+      setBalance(userBalance);
+    }
+  }, [userBalance]);
+
+  const calculateBalance = (mutation: number) => {
+    setBalance((prevBalance) => prevBalance - mutation);
+
+    return balance;
+  };
+
   return (
     <div className="overflow-auto">
       <table className="w-full">
@@ -49,23 +31,25 @@ export default function RiwayatTransaksiTable() {
           </tr>
         </thead>
         <tbody>
-          {transactions.length > 0 ? (
-            transactions.map((transaction) => (
+          {userMutations.length > 0 ? (
+            userMutations.map((transaction: any) => (
               <tr key={transaction.id} className="border-b border-neutral-200">
-                <td className="py-4 px-6">{transaction.date}</td>
+                <td className="py-4 px-6">{transaction.datetime.toString()}</td>
                 <td className="py-4 px-6">{transaction.description}</td>
                 <td className="py-4 px-6">
                   <span className="py-0.5 px-2 rounded-full bg-neutral-200">
-                    {transaction.category}
+                    {transaction.type}
                   </span>
                 </td>
                 <td className="py-4 px-6">
                   <span className="text-secondary-red font-bold">
-                    {transaction.mutation}
+                    - {transaction.amount}
                   </span>
                 </td>
                 <td className="py-4 px-6">
-                  <span className="font-bold">{transaction.balance}</span>
+                  <span className="font-bold">
+                    {calculateBalance(transaction.amount)}
+                  </span>
                 </td>
               </tr>
             ))
