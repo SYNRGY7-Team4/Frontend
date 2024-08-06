@@ -22,12 +22,15 @@ import {
 } from "@/pages";
 import ProtectedRoutes from "@/utils/ProtectedRoutes";
 import UserSession from "@/components/UserSession/UserSession";
+// import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function App() {
   const location = useLocation();
+  // const queryClient = new QueryClient();
 
   return (
     <>
+      {/* <QueryClientProvider client={queryClient}> */}
       <UserSession />
       <Routes key={location.pathname} location={location}>
         <Route
@@ -75,6 +78,7 @@ function App() {
         <Route path="/under-development" element={<UnderDevelopment />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+        {/* </QueryClientProvider> */}
     </>
   );
 }
