@@ -178,15 +178,11 @@ export default function Verification_E_KTP() {
                     <span className="text-sm">
                       Max berukuran 1MB dengan format .jpg, .png
                     </span>
-                    <div
-                      role="img"
-                      aria-label="Tampilan foto e-KTP Anda"
-                      className="py-5"
-                    >
+                    <div className="py-5">
                       <img
                         className="w-48 h-28 object-cover rounded-lg"
                         src={preview}
-                        alt="Preview foto e-KTP"
+                        alt="Tampilan preview foto e-KTP anda"
                       />
                     </div>
                   </div>

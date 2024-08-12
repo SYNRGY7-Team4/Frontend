@@ -46,7 +46,11 @@ export default function Alert({
         isOpen ? "block" : "hidden"
       } fixed z-10 top-0 left-0 w-full h-full bg-neutral-09/35 grid place-items-center`}
     >
-      <div className={cn(alertVariant({ className, variant }))}>
+      <div
+        className={cn(alertVariant({ className, variant }))}
+        role="alert"
+        aria-live="assertive"
+      >
         {showCloseButton && (
           <button
             type="button"
@@ -63,7 +67,12 @@ export default function Alert({
           </button>
         )}
         {variant === "danger" && (
-          <MaterialSymbol icon="warning" size={132} title="warning" />
+          <MaterialSymbol
+            icon="warning"
+            size={132}
+            title="warning"
+            aria-label="Icon warning"
+          />
         )}
         {variant === "success" && (
           <MaterialSymbol
@@ -71,6 +80,7 @@ export default function Alert({
             icon="new_releases"
             size={132}
             title="new_releases"
+            aria-label="Icon sukses"
           />
         )}
         {variant === "primary" && (
@@ -79,6 +89,7 @@ export default function Alert({
             icon="preliminary"
             size={132}
             title="preliminary"
+            aria-label="Icon warning"
           />
         )}
         <div className="w-full">{children}</div>

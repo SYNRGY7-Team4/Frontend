@@ -30,10 +30,14 @@ const TransferForm: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [msgError, setMsgError] = useState<string>("");
   const { userData, fetchUserData } = useUserStore();
+  const [userAccountNumber, setUserAccountNumber] = useState<string>("");
 
   useEffect(() => {
     if (!userData) {
       fetchUserData();
+    }
+    if (userData?.account_number) {
+      setUserAccountNumber(userData.account_number.toString());
     }
   }, [fetchUserData, userData]);
 
@@ -131,7 +135,7 @@ const TransferForm: React.FC = () => {
                   id="accountNumber"
                   name="accountNumber"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  defaultValue={userData.account_number}
+                  defaultValue={userAccountNumber}
                   aria-label="Nomor rekening anda"
                 />
               </div>

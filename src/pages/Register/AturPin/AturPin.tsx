@@ -49,8 +49,6 @@ export default function AturPin() {
     setIsAlertOpen(false);
     if (alertVariant === "success") {
       navigate("/login");
-    } else {
-      navigate("/register");
     }
   };
 
@@ -70,9 +68,6 @@ export default function AturPin() {
       if (response?.success === false) {
         setAlertVariant("danger");
         setAlertMessage(extractMessage(response.message));
-        // setAlertMessage(
-        //   "Registrasi gagal. Terjadi kesalahan yang tidak terduga. Silakan coba lagi"
-        // );
         setIsAlertOpen(true);
         reset();
       } else {
@@ -136,8 +131,8 @@ export default function AturPin() {
                           />
                         )}
                       />
-                      <div
-                        className="absolute right-[15px] cursor-pointer"
+                      <Button
+                        className="w-fit h-fit hover:shadow-none bg-transparent absolute right-[15px] cursor-pointer"
                         onClick={() => setPinVisibility(!isPinVisibility)}
                         aria-label={
                           isPinVisibility ? "Sembunyikan pin" : "Tampilkan pin"
@@ -158,7 +153,7 @@ export default function AturPin() {
                             className="py-3 text-neutral-03"
                           />
                         )}
-                      </div>
+                      </Button>
                     </div>
                     {errors.pin && (
                       <span
@@ -207,8 +202,8 @@ export default function AturPin() {
                           />
                         )}
                       />
-                      <div
-                        className="absolute right-[15px] cursor-pointer"
+                      <Button
+                        className="w-fit h-fit hover:shadow-none bg-transparent absolute right-[15px] cursor-pointer"
                         onClick={() =>
                           setConfirmPinVisibility(!isConfirmPinVisibility)
                         }
@@ -233,7 +228,7 @@ export default function AturPin() {
                             className="py-3 text-neutral-03"
                           />
                         )}
-                      </div>
+                      </Button>
                     </div>
                     {errors.konfirmasiPin && (
                       <span

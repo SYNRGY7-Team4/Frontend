@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axiosInstance from "@/axios/axios";
 import { AxiosError } from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TIsStatus } from "./types";
 import Alert from "@/components/Alert/Alert";
 import { useLoading } from "@/hooks/useLoading";
@@ -32,19 +32,12 @@ const loginSchema = z.object({
       message:
         "Password harus terdiri dari 8-15 karakter dan harus mengandung kombinasi huruf dan angka",
     }),
-  // .regex(
-  //   new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/),
-  //   "Password harus terdiri dari 8-15 karakter dan harus mengandung kombinasi huruf dan angka"
-  // ),
 });
 
 type TLoginSchema = z.infer<typeof loginSchema>;
 
 export default function Login() {
   const navigate = useNavigate();
-  const [isAuthenticated] = useState(
-    localStorage.getItem("token") ? true : false
-  );
   const { isLoading, withLoading } = useLoading();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isStatus, setIsStatus] = useState<TIsStatus>(undefined);
@@ -59,12 +52,6 @@ export default function Login() {
   } = useForm<TLoginSchema>({
     resolver: zodResolver(loginSchema),
   });
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      window.location.href = "/dashboard";
-    }
-  }, [isAuthenticated]);
 
   const onSubmit = async (data: TLoginSchema) => {
     try {
@@ -145,8 +132,8 @@ export default function Login() {
                           : ""
                       }`}
                     />
-                    <div
-                      className="absolute right-[15px] cursor-pointer"
+                    <Button
+                      className="w-fit h-fit bg-transparent absolute right-[15px] cursor-pointer"
                       onClick={() =>
                         setPasswordVisibility(!isPasswordVisibility)
                       }
@@ -171,7 +158,7 @@ export default function Login() {
                           className="py-3 text-neutral-03"
                         />
                       )}
-                    </div>
+                    </Button>
                   </div>
                   {errors.password && (
                     <span

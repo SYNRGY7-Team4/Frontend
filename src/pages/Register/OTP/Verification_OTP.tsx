@@ -138,7 +138,7 @@ export default function Verification_OTP() {
                 <div className="flex flex-col gap-y-3">
                   <div className="flex flex-col gap-y-8 sm:gap-y-6">
                     <Label htmlFor="otp" className="text-black">
-                      Masukkan kode 4 digit yang Anda terima di email Anda
+                      Masukkan kode 6 digit yang Anda terima di email Anda
                     </Label>
                     <div
                       id="otp"
@@ -206,7 +206,7 @@ export default function Verification_OTP() {
           onClose={handleCloseAlert}
           showCloseButton={true}
         >
-          {alertMessage}
+          <p aria-label={alertMessage}>{alertMessage}</p>
         </Alert>
       </SpinnerWrapper>
     </>

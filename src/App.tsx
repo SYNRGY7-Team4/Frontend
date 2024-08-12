@@ -28,6 +28,14 @@ function App() {
   const location = useLocation();
   // const queryClient = new QueryClient();
 
+  if (
+    (location.pathname === "/login" ||
+      /^\/register(\/.*)?$/.test(location.pathname)) &&
+    localStorage.getItem("token")
+  ) {
+    window.location.href = "/dashboard";
+  }
+
   return (
     <>
       {/* <QueryClientProvider client={queryClient}> */}
@@ -78,7 +86,7 @@ function App() {
         <Route path="/under-development" element={<UnderDevelopment />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-        {/* </QueryClientProvider> */}
+      {/* </QueryClientProvider> */}
     </>
   );
 }
