@@ -2,25 +2,40 @@ import Button from "@/components/Button/Button";
 import FooterDashboard from "@/components/Footer/FooterDasboard";
 import Header from "@/components/Header/HeaderDasboard";
 import Input from "@/components/Input/Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { IconContext } from "react-icons";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { TIsStatus, TPinInput } from "./types";
 import Alert from "@/components/Alert/Alert";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import axiosInstance from "@/axios/axios";
+import { useUserStore } from "@/store/UserStore";
 
 const InputPin = () => {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const { userData, fetchUserData } = useUserStore();
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<TPinInput>({
     defaultValues: {
-      pin: undefined,
+      ...state,
+      pin: "",
     },
   });
+  const [userPin, setUserPin] = useState<string>("");
+
+  useEffect(() => {
+    if (!userData) {
+      fetchUserData();
+    }
+    if (userData) {
+      setUserPin(userData.account_pin.toString());
+    }
+  }, [fetchUserData, userData]);
 
   const [visibility, setVisibility] = useState(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -32,14 +47,22 @@ const InputPin = () => {
     setVisibility(!visibility);
   };
 
-  const onSubmit: SubmitHandler<TPinInput> = (data) => {
-    setIsOpen(true);
+  const onSubmit: SubmitHandler<TPinInput> = async (data) => {
+    // setIsOpen(true);
 
-    if (+data.pin === 123) {
-      return setIsStatus("success");
+    // if (data.pin !== userPin) {
+    //   return console.log("pin tidak sama");
+    // }
+
+    // // setIsStatus("danger");
+    console.log({ data });
+    try {
+      const res = await axiosInstance.post("/transaction/transfer", data);
+
+      console.log({ data: res });
+    } catch (error) {
+      console.log(error);
     }
-
-    setIsStatus("danger");
   };
 
   return (
@@ -167,12 +190,7 @@ const InputPin = () => {
                 </tr>
               </table>
             </div>
-            <Button
-              id="btnOke"
-              className="w-full py-0"
-              aria-label="Tombol oke"
-              onClick={() => navigate("/transfer")}
-            >
+            <Button id="btnOke" className="w-full py-0" aria-label="Tombol oke">
               Oke
             </Button>
           </>
