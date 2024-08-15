@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://backend-dev-synrgy-team4.koyeb.app/api",
+  baseURL: "https://lumibank-backend-edqo6jv53q-et.a.run.app/api",
   headers: {
     "Content-Type": "application/json",
   },
