@@ -19,6 +19,7 @@ import {
   NewPassword,
   Mutasi,
   Notifikasi,
+  Qris,
 } from "@/pages";
 import ProtectedRoutes from "@/utils/ProtectedRoutes";
 import UserSession from "@/components/UserSession/UserSession";
@@ -81,6 +82,8 @@ function App() {
           <Route path="/transfer/input-pin" element={<InputPin />} />
 
           <Route path="/mutasi" element={<Mutasi />} />
+
+          <Route path="/qris" element={<Qris />} />
         </Route>
 
         <Route path="/under-development" element={<UnderDevelopment />} />
