@@ -11,6 +11,7 @@ import Alert from "@/components/Alert/Alert";
 import { otpSchema, OTPInput } from "@/pages/Register/OTP/OTPSchema";
 import { useLoading } from "@/hooks/useLoading";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
+import { MdArrowBack } from "react-icons/md";
 
 let currentOTPIndex: number = 0;
 
@@ -127,7 +128,16 @@ export default function Verification_OTP() {
           style={{ backgroundImage: `url(${bgAuth})` }}
         >
           <div className="container mx-auto px-6 flex items-center justify-center md:justify-end h-full">
-            <div className="bg-neutral-01 px-8 py-14 md:px-14 rounded-lg w-[450px]">
+            <div className="bg-neutral-01 px-8 py-8 md:px-14 rounded-lg w-[450px] min-h-[480px]">
+              <Button
+                className="w-fit h-fit my-4 text-primary-darkBlue bg-transparent"
+                aria-label="Tombol kembali"
+                onClick={() => {
+                  navigate("/register");
+                }}
+              >
+                <MdArrowBack size={22} />
+              </Button>
               <h1 className="mb-4 text-3xl text-primary-blue font-bold">
                 Verifikasi
               </h1>
@@ -138,7 +148,7 @@ export default function Verification_OTP() {
                 <div className="flex flex-col gap-y-3">
                   <div className="flex flex-col gap-y-8 sm:gap-y-6">
                     <Label htmlFor="otp" className="text-black">
-                      Masukkan kode 4 digit yang Anda terima di email Anda
+                      Masukkan kode 6 digit yang Anda terima di email Anda
                     </Label>
                     <div
                       id="otp"
@@ -206,7 +216,7 @@ export default function Verification_OTP() {
           onClose={handleCloseAlert}
           showCloseButton={true}
         >
-          {alertMessage}
+          <p aria-label={alertMessage}>{alertMessage}</p>
         </Alert>
       </SpinnerWrapper>
     </>

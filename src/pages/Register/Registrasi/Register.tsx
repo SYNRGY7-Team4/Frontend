@@ -13,12 +13,21 @@ import { useRegistrationStore } from "@/store/RegisterStore";
 import { useLoading } from "@/hooks/useLoading";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 import { RegisterSchema, TRegisterSchema } from "./RegisterSchema";
+import { checkRegisterDataAPI } from "@/services/authServices";
+import { useState } from "react";
+import Alert from "@/components/Alert/Alert";
 
 export default function Register() {
   const { email, no_hp } = useRegistrationStore((state) => state);
   const setField = useRegistrationStore((state) => state.setField);
   const navigate = useNavigate();
   const { isLoading, withLoading } = useLoading();
+
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertVariant, setAlertVariant] = useState<
+    "success" | "danger" | "primary" | undefined
+  >(undefined);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const {
     control,
@@ -33,15 +42,42 @@ export default function Register() {
     },
   });
 
+  const getErrorMessage = (emailResponse: any, hpResponse: any) => {
+    if (emailResponse?.success === false) {
+      return emailResponse?.message;
+    } else if (hpResponse?.success === false) {
+      return hpResponse?.message;
+    }
+  };
+
   const onSubmit = async (data: TRegisterSchema) => {
     setField("email", data.emailRegister);
     setField("no_hp", data.phoneNumber);
 
     withLoading(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      navigate("/register/otp");
+      const emailResponse = await checkRegisterDataAPI(
+        "email",
+        data.emailRegister
+      );
+      const hpResponse = await checkRegisterDataAPI("no_hp", data.phoneNumber);
+
+      if (emailResponse?.success === false || hpResponse?.success === false) {
+        setAlertVariant("danger");
+        setAlertMessage(getErrorMessage(emailResponse, hpResponse));
+        setIsAlertOpen(true);
+        reset();
+      } else if (
+        emailResponse?.success === true ||
+        hpResponse?.success === true
+      ) {
+        navigate("/register/otp");
+        reset();
+      } else {
+        setAlertVariant("danger");
+        setAlertMessage(emailResponse?.message || hpResponse?.message);
+        setIsAlertOpen(true);
+      }
     });
-    reset();
   };
 
   return (
@@ -183,6 +219,17 @@ export default function Register() {
           </div>
         </main>
         <Footer />
+        <Alert
+          variant={alertVariant}
+          isOpen={isAlertOpen}
+          autoDismiss={false}
+          onClose={() => {
+            setIsAlertOpen(false);
+          }}
+          showCloseButton={true}
+        >
+          {alertMessage}
+        </Alert>
       </SpinnerWrapper>
     </>
   );

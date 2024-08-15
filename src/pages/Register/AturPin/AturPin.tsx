@@ -16,10 +16,10 @@ import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 import { useState } from "react";
 import Alert from "@/components/Alert/Alert";
 import { PinSchema, TPinSchema } from "./PinSchema";
+import { MdArrowBack } from "react-icons/md";
 
 export default function AturPin() {
   const navigate = useNavigate();
-
   const { pin } = useRegistrationStore((state) => state);
   const setField = useRegistrationStore((state) => state.setField);
   const { reset, ...formData } = useRegistrationStore();
@@ -32,6 +32,8 @@ export default function AturPin() {
     "success" | "danger" | "primary" | undefined
   >(undefined);
   const [alertMessage, setAlertMessage] = useState("");
+
+  const [isModalAlertOpen, setIsModalAlertOpen] = useState(false);
 
   const {
     control,
@@ -49,8 +51,15 @@ export default function AturPin() {
     setIsAlertOpen(false);
     if (alertVariant === "success") {
       navigate("/login");
+    }
+  };
+
+  const confirmModalAction = () => {
+    if (!formData.ektp_photo) {
+      navigate("/register/ktp");
     } else {
       navigate("/register");
+      reset();
     }
   };
 
@@ -70,16 +79,17 @@ export default function AturPin() {
       if (response?.success === false) {
         setAlertVariant("danger");
         setAlertMessage(extractMessage(response.message));
-        // setAlertMessage(
-        //   "Registrasi gagal. Terjadi kesalahan yang tidak terduga. Silakan coba lagi"
-        // );
         setIsAlertOpen(true);
         reset();
-      } else {
+      } else if (response?.success === true) {
         setAlertVariant("success");
         setAlertMessage("Anda berhasil membuka rekening");
         setIsAlertOpen(true);
         reset();
+      } else {
+        setAlertVariant("danger");
+        setAlertMessage(response?.message);
+        setIsAlertOpen(true);
       }
     });
   };
@@ -93,7 +103,14 @@ export default function AturPin() {
           style={{ backgroundImage: `url(${bgAuth})` }}
         >
           <div className="container mx-auto px-6 flex items-center justify-center md:justify-end h-full">
-            <div className="bg-neutral-01 px-8 py-14 md:px-14 rounded-lg w-[450px] min-h-[480px]">
+            <div className="bg-neutral-01 px-8 py-8 md:px-14 rounded-lg w-[450px] min-h-[480px]">
+              <Button
+                className="w-fit h-fit my-4 text-primary-darkBlue bg-transparent"
+                onClick={() => setIsModalAlertOpen(true)}
+                type="button"
+              >
+                <MdArrowBack size={22} />
+              </Button>
               <h1 className="mb-10 text-3xl text-primary-blue font-bold">
                 Atur Pin
               </h1>
@@ -136,8 +153,9 @@ export default function AturPin() {
                           />
                         )}
                       />
-                      <div
-                        className="absolute right-[15px] cursor-pointer"
+                      <Button
+                        type="button"
+                        className="w-fit h-fit hover:shadow-none bg-transparent absolute right-[15px] cursor-pointer"
                         onClick={() => setPinVisibility(!isPinVisibility)}
                         aria-label={
                           isPinVisibility ? "Sembunyikan pin" : "Tampilkan pin"
@@ -158,7 +176,7 @@ export default function AturPin() {
                             className="py-3 text-neutral-03"
                           />
                         )}
-                      </div>
+                      </Button>
                     </div>
                     {errors.pin && (
                       <span
@@ -207,8 +225,9 @@ export default function AturPin() {
                           />
                         )}
                       />
-                      <div
-                        className="absolute right-[15px] cursor-pointer"
+                      <Button
+                        type="button"
+                        className="w-fit h-fit hover:shadow-none bg-transparent absolute right-[15px] cursor-pointer"
                         onClick={() =>
                           setConfirmPinVisibility(!isConfirmPinVisibility)
                         }
@@ -233,7 +252,7 @@ export default function AturPin() {
                             className="py-3 text-neutral-03"
                           />
                         )}
-                      </div>
+                      </Button>
                     </div>
                     {errors.konfirmasiPin && (
                       <span
@@ -254,6 +273,41 @@ export default function AturPin() {
             </div>
           </div>
         </main>
+
+        {isModalAlertOpen && (
+          <Alert
+            variant={"danger"}
+            isOpen={isModalAlertOpen}
+            autoDismiss={false}
+            onClose={handleCloseAlert}
+            showCloseButton={false}
+          >
+            <div>
+              <p className="text-lg mb-4">
+                Apakah anda yakin akan keluar dari halaman ini? Jika iya, maka
+                data Anda tidak akan tersimpan
+              </p>
+              <div className="flex justify-center gap-3">
+                <Button
+                  className="w-[45%] bg-transparent text-primary-blue border-2 border-primary-blue"
+                  type="button"
+                  aria-label="Tombol tidak"
+                  onClick={() => setIsModalAlertOpen(false)}
+                >
+                  Tidak
+                </Button>
+                <Button
+                  className="w-[45%] "
+                  type="button"
+                  aria-label="Tombol ya"
+                  onClick={confirmModalAction}
+                >
+                  Ya
+                </Button>
+              </div>
+            </div>
+          </Alert>
+        )}
         <Alert
           variant={alertVariant}
           isOpen={isAlertOpen}

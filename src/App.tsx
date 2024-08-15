@@ -19,6 +19,7 @@ import {
   NewPassword,
   Mutasi,
   Notifikasi,
+  Qris,
 } from "@/pages";
 import ProtectedRoutes from "@/utils/ProtectedRoutes";
 import UserSession from "@/components/UserSession/UserSession";
@@ -27,6 +28,14 @@ import UserSession from "@/components/UserSession/UserSession";
 function App() {
   const location = useLocation();
   // const queryClient = new QueryClient();
+
+  if (
+    (location.pathname === "/login" ||
+      /^\/register(\/.*)?$/.test(location.pathname)) &&
+    localStorage.getItem("token")
+  ) {
+    window.location.href = "/dashboard";
+  }
 
   return (
     <>
@@ -73,12 +82,14 @@ function App() {
           <Route path="/transfer/input-pin" element={<InputPin />} />
 
           <Route path="/mutasi" element={<Mutasi />} />
+
+          <Route path="/qris" element={<Qris />} />
         </Route>
 
         <Route path="/under-development" element={<UnderDevelopment />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-        {/* </QueryClientProvider> */}
+      {/* </QueryClientProvider> */}
     </>
   );
 }

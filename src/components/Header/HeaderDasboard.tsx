@@ -5,26 +5,22 @@ import { MaterialSymbol } from "react-material-symbols";
 import "react-material-symbols/rounded";
 import { useState } from "react";
 import NotificationList, { Notification } from "../Notifikasi/Notifikasi";
+import Button from "../Button/Button";
+import { useUserStore } from "@/store/UserStore";
 
 export default function HeaderDashboard() {
   const navigate = useNavigate();
+  const resetState = useUserStore((state) => state.resetState);
 
   const [isOpenMobileMenu, setOpenMobileMenu] = useState(false);
-  const [isOpenDropdownTransaksi, setOpenDropdownTransaksi] = useState(false);
   const [isOpenDropdownNotifikasi, setOpenDropdownNotifikasi] = useState(false);
 
   const toggleDropdown = (dropdownType: string) => {
     switch (dropdownType) {
-      case "transaksi":
-        setOpenDropdownTransaksi((prev) => !prev);
-        setOpenDropdownNotifikasi(false);
-        break;
       case "notifikasi":
         setOpenDropdownNotifikasi((prev) => !prev);
-        setOpenDropdownTransaksi(false);
         break;
       default:
-        setOpenDropdownTransaksi(false);
         setOpenDropdownNotifikasi(false);
         break;
     }
@@ -60,6 +56,8 @@ export default function HeaderDashboard() {
 
   const handleLogout = () => {
     localStorage.clear();
+    resetState();
+
     navigate("/login");
   };
 
@@ -97,67 +95,44 @@ export default function HeaderDashboard() {
                 Beranda
               </NavLink>
             </li>
-            <li className="font-bold text-lg tracking-wide relative">
-              <div
-                className={`cursor-pointer ${
-                  location.pathname === "/transfer" ||
-                  location.pathname === "/mutasi"
+            <li className="font-bold text-lg tracking-wide">
+              <NavLink
+                to="/transfer"
+                className={({ isActive }) => {
+                  return isActive
                     ? "text-primary-darkBlue border-b-2 border-b-primary-darkBlue"
-                    : "text-black relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary-darkBlue after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left"
-                }`}
-                aria-label="Menu dropdown transaksi"
+                    : "text-black relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary-darkBlue after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left";
+                }}
+                aria-current="page"
               >
-                <div
-                  className={`flex items-center space-x-2 `}
-                  onClick={() => toggleDropdown("transaksi")}
-                >
-                  Transaksi
-                  {!isOpenDropdownTransaksi ? (
-                    <MaterialSymbol
-                      icon="keyboard_arrow_right"
-                      title="keyboard_arrow_right"
-                    />
-                  ) : (
-                    <MaterialSymbol
-                      icon="keyboard_arrow_down"
-                      title="keyboard_arrow_down"
-                    />
-                  )}
-                </div>
-                {isOpenDropdownTransaksi && (
-                  <div className="bg-neutral-01 absolute w-[310px] rounded-lg shadow-02 z-[100] py-4 right-0 text-primary-darkBlue">
-                    <span className="text-lg border-b top-20 flex flex-col items-start p-2 w-full px-4">
-                      Transaksi
-                    </span>
-                    <div className="flex justify-around px-4 py-3 text-center">
-                      <NavLink
-                        to="/transfer"
-                        aria-label="Menu transfer"
-                        className={"flex flex-col"}
-                      >
-                        <MaterialSymbol
-                          icon="credit_card"
-                          size={40}
-                          title="credit_card"
-                        />
-                        <span>Transfer</span>
-                      </NavLink>
-                      <NavLink
-                        to={"/mutasi"}
-                        aria-label="Menu mutasi rekening"
-                        className={"flex flex-col"}
-                      >
-                        <MaterialSymbol
-                          icon="description"
-                          size={40}
-                          title="description"
-                        />
-                        <span>Mutasi</span>
-                      </NavLink>
-                    </div>
-                  </div>
-                )}
-              </div>
+                Transfer
+              </NavLink>
+            </li>
+            <li className="font-bold text-lg tracking-wide">
+              <NavLink
+                to="/mutasi"
+                className={({ isActive }) => {
+                  return isActive
+                    ? "text-primary-darkBlue border-b-2 border-b-primary-darkBlue"
+                    : "text-black relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary-darkBlue after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left";
+                }}
+                aria-current="page"
+              >
+                Mutasi
+              </NavLink>
+            </li>
+            <li className="font-bold text-lg tracking-wide">
+              <NavLink
+                to="/qris"
+                className={({ isActive }) => {
+                  return isActive
+                    ? "text-primary-darkBlue border-b-2 border-b-primary-darkBlue"
+                    : "text-black relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary-darkBlue after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left";
+                }}
+                aria-current="page"
+              >
+                QRIS
+              </NavLink>
             </li>
             <li className="font-bold text-lg tracking-wide flex items-center">
               <NavLink to={"/profil"} aria-label="Menu profil">
@@ -179,20 +154,21 @@ export default function HeaderDashboard() {
               </NavLink>
             </li>
             <li className="font-bold text-lg tracking-wide relative">
-              <div className="cursor-pointer" aria-label="Menu notifikasi">
-                <div
-                  className={`relative flex items-center relative w-fit block ${
+              <div className="cursor-pointer">
+                <Button
+                  className={`bg-transparent relative !flex !items-center relative w-fit h-fit block ${
                     location.pathname === "/notifikasi"
                       ? "text-primary-darkBlue border-b-2 border-b-primary-darkBlue"
                       : "after:block after:content-[''] after:absolute after:h-[1px] after:bg-primary-darkBlue after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left after:bottom-[-2px]"
                   } `}
-                  aria-describedby="Icon notifikasi"
+                  aria-label="Menu notifikasi"
                   onClick={() => toggleDropdown("notifikasi")}
                 >
                   <MaterialSymbol
                     icon="notifications"
                     size={24}
                     title="notifications"
+                    className="text-black"
                   />
                   <MaterialSymbol
                     fill
@@ -201,7 +177,7 @@ export default function HeaderDashboard() {
                     title="circle"
                     className="absolute top-0 right-0 text-secondary-red"
                   />
-                </div>
+                </Button>
                 {isOpenDropdownNotifikasi && (
                   <div className="bg-neutral-01 absolute w-[310px] rounded-lg shadow-02 z-50 py-2 right-0 text-primary-darkBlue">
                     <span className="text-lg border-b top-20 flex flex-col items-start p-2 w-full px-4">
@@ -276,66 +252,43 @@ export default function HeaderDashboard() {
               </NavLink>
             </li>
             <li className="py-3 px-3 text-l font-bold">
-              <div
-                className={`cursor-pointer ${
-                  location.pathname === "/transfer" ||
-                  location.pathname === "/mutasi"
-                    ? "text-primary-darkBlue border-b-2 border-b-primary-darkBlue w-fit"
-                    : "text-black relative w-fit block after:block after:content-[''] after:absolute after:h-[2px] after:bg-primary-darkBlue after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left"
-                }`}
-                aria-label="Menu dropdown transaksi"
+              <NavLink
+                to="/transfer"
+                className={({ isActive }) => {
+                  return isActive
+                    ? "text-primary-darkBlue border-b-2 border-b-primary-darkBlue"
+                    : "text-black relative w-fit block after:block after:content-[''] after:absolute after:h-[1px] after:bg-primary-darkBlue after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left";
+                }}
+                aria-label="Menu Transfer"
               >
-                <div
-                  className={`flex items-center space-x-2 `}
-                  onClick={() => setOpenDropdownTransaksi((prev) => !prev)}
-                >
-                  Transaksi
-                  {!isOpenDropdownTransaksi ? (
-                    <MaterialSymbol
-                      icon="keyboard_arrow_right"
-                      title="keyboard_arrow_right"
-                    />
-                  ) : (
-                    <MaterialSymbol
-                      icon="keyboard_arrow_down"
-                      title="keyboard_arrow_down"
-                    />
-                  )}
-                </div>
-              </div>
-              {isOpenDropdownTransaksi && (
-                <div className="bg-neutral-01 w-auto md:w-[310px] rounded-lg shadow-02 z-[100] md:py-4 mt-2 right-0 text-primary-darkBlue">
-                  <span className="text-lg border-b top-20 flex flex-col items-start p-2 w-full px-4">
-                    Transaksi
-                  </span>
-                  <div className="flex justify-around px-4 py-3 text-center">
-                    <NavLink
-                      to="/transfer"
-                      aria-label="Menu transfer"
-                      className={"flex flex-col"}
-                    >
-                      <MaterialSymbol
-                        icon="credit_card"
-                        size={40}
-                        title="credit_card"
-                      />
-                      <span>Transfer</span>
-                    </NavLink>
-                    <NavLink
-                      to={"/mutasi"}
-                      aria-label="Menu mutasi rekening"
-                      className={"flex flex-col"}
-                    >
-                      <MaterialSymbol
-                        icon="description"
-                        size={40}
-                        title="description"
-                      />
-                      <span>Mutasi</span>
-                    </NavLink>
-                  </div>
-                </div>
-              )}
+                Transfer
+              </NavLink>
+            </li>
+            <li className="py-3 px-3 text-l font-bold">
+              <NavLink
+                to="/mutasi"
+                className={({ isActive }) => {
+                  return isActive
+                    ? "text-primary-darkBlue border-b-2 border-b-primary-darkBlue"
+                    : "text-black relative w-fit block after:block after:content-[''] after:absolute after:h-[1px] after:bg-primary-darkBlue after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left";
+                }}
+                aria-label="Menu Mutasi"
+              >
+                Mutasi
+              </NavLink>
+            </li>
+            <li className="py-3 px-3 text-l font-bold">
+              <NavLink
+                to="/qris"
+                className={({ isActive }) => {
+                  return isActive
+                    ? "text-primary-darkBlue border-b-2 border-b-primary-darkBlue"
+                    : "text-black relative w-fit block after:block after:content-[''] after:absolute after:h-[1px] after:bg-primary-darkBlue after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-left";
+                }}
+                aria-label="Menu Mutasi"
+              >
+                QRIS
+              </NavLink>
             </li>
             <li className="py-3 px-3 text-l font-bold">
               <NavLink
