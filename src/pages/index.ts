@@ -17,6 +17,7 @@ import UnderDevelopment from "./Error/UnderDevelopment";
 import TransferForm from "./Transfer/FormTransfer";
 import Mutasi from "./Mutasi/Mutasi";
 import Qris from "./Qris/Qris";
+import Landing from "./Landing/Landing";
 
 export {
   Login,
@@ -38,4 +39,5 @@ export {
   TransferForm,
   Mutasi,
   Qris,
+  Landing,
 };
