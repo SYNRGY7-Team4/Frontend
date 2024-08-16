@@ -10,10 +10,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { TMutasi, mutasiSchema } from "./mutasiSchema";
 import { useState } from "react";
 import Alert from "@/components/Alert/Alert";
+import { useUserStore } from "@/store/UserStore";
 
 export default function Mutasi() {
+  const { userMutations } = useUserStore();
+
   const [formError, setFormError] = useState<string | null>(null);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
+  const [filteredTransactions, setFilteredTransactions] = useState(userMutations)
 
   const { handleSubmit, control} = useForm<TMutasi>({
     resolver: zodResolver(mutasiSchema)
@@ -23,6 +27,16 @@ export default function Mutasi() {
     console.log(data)
     setFormError(null);
     setHasValidationErrors(false);
+
+    const filteredData = userMutations.filter((transaction: any) => {
+      const isJenisTransaksiMatch = data.jenisTransaksi === "semua" || transaction.type === data.jenisTransaksi;
+      const isDariTanggalMatch = !data.dariTanggal || new Date(transaction.datetime) >= new Date(data.dariTanggal);
+      const isSampaiTanggalMatch = !data.sampaiTanggal || new Date(transaction.datetime) <= new Date(data.sampaiTanggal);
+
+      return isJenisTransaksiMatch && isDariTanggalMatch && isSampaiTanggalMatch;
+    });
+
+    setFilteredTransactions(filteredData);
   }
 
   const onError = (errors: FieldValues) => {
@@ -111,7 +125,7 @@ export default function Mutasi() {
           </form>
         </div>
         <div className="w-full h-full bg-neutral-01 p-6 rounded-lg shadow-02 flex flex-col gap-y-5">
-          <RiwayatTransaksiTable />
+          <RiwayatTransaksiTable transactions={filteredTransactions}/>
 
           <div className="flex justify-end">
             <nav aria-label="Page navigation">
