@@ -1,23 +1,5 @@
 import noDocuments from "@/assets/no_documents.svg";
-import { useUserStore } from "@/store/UserStore";
-// import { useEffect, useState } from "react";
-
-export default function RiwayatTransaksiTable() {
-  const { userMutations } = useUserStore();
-  // const [balance, setBalance] = useState<number>(0);
-
-  // useEffect(() => {
-  //   if (userBalance !== null) {
-  //     setBalance(userBalance);
-  //   }
-  // }, [userBalance]);
-
-  // const calculateBalance = (mutation: number) => {
-  //   setBalance((prevBalance) => prevBalance - mutation);
-
-  //   return balance;
-  // };
-
+export default function RiwayatTransaksiTable({transactions}: {transactions: any[]}) {
   return (
     <div className="overflow-auto">
       <table className="w-full">
@@ -31,8 +13,8 @@ export default function RiwayatTransaksiTable() {
           </tr>
         </thead>
         <tbody>
-          {userMutations.length > 0 ? (
-            userMutations?.map((transaction: any) => (
+          {transactions.length > 0 ? (
+            transactions?.map((transaction: any) => (
               <tr key={transaction.id} className="border-b border-neutral-200">
                 <td className="py-4 px-6">{transaction.datetime.toString()}</td>
                 <td className="py-4 px-6">{transaction.description}</td>
