@@ -74,7 +74,7 @@ export default function Dashboard() {
                     Lihat Selengkapnya
                   </Link>
                 </div>
-                <RiwayatTransaksiTable transactions={userMutations} />
+                <RiwayatTransaksiTable maxRow={4} transactions={userMutations} />
               </div>
             </div>
           </div>
