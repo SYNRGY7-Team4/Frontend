@@ -13,16 +13,18 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import axiosInstance from "@/axios/axios";
 import Label from "@/components/Label/Label";
 import Input from "@/components/Input/Input";
-
-const bankOptions = [
-  { value: "bca", label: "BCA - Bank Central Asia" },
-  { value: "bni", label: "BNI - Bank Negara Indonesia" },
-  { value: "bri", label: "BRI - Bank Rakyat Indonesia" },
-  { value: "mandiri", label: "Mandiri - Bank Mandiri" },
-];
+import useTransferStore, {
+  selectSetField,
+  selectState,
+} from "@/store/TransferStore";
+import { useLoading } from "@/hooks/useLoading";
+import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 
 const TransferForm: React.FC = () => {
   const navigate = useNavigate();
+  const { isLoading, withLoading } = useLoading();
+  const state = useTransferStore(selectState);
+  const setField = useTransferStore(selectSetField);
   const {
     control,
     handleSubmit,
@@ -30,11 +32,14 @@ const TransferForm: React.FC = () => {
     setValue,
   } = useForm<IFormTransfer>({
     defaultValues: {
-      accountFrom: "",
-      accountTo: "",
-      amount: 0,
-      description: "",
-      pin: "",
+      accountFrom: state.accountFrom || "",
+      accountTo: state.accountTo || "",
+      amount: state.amount || undefined,
+      description: state.description || "",
+      // datetime:
+      //   new Date().toLocaleString("id-ID").replace(",", "T").slice(0, 16) || "",
+      datetime: state.datetime || "",
+      bankTo: state.bankTo || "",
     },
   });
   const [saldo, setSaldo] = useState<number>(0);
@@ -43,22 +48,21 @@ const TransferForm: React.FC = () => {
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [msgError, setMsgError] = useState<string>("");
-  const { userData, balance, fetchUserData } = useUserStore();
+  const { userData, balance, fetchUserData, fetchBalance } = useUserStore();
   const [accountList, setAccountLit] = useState<IAccount[]>([]);
 
   useEffect(() => {
     if (!userData) {
       fetchUserData();
     }
-    if (userData) {
+    if (userData && userData.account_number) {
+      fetchBalance(userData.account_number);
       setUserName(userData.name);
       setValue("accountFrom", userData.account_number.toString());
       setUserAccountNumber(userData.account_number.toString());
     }
-    if (balance !== null) {
-      setSaldo(balance);
-    }
-  }, [fetchUserData, userData]);
+    if (balance !== null) setSaldo(balance);
+  }, [userData, balance]);
 
   const getAllAccount = async () => {
     try {
@@ -71,25 +75,30 @@ const TransferForm: React.FC = () => {
   };
 
   useEffect(() => {
-    getAllAccount();
+    // getAllAccount();
   }, []);
 
   const onSubmit: SubmitHandler<IFormTransfer> = (data) => {
-    console.log({ data });
+    // console.log({ data });
     // if (rekeningTujuan != +formData.accountNumber) {
     //   setMsgError("Nomor Rekening Tidak Valid");
     //   setIsOpen(true);
     //   return;
-    // } else if (+formData.amount > saldo) {
+    // } else if (+data.amount > +saldo) {
     //   setMsgError("Saldo Tidak Cukup");
     //   setIsOpen(true);
     //   return;
     // }
-    navigate("/transfer/input-pin", { state: data });
+    setField(data);
+
+    withLoading(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      navigate("/transfer/input-pin");
+    });
   };
 
   return (
-    <>
+    <SpinnerWrapper isLoading={isLoading}>
       <Header />
       <main className="flex-grow w-[min(100%,1056px)] px-6 lg:mx-auto lg:px-0 py-10 mb-20">
         <h1 className="text-4xl font-bold mb-8">Transfer ke BCA</h1>
@@ -134,16 +143,45 @@ const TransferForm: React.FC = () => {
               </div>
               <div className="w-full">
                 <Label htmlFor="bankTujuan">Bank Tujuan</Label>
-                <select
-                  id="bankTujuan"
-                  className="w-full h-[42px] bg-neutral-01 px-5 rounded-lg focus:outline-primary-blue border border-primary-blue appearance-none focus:ring-primary-blue focus:border-primary-blue block"
-                  aria-label="Jenis Transaksi"
-                >
-                  <option value="bca">BCA - Bank Central Asia</option>
-                  <option value="bni">BNI - Bank Negara Indonesia</option>
-                  <option value="bri">BRI - Bank Rakyat Indonesia</option>
-                  <option value="mandiri">Mandiri - Bank Mandiri</option>
-                </select>
+                <Controller
+                  name="bankTo"
+                  control={control}
+                  render={({ field }) => (
+                    <select
+                      id="bankTo"
+                      // className="w-full h-[42px] bg-neutral-01 px-5 rounded-lg focus:outline-primary-blue border border-primary-blue appearance-none focus:ring-primary-blue focus:border-primary-blue block"
+                      className={`w-full h-[42px] !bg-neutral-01 rounded-lg px-4 ${
+                        errors.bankTo
+                          ? "border-2 border-secondary-red focus:outline-secondary-red"
+                          : " focus:outline-primary-blue border appearance-none focus:ring-primary-blue focus:border-primary-blue block"
+                      }`}
+                      aria-label="Jenis Transaksi"
+                      {...field}
+                    >
+                      <option value="" disabled>
+                        Pilih bank tujuan
+                      </option>
+                      <option value="Bank Central Asia">
+                        BCA - Bank Central Asia
+                      </option>
+                      <option value="Bank Negara Indonesia">
+                        BNI - Bank Negara Indonesia
+                      </option>
+                      <option value="Bank Rakyat Indonesia">
+                        BRI - Bank Rakyat Indonesia
+                      </option>
+                      <option value="Bank Mandiri">
+                        Mandiri - Bank Mandiri
+                      </option>
+                    </select>
+                  )}
+                  rules={{
+                    required: "Bank tujuan tidak boleh kosong",
+                  }}
+                />
+                {errors.bankTo && (
+                  <p className="text-secondary-red">{errors.bankTo.message}</p>
+                )}
               </div>
               <div className="w-full">
                 <Label htmlFor="accountTo">Rekening Tujuan</Label>
@@ -153,38 +191,45 @@ const TransferForm: React.FC = () => {
               </div>
               <div className="w-full">
                 <Label htmlFor="amount">Nominal</Label>
-                <Controller
-                  name="amount"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      id="amount"
-                      type="text"
-                      placeholder="xxx.xxx"
-                      aria-label="Masukkan nominal"
-                      className={`w-full h-[42px] !bg-neutral-01 ${
-                        errors.accountTo
-                          ? "border-2 border-secondary-red focus:outline-secondary-red"
-                          : ""
-                      }`}
-                      {...field}
-                      onChange={(e) =>
-                        field.onChange(e.target.value.replace(/[^0-9]/g, ""))
-                      }
-                    />
-                  )}
-                  rules={{
-                    required: "Nominal tidak boleh kosong",
-                  }}
-                />
-                {errors.accountTo && (
-                  <p className="text-secondary-red">
-                    {errors.accountTo.message}
-                  </p>
+                <div className="relative">
+                  <div className="h-fit pointer-events-none absolute inset-y-0 left-0 py-[10px] flex items-center pl-5">
+                    <span>Rp.</span>
+                  </div>
+                  <Controller
+                    name="amount"
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        id="amount"
+                        type="text"
+                        placeholder="xxx.xxx"
+                        aria-label="Masukkan nominal"
+                        className={`w-full block pl-12 h-[42px] !bg-neutral-01 ${
+                          errors.amount
+                            ? "border-2 border-secondary-red focus:outline-secondary-red"
+                            : ""
+                        }`}
+                        {...field}
+                        onChange={(e) =>
+                          field.onChange(e.target.value.replace(/[^0-9]/g, ""))
+                        }
+                      />
+                    )}
+                    rules={{
+                      required: "Nominal tidak boleh kosong",
+                      pattern: {
+                        value: /^[1-9]\d*$/,
+                        message: "Nominal transfer tidak boleh 0",
+                      },
+                    }}
+                  />
+                </div>
+                {errors.amount && (
+                  <p className="text-secondary-red">{errors.amount.message}</p>
                 )}
               </div>
               <div className="w-full">
-                <Label htmlFor="amount">Berita</Label>
+                <Label htmlFor="description">Berita</Label>
                 <Controller
                   name="description"
                   control={control}
@@ -195,7 +240,7 @@ const TransferForm: React.FC = () => {
                       placeholder="Isi Berita"
                       aria-label="Masukkan berita"
                       className={`w-full !bg-neutral-01 py-2 px-3 rounded-lg focus:outline-primary-blue border  ${
-                        errors.accountTo
+                        errors.description
                           ? "border-2 border-secondary-red focus:outline-secondary-red"
                           : ""
                       }`}
@@ -206,15 +251,43 @@ const TransferForm: React.FC = () => {
                     required: "Berita tidak boleh kosong",
                   }}
                 />
-                {errors.accountTo && (
+                {errors.description && (
                   <p className="text-secondary-red">
-                    {errors.accountTo.message}
+                    {errors.description.message}
                   </p>
                 )}
               </div>
               <div>
                 <Label htmlFor="amount">Waktu Transfer</Label>
-                <div className="mt-1">
+                <div className="w-60">
+                  <Controller
+                    name="datetime"
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        id="datetime"
+                        type="datetime-local"
+                        aria-label="Masukkan tanggal lahir Anda"
+                        className={`h-[42px] ${
+                          errors.datetime
+                            ? "border-2 border-secondary-red focus:outline-secondary-red"
+                            : ""
+                        }`}
+                        {...field}
+                        min={`${new Date().toISOString().slice(0, 16)}`}
+                      />
+                    )}
+                    // rules={{
+                    //   required: "Input tanggal lahir tidak boleh kosong",
+                    // }}
+                  />
+                  {errors.datetime && (
+                    <p className="text-secondary-red">
+                      {errors.datetime.message}
+                    </p>
+                  )}
+                </div>
+                {/* <div className="mt-1">
                   <button
                     type="button"
                     className="w-40 px-4 py-2 border border-primary-blue text-neutral-09 rounded-md shadow-sm bg-blue-100 text-blue-700"
@@ -222,7 +295,7 @@ const TransferForm: React.FC = () => {
                   >
                     Sekarang
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="mt-3 text-center">
@@ -233,112 +306,6 @@ const TransferForm: React.FC = () => {
           </form>
         </div>
       </main>
-      {/* <main className="flex-grow w-[min(100%,1056px)] px-6 lg:mx-auto lg:px-0 py-10 mb-20">
-        <h2 className="text-2xl font-semibold max-w-md mx-auto mt-10 p-6">
-          Transfer Antar Bank
-        </h2>
-        <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow-02">
-          <div className="mb-4">
-            <span className="text-lg font-bold" aria-label="Saldo anda">
-              Saldo : {currencyFormat(saldo, "id-ID", "IDR")}
-            </span>
-          </div>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div>
-                <label
-                  htmlFor="accountTo"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Rekening Tujuan
-                </label>
-                <input
-                  type="text"
-                  id="accountTo"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  aria-label="Masukkan nomor rekening tujuan transfer"
-                  {...register("accountTo")}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="bank"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Bank Tujuan
-                </label>
-                <Select
-                  id="bank"
-                  name="bank"
-                  options={bankOptions}
-                  className="mt-1 block w-full"
-                  aria-label="Pilih bank tujuan transfer"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="accountNumber"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Dari Rekening
-                </label>
-                <div className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                  {`${userAccountNumber} - ${userName}`}
-                </div>
-              </div>
-              <div>
-                <label
-                  htmlFor="amount"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Nominal
-                </label>
-                <input
-                  type="number"
-                  id="amount"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  placeholder="Masukkan nominal transfer"
-                  aria-label="Masukkan nominal transfer"
-                  {...register("amount")}
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Berita
-                </label>
-                <textarea
-                  id="description"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  aria-label="Masukkan berita transfer(optional)"
-                  {...register("description")}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Waktu Transfer
-                </label>
-                <div className="mt-1">
-                  <button
-                    type="button"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-blue-100 text-blue-700"
-                    aria-label="Waktu transfer sekarang"
-                  >
-                    Sekarang
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="mt-4 text-center">
-              <Button id="btnTransferLanjut" aria-label="Tombol lanjut">
-                Lanjut
-              </Button>
-            </div>
-          </form>
-        </div>
-      </main> */}
       <FooterDashboard />
       <Alert
         className="p-8"
@@ -349,7 +316,7 @@ const TransferForm: React.FC = () => {
       >
         {msgError}
       </Alert>
-    </>
+    </SpinnerWrapper>
   );
 };
 

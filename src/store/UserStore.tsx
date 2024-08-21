@@ -48,7 +48,7 @@ export const useUserStore = create<UserState>((set) => ({
     set({ isLoading: true });
     try {
       const response = await fetchUserDataAPI();
-      console.log("fetchUserDataAPI response:", response);
+      // console.log("fetchUserDataAPI response:", response);
       const data = response?.data as UserData;
       if (data) {
         set({ userData: data, isLoading: false });

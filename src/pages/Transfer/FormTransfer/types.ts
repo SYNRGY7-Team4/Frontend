@@ -4,6 +4,8 @@ export interface IFormTransfer {
   amount: number;
   description: string;
   pin: string;
+  datetime: string;
+  bankTo: string;
 }
 
 export interface IAccount {
