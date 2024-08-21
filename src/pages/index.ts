@@ -16,6 +16,8 @@ import NotFound from "./Error/NotFound";
 import UnderDevelopment from "./Error/UnderDevelopment";
 import TransferForm from "./Transfer/FormTransfer/FormTransfer";
 import Mutasi from "./Mutasi/Mutasi";
+import Qris from "./Qris/Qris";
+import Landing from "./Landing/Landing";
 
 export {
   Login,
@@ -36,4 +38,6 @@ export {
   UnderDevelopment,
   TransferForm,
   Mutasi,
+  Qris,
+  Landing,
 };

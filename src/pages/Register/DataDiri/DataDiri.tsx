@@ -12,6 +12,10 @@ import { useNavigate } from "react-router-dom";
 import { useRegistrationStore } from "@/store/RegisterStore";
 import { useLoading } from "@/hooks/useLoading";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
+import { checkRegisterDataAPI } from "@/services/authServices";
+import { useState } from "react";
+import Alert from "@/components/Alert/Alert";
+import { MdArrowBack } from "react-icons/md";
 
 const DataDiri = () => {
   const { no_ktp, name, date_of_birth } = useRegistrationStore(
@@ -20,6 +24,12 @@ const DataDiri = () => {
   const setField = useRegistrationStore((state) => state.setField);
   const navigate = useNavigate();
   const { isLoading, withLoading } = useLoading();
+
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertVariant, setAlertVariant] = useState<
+    "success" | "danger" | "primary" | undefined
+  >(undefined);
+  const [alertMessage, setAlertMessage] = useState("");
 
   const {
     control,
@@ -39,8 +49,19 @@ const DataDiri = () => {
     setField("date_of_birth", data.tanggalLahir.split("-").reverse().join("-"));
 
     withLoading(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      navigate("/register/ktp");
+      const response = await checkRegisterDataAPI("no_ktp", data.noKtp);
+
+      if (response?.success === false) {
+        setAlertVariant("danger");
+        setAlertMessage(response?.message);
+        setIsAlertOpen(true);
+      } else if (response?.success === true) {
+        navigate("/register/ktp");
+      } else {
+        setAlertVariant("danger");
+        setAlertMessage(response?.message);
+        setIsAlertOpen(true);
+      }
     });
   };
 
@@ -53,7 +74,16 @@ const DataDiri = () => {
           style={{ backgroundImage: `url(${bgAuth})` }}
         >
           <div className="container mx-auto px-6 flex items-center justify-center md:justify-end h-full">
-            <div className="bg-neutral-01 px-8 py-14 md:px-14 rounded-lg w-[450px]">
+            <div className="bg-neutral-01 px-8 py-8 md:px-14 rounded-lg w-[450px] min-h-[480px]">
+              <Button
+                className="w-fit h-fit my-4 text-primary-darkBlue bg-transparent"
+                aria-label="Tombol kembali"
+                onClick={() => {
+                  navigate("/register/password");
+                }}
+              >
+                <MdArrowBack size={22} />
+              </Button>
               <h1 className="mb-10 text-3xl text-primary-blue font-bold">
                 Data Diri
               </h1>
@@ -196,6 +226,17 @@ const DataDiri = () => {
           </div>
         </main>
         <Footer />
+        <Alert
+          variant={alertVariant}
+          isOpen={isAlertOpen}
+          autoDismiss={false}
+          onClose={() => {
+            setIsAlertOpen(false);
+          }}
+          showCloseButton={true}
+        >
+          {alertMessage}
+        </Alert>
       </SpinnerWrapper>
     </>
   );

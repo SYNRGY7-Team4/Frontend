@@ -10,7 +10,7 @@ import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 import { Link } from "react-router-dom";
 
 export default function Dashboard() {
-  const { userData, isLoading, fetchUserData, fetchBalance, fetchMutations } = useUserStore();
+  const { userData, isLoading, fetchUserData, fetchBalance, fetchMutations, userMutations } = useUserStore();
   const [lastLogin, setLastLogin] = useState("");
 
   useEffect(() => {
@@ -74,7 +74,7 @@ export default function Dashboard() {
                     Lihat Selengkapnya
                   </Link>
                 </div>
-                <RiwayatTransaksiTable />
+                <RiwayatTransaksiTable maxRow={4} transactions={userMutations} />
               </div>
             </div>
           </div>

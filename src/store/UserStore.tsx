@@ -3,6 +3,7 @@ import {
   fetchUserDataAPI,
   fetchUserBalanceDataAPI,
   fetchUserMutationDataAPI,
+  fetchUserQRCodeDataAPI,
 } from "@/services/authServices";
 
 interface UserData {
@@ -31,17 +32,21 @@ interface UserState {
   userData: any | null;
   userMutations: any | null;
   balance: number | null;
+  qrCode: string | null;
   isLoading: boolean;
   error: string | null;
   fetchUserData: () => Promise<void>;
   fetchBalance: (accountNumber: string) => Promise<void>;
   fetchMutations: (accountNumber: string) => Promise<void>;
+  fetchQRCode: () => Promise<void>;
+  resetState: () => void;
 }
 
 export const useUserStore = create<UserState>((set) => ({
   userData: null,
   userMutations: [],
   balance: null,
+  qrCode: null,
   isLoading: false,
   error: null,
   fetchUserData: async () => {
@@ -91,4 +96,25 @@ export const useUserStore = create<UserState>((set) => ({
       set({ error: "Failed to fetch mutation data", isLoading: false });
     }
   },
+  fetchQRCode: async () => {
+    set({ isLoading: true });
+    try {
+      const response = await fetchUserQRCodeDataAPI();
+      if (response) {
+        const blob = new Blob([response], { type: "image/png" });
+        const image = URL.createObjectURL(blob);
+        set({
+          qrCode: image,
+          isLoading: false,
+        });
+      } else {
+        set({ error: "Invalid response from API", isLoading: false });
+      }
+    } catch (error) {
+      console.error("Error fetching QR code data:", error);
+      set({ error: "Failed to fetch QR code data", isLoading: false });
+    }
+  },
+  resetState: () =>
+    set({ userData: null, userMutations: [], balance: null, error: null }),
 }));

@@ -9,11 +9,38 @@ const handleError = (error: unknown): any => {
       return error.response?.data;
     } else {
       console.error("Error jaringan:", error.message);
-      throw new Error("Terjadi kesalahan jaringan. Silakan coba lagi.");
+      return {
+        message: "Terjadi kesalahan jaringan. Silakan coba lagi.",
+      };
     }
   } else {
     console.error("Error tidak terduga:", error);
-    throw new Error("Terjadi kesalahan yang tidak terduga. Silakan coba lagi.");
+    return {
+      message: "Terjadi kesalahan yang tidak terduga. Silakan coba lagi.",
+    };
+  }
+};
+
+export const checkRegisterDataAPI = async (
+  fieldName: string,
+  fieldValue: string
+) => {
+  try {
+    const requestBody = {
+      filter: {
+        [fieldName]: fieldValue,
+      },
+    };
+
+    const response = await axiosInstance.post<Response>(
+      "https://lumibank-api-fsw-edqo6jv53q-et.a.run.app/api/users",
+      requestBody
+    );
+    console.log(response);
+
+    return response.data;
+  } catch (error) {
+    return handleError(error);
   }
 };
 
@@ -64,6 +91,17 @@ export const fetchUserMutationDataAPI = async (account_number: string) => {
       `/transaction/mutations?accountNumber=${account_number}`
     );
     // console.log(response.data);
+    return response.data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+export const fetchUserQRCodeDataAPI = async () => {
+  try {
+    const response = await axiosInstance.get(`/qrcode/generate`, {
+      responseType: "arraybuffer",
+    });
     return response.data;
   } catch (error) {
     return handleError(error);

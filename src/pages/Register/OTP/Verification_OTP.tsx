@@ -11,6 +11,7 @@ import Alert from "@/components/Alert/Alert";
 import { otpSchema, OTPInput } from "@/pages/Register/OTP/OTPSchema";
 import { useLoading } from "@/hooks/useLoading";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
+import { MdArrowBack } from "react-icons/md";
 
 let currentOTPIndex: number = 0;
 
@@ -127,7 +128,16 @@ export default function Verification_OTP() {
           style={{ backgroundImage: `url(${bgAuth})` }}
         >
           <div className="container mx-auto px-6 flex items-center justify-center md:justify-end h-full">
-            <div className="bg-neutral-01 px-8 py-14 md:px-14 rounded-lg w-[450px]">
+            <div className="bg-neutral-01 px-8 py-8 md:px-14 rounded-lg w-[450px] min-h-[480px]">
+              <Button
+                className="w-fit h-fit my-4 text-primary-darkBlue bg-transparent"
+                aria-label="Tombol kembali"
+                onClick={() => {
+                  navigate("/register");
+                }}
+              >
+                <MdArrowBack size={22} />
+              </Button>
               <h1 className="mb-4 text-3xl text-primary-blue font-bold">
                 Verifikasi
               </h1>

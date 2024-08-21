@@ -1,5 +1,4 @@
 import { Route, Routes, useLocation } from "react-router-dom";
-import Button from "@/components/Button/Button";
 import {
   Login,
   Register,
@@ -19,6 +18,8 @@ import {
   NewPassword,
   Mutasi,
   Notifikasi,
+  Qris,
+  Landing,
 } from "@/pages";
 import ProtectedRoutes from "@/utils/ProtectedRoutes";
 import UserSession from "@/components/UserSession/UserSession";
@@ -41,23 +42,7 @@ function App() {
       {/* <QueryClientProvider client={queryClient}> */}
       <UserSession />
       <Routes key={location.pathname} location={location}>
-        <Route
-          path="/"
-          element={
-            <>
-              <div className="text-secondary-red shadow-03">Hello World</div>
-
-              <Button
-                variant="primary"
-                className="bg-primary-darkBlue"
-                disabled={false}
-                size="md"
-              >
-                Custom Button
-              </Button>
-            </>
-          }
-        />
+        <Route path="/" element={<Landing />} />
 
         <Route path="/login" element={<Login />} />
 
@@ -81,6 +66,8 @@ function App() {
           <Route path="/transfer/input-pin" element={<InputPin />} />
 
           <Route path="/mutasi" element={<Mutasi />} />
+
+          <Route path="/qris" element={<Qris />} />
         </Route>
 
         <Route path="/under-development" element={<UnderDevelopment />} />

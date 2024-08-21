@@ -134,6 +134,7 @@ export default function Login() {
                     />
                     <Button
                       className="w-fit h-fit bg-transparent absolute right-[15px] cursor-pointer"
+                      type="button"
                       onClick={() =>
                         setPasswordVisibility(!isPasswordVisibility)
                       }

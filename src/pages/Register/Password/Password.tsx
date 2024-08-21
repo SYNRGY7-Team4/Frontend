@@ -16,6 +16,7 @@ import { useLoading } from "@/hooks/useLoading";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PasswordSchema, TPasswordSchema } from "./PasswordSchema";
+import { MdArrowBack } from "react-icons/md";
 
 export default function Password() {
   const { password } = useRegistrationStore((state) => state);
@@ -69,7 +70,16 @@ export default function Password() {
           style={{ backgroundImage: `url(${bgAuth})` }}
         >
           <div className="container mx-auto px-6 flex items-center justify-center md:justify-end h-full">
-            <div className="bg-neutral-01 px-8 py-14 md:px-14 rounded-lg w-[450px] min-h-[480px]">
+            <div className="bg-neutral-01 px-8 py-8 md:px-14 rounded-lg w-[450px] min-h-[480px]">
+              <Button
+                className="w-fit h-fit my-4 text-primary-darkBlue bg-transparent"
+                aria-label="Tombol kembali"
+                onClick={() => {
+                  navigate("/register/otp");
+                }}
+              >
+                <MdArrowBack size={22} />
+              </Button>
               <h1 className="mb-10 text-3xl text-primary-blue font-bold">
                 Buat Password
               </h1>
