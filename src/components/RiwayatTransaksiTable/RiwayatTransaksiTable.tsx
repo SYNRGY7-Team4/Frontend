@@ -37,7 +37,7 @@ export default function RiwayatTransaksiTable({
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
       currency: 'IDR',
-      minimumFractionDigits: 0, // To remove decimals, set to 2 if you want decimals.
+      minimumFractionDigits: 0,
     }).format(amount);
   };
 
