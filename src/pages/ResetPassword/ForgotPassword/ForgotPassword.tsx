@@ -8,7 +8,9 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
+// Define the schema for validation
 const ForgotPasswordSchema = z.object({
   email: z
     .string()
@@ -19,6 +21,37 @@ const ForgotPasswordSchema = z.object({
 });
 
 type TForgotPasswordSchema = z.infer<typeof ForgotPasswordSchema>;
+
+// Define the API URL
+const apiUrl =
+  "https://lumibank-backend-edqo6jv53q-et.a.run.app/api/forget-password/send";
+
+// Define the function to send OTP
+const sendOtp = async (email: string) => {
+  try {
+    const response = await axios.post(
+      apiUrl,
+      { email },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          // Add Authorization header if needed
+          // "Authorization": `Bearer ${yourAuthToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Error response:", error.response?.data);
+      console.error("Status code:", error.response?.status); // Log status code
+      throw new Error(error.response?.data?.message || "An error occurred");
+    } else {
+      console.error("Unexpected error:", error);
+      throw new Error("An unexpected error occurred");
+    }
+  }
+};
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -31,10 +64,21 @@ export default function ForgotPassword() {
     resolver: zodResolver(ForgotPasswordSchema),
   });
 
-  const onSubmit = (data: TForgotPasswordSchema) => {
-    console.log(data);
-    reset();
-    navigate("/reset/otp");
+  const onSubmit = async (data: TForgotPasswordSchema) => {
+    try {
+      await sendOtp(data.email);
+      reset();
+      navigate("/reset/otp"); // Redirect to OTP verification page
+    } catch (error) {
+      // Display error to user
+      if (error instanceof Error) {
+        alert(`Error: ${error.message}`);
+        console.error(error.message);
+      } else {
+        alert("An unexpected error occurred");
+        console.error("An unexpected error occurred");
+      }
+    }
   };
 
   return (
@@ -62,7 +106,7 @@ export default function ForgotPassword() {
             >
               <div className="flex flex-col gap-y-3">
                 <div className="flex flex-col gap-y-1">
-                  <Label htmlFor="pin">Email</Label>
+                  <Label htmlFor="email">Email</Label>
                   <Input
                     type="email"
                     id="email"
