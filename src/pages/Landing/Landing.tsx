@@ -35,7 +35,7 @@ export default function Landing() {
               Download Lumi
             </Link>
             <Link
-              to='/register'
+              to='/login'
               className='w-full xl:w-[406px] h-[103px] grid place-items-center rounded-3xl text-[32px] text-primary-blue border-2 border-primary-blue'
               aria-label='Bergabung Sekarang'
             >
