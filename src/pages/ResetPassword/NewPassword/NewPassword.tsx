@@ -11,14 +11,24 @@ import { IconContext } from "react-icons";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { IPasswordInput } from "./types";
 import { useNavigate } from "react-router-dom";
-import { useRegistrationStore } from "@/store/RegisterStore";
 import { useLoading } from "@/hooks/useLoading";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
+import { MdArrowBack } from "react-icons/md";
+import { useResetPasswordStore } from "@/store/ResetPasswordStore";
+import { ChangeNewPasswordAPI } from "@/services/authServices";
+import Alert from "@/components/Alert/Alert";
 
 export default function NewPassword() {
-  const setField = useRegistrationStore((state) => state.setField);
+  const setField = useResetPasswordStore((state) => state.setField);
+  const { reset, ...formData } = useResetPasswordStore();
   const { isLoading, withLoading } = useLoading();
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [alertStatus, setAlertStatus] = useState<
+    "success" | "danger" | undefined
+  >(undefined);
+  const [alertMessage, setAlertMessage] = useState("");
   const navigate = useNavigate();
+
   const {
     control,
     handleSubmit,
@@ -47,14 +57,33 @@ export default function NewPassword() {
     }));
   };
 
+  const handleCloseAlert = () => {
+    setIsAlertOpen(false);
+    if (alertStatus === "success") {
+      navigate("/dashboard");
+    }
+  };
+
   const onSubmit: SubmitHandler<IPasswordInput> = (data) => {
     console.log({ data });
     setField("password", data.password);
-    setField("confirm_password", data.confirmPassword);
 
     withLoading(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      navigate("/dashboard");
+      const response = await ChangeNewPasswordAPI({
+        ...formData,
+        newPassword: data.password,
+      });
+
+      if (response?.success === false) {
+        setAlertStatus("danger");
+        setAlertMessage(response?.message);
+        setIsAlertOpen(true);
+      } else if (response?.success === true) {
+        setAlertStatus("success");
+        setAlertMessage("Berhasil ubah password");
+        setIsAlertOpen(true);
+        reset();
+      }
     });
   };
 
@@ -67,7 +96,16 @@ export default function NewPassword() {
           style={{ backgroundImage: `url(${bgAuth})` }}
         >
           <div className="container mx-auto px-6 flex items-center justify-center md:justify-end h-full">
-            <div className="bg-neutral-01 px-8 py-14 md:px-14 rounded-lg w-[450px] min-h-[480px]">
+            <div className="bg-neutral-01 px-8 py-8 md:px-14 rounded-lg w-[450px] min-h-[480px]">
+              <Button
+                className="w-fit h-fit my-4 text-primary-darkBlue bg-transparent"
+                aria-label="Tombol kembali"
+                onClick={() => {
+                  navigate("/reset/otp");
+                }}
+              >
+                <MdArrowBack size={22} />
+              </Button>
               <h1 className="mb-10 text-3xl text-primary-blue font-bold">
                 Buat Password Baru
               </h1>
@@ -216,6 +254,27 @@ export default function NewPassword() {
           </div>
         </main>
         <Footer />
+        {alertStatus === "danger" ? (
+          <Alert
+            variant={alertStatus}
+            isOpen={isAlertOpen}
+            autoDismiss={false}
+            onClose={handleCloseAlert}
+            showCloseButton={true}
+          >
+            {alertMessage}
+          </Alert>
+        ) : (
+          <Alert
+            variant={alertStatus}
+            isOpen={isAlertOpen}
+            autoDismiss={true}
+            onClose={handleCloseAlert}
+            showCloseButton={false}
+          >
+            {alertMessage}
+          </Alert>
+        )}
       </SpinnerWrapper>
     </>
   );

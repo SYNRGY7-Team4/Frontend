@@ -14,3 +14,9 @@ export interface RegisterFormData {
   ektp_photo: string;
   pin: string;
 }
+
+export interface ResetPasswordFormData {
+  email: string;
+  otp: string;
+  newPassword: string;
+}
