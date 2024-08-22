@@ -14,7 +14,7 @@ import Dashboard from "./Dashboard/Dashboard";
 import InputPin from "./Transfer/InputPin/InputPin";
 import NotFound from "./Error/NotFound";
 import UnderDevelopment from "./Error/UnderDevelopment";
-import TransferForm from "./Transfer/FormTransfer";
+import TransferForm from "./Transfer/FormTransfer/FormTransfer";
 import Mutasi from "./Mutasi/Mutasi";
 import Qris from "./Qris/Qris";
 import Landing from "./Landing/Landing";

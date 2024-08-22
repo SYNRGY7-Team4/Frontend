@@ -3,9 +3,9 @@ const currencyFormat = (balance: number, locale: string, currency: string) => {
     style: "currency",
     currency: currency,
     maximumFractionDigits: 0,
-  }).format(balance)
+  }).format(balance);
 
-  return result
-}
+  return result;
+};
 
-export default currencyFormat
+export default currencyFormat;
