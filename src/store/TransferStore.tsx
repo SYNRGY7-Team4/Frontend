@@ -3,7 +3,7 @@ import { create } from "zustand";
 interface IFormTransfer {
   accountFrom: string;
   accountTo: string;
-  amount: number;
+  amount: string;
   description: string;
   datetime: string;
   pin: string;
@@ -15,7 +15,7 @@ interface IFormTransfer {
 const initialState = {
   accountFrom: "",
   accountTo: "",
-  amount: 0,
+  amount: "",
   description: "",
   datetime: "",
   pin: "",

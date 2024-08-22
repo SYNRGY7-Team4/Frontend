@@ -1,7 +1,7 @@
 export interface IFormTransfer {
   accountFrom: string;
   accountTo: string;
-  amount: number;
+  amount: string;
   description: string;
   pin: string;
   datetime: string;

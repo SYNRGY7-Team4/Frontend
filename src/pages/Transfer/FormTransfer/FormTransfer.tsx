@@ -10,7 +10,7 @@ import Button from "@/components/Button/Button";
 import { useUserStore } from "@/store/UserStore";
 import { useNavigate } from "react-router-dom";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import axiosInstance from "@/axios/axios";
+import { axiosNode } from "@/axios/axios";
 import Label from "@/components/Label/Label";
 import Input from "@/components/Input/Input";
 import useTransferStore, {
@@ -19,6 +19,7 @@ import useTransferStore, {
 } from "@/store/TransferStore";
 import { useLoading } from "@/hooks/useLoading";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
+import { AxiosError } from "axios";
 
 const TransferForm: React.FC = () => {
   const navigate = useNavigate();
@@ -34,10 +35,8 @@ const TransferForm: React.FC = () => {
     defaultValues: {
       accountFrom: state.accountFrom || "",
       accountTo: state.accountTo || "",
-      amount: state.amount || undefined,
+      amount: state.amount || "",
       description: state.description || "",
-      // datetime:
-      //   new Date().toLocaleString("id-ID").replace(",", "T").slice(0, 16) || "",
       datetime: state.datetime || "",
       bankTo: state.bankTo || "",
     },
@@ -49,7 +48,6 @@ const TransferForm: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [msgError, setMsgError] = useState<string>("");
   const { userData, balance, fetchUserData, fetchBalance } = useUserStore();
-  const [accountList, setAccountLit] = useState<IAccount[]>([]);
 
   useEffect(() => {
     if (!userData) {
@@ -64,36 +62,38 @@ const TransferForm: React.FC = () => {
     if (balance !== null) setSaldo(balance);
   }, [userData, balance]);
 
-  const getAllAccount = async () => {
-    try {
-      const { data } = await axiosInstance.get("/account-list");
-
-      console.log({ data });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    // getAllAccount();
-  }, []);
-
   const onSubmit: SubmitHandler<IFormTransfer> = (data) => {
-    // console.log({ data });
-    // if (rekeningTujuan != +formData.accountNumber) {
-    //   setMsgError("Nomor Rekening Tidak Valid");
-    //   setIsOpen(true);
-    //   return;
-    // } else if (+data.amount > +saldo) {
-    //   setMsgError("Saldo Tidak Cukup");
-    //   setIsOpen(true);
-    //   return;
-    // }
-    setField(data);
-
     withLoading(async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      navigate("/transfer/input-pin");
+      if (data.accountFrom === data.accountTo) {
+        setMsgError("Tidak Dapat Transfer Ke Rekening Anda");
+        setIsOpen(true);
+        return;
+      }
+
+      try {
+        await axiosNode.get(`account/?accountNumber=${data.accountTo}`);
+
+        if (+data.amount > +saldo) {
+          setMsgError("Saldo Tidak Cukup");
+          setIsOpen(true);
+          return;
+        }
+
+        setField(data);
+        navigate("/transfer/input-pin");
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          if (err.response?.status === 400) {
+            setMsgError("Nomor Rekening Tidak Valid");
+            setIsOpen(true);
+            return;
+          } else {
+            setMsgError(err.message);
+            setIsOpen(true);
+          }
+        }
+      }
     });
   };
 
@@ -149,7 +149,6 @@ const TransferForm: React.FC = () => {
                   render={({ field }) => (
                     <select
                       id="bankTo"
-                      // className="w-full h-[42px] bg-neutral-01 px-5 rounded-lg focus:outline-primary-blue border border-primary-blue appearance-none focus:ring-primary-blue focus:border-primary-blue block"
                       className={`w-full h-[42px] !bg-neutral-01 rounded-lg px-4 ${
                         errors.bankTo
                           ? "border-2 border-secondary-red focus:outline-secondary-red"
@@ -298,7 +297,7 @@ const TransferForm: React.FC = () => {
                 </div> */}
               </div>
             </div>
-            <div className="mt-3 text-center">
+            <div className="mt-10 text-center">
               <Button id="btnLanjut" aria-label="Tombol lanjut">
                 Lanjut
               </Button>
