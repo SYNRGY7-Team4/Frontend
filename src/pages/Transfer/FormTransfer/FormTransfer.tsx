@@ -1,10 +1,9 @@
 import FooterDashboard from "@/components/Footer/FooterDasboard";
 import Header from "@/components/Header/HeaderDasboard";
 import currencyFormat from "@/utils/currencyFormat";
-import { IAccount, IFormTransfer } from "./types";
+import { IFormTransfer } from "./types";
 import { useEffect, useState } from "react";
 
-import Select from "react-select";
 import Alert from "@/components/Alert/Alert";
 import Button from "@/components/Button/Button";
 import { useUserStore } from "@/store/UserStore";
@@ -78,6 +77,10 @@ const TransferForm: React.FC = () => {
           setMsgError("Saldo Tidak Cukup");
           setIsOpen(true);
           return;
+        } else if (+data.amount < 10000) {
+          setMsgError("Minimal Nominal Transfer Adalah 10 Ribu");
+          setIsOpen(true);
+          return;
         }
 
         setField(data);
@@ -85,7 +88,7 @@ const TransferForm: React.FC = () => {
       } catch (err) {
         if (err instanceof AxiosError) {
           if (err.response?.status === 400) {
-            setMsgError("Nomor Rekening Tidak Valid");
+            setMsgError("Nomor Rekening Tujuan Tidak Valid");
             setIsOpen(true);
             return;
           } else {
@@ -183,7 +186,7 @@ const TransferForm: React.FC = () => {
                 )}
               </div>
               <div className="w-full">
-                <Label htmlFor="accountTo">Rekening Tujuan</Label>
+                <Label htmlFor="accountTo">Dari Rekening</Label>
                 <div className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                   {`${userAccountNumber} - ${userName}`}
                 </div>
@@ -216,10 +219,6 @@ const TransferForm: React.FC = () => {
                     )}
                     rules={{
                       required: "Nominal tidak boleh kosong",
-                      pattern: {
-                        value: /^[1-9]\d*$/,
-                        message: "Nominal transfer tidak boleh 0",
-                      },
                     }}
                   />
                 </div>
@@ -266,7 +265,7 @@ const TransferForm: React.FC = () => {
                       <Input
                         id="datetime"
                         type="datetime-local"
-                        aria-label="Masukkan tanggal lahir Anda"
+                        aria-label="Masukkan waktu transfer"
                         className={`h-[42px] ${
                           errors.datetime
                             ? "border-2 border-secondary-red focus:outline-secondary-red"
@@ -286,15 +285,6 @@ const TransferForm: React.FC = () => {
                     </p>
                   )}
                 </div>
-                {/* <div className="mt-1">
-                  <button
-                    type="button"
-                    className="w-40 px-4 py-2 border border-primary-blue text-neutral-09 rounded-md shadow-sm bg-blue-100 text-blue-700"
-                    aria-label="Waktu transfer sekarang"
-                  >
-                    Sekarang
-                  </button>
-                </div> */}
               </div>
             </div>
             <div className="mt-10 text-center">
