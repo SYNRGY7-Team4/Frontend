@@ -123,7 +123,7 @@ const TransferForm: React.FC = () => {
                       type="text"
                       placeholder="No rekening tujuan"
                       aria-label="Masukkan no rekening tujuan"
-                      className={`w-full h-[42px] !bg-neutral-01 ${
+                      className={`w-full h-[42px] !bg-neutral-01 border-neutral-03 ${
                         errors.accountTo
                           ? "border-2 border-secondary-red focus:outline-secondary-red"
                           : ""
@@ -152,7 +152,7 @@ const TransferForm: React.FC = () => {
                   render={({ field }) => (
                     <select
                       id="bankTo"
-                      className={`w-full h-[42px] !bg-neutral-01 rounded-lg px-4 ${
+                      className={`w-full h-[42px] !bg-neutral-01 border-neutral-03 rounded-lg px-4 ${
                         errors.bankTo
                           ? "border-2 border-secondary-red focus:outline-secondary-red"
                           : " focus:outline-primary-blue border appearance-none focus:ring-primary-blue focus:border-primary-blue block"
@@ -187,7 +187,7 @@ const TransferForm: React.FC = () => {
               </div>
               <div className="w-full">
                 <Label htmlFor="accountTo">Dari Rekening</Label>
-                <div className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                <div className="mt-1 block w-full px-3 py-2 border border-neutral-03 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                   {`${userAccountNumber} - ${userName}`}
                 </div>
               </div>
@@ -206,7 +206,7 @@ const TransferForm: React.FC = () => {
                         type="text"
                         placeholder="xxx.xxx"
                         aria-label="Masukkan nominal"
-                        className={`w-full block pl-12 h-[42px] !bg-neutral-01 ${
+                        className={`w-full block pl-12 h-[42px] !bg-neutral-01 border-neutral-03 ${
                           errors.amount
                             ? "border-2 border-secondary-red focus:outline-secondary-red"
                             : ""
@@ -237,7 +237,7 @@ const TransferForm: React.FC = () => {
                       id="description"
                       placeholder="Isi Berita"
                       aria-label="Masukkan berita"
-                      className={`w-full !bg-neutral-01 py-2 px-3 rounded-lg focus:outline-primary-blue border  ${
+                      className={`w-full !bg-neutral-01 border-neutral-03 py-2 px-3 rounded-lg focus:outline-primary-blue border  ${
                         errors.description
                           ? "border-2 border-secondary-red focus:outline-secondary-red"
                           : ""
@@ -266,7 +266,7 @@ const TransferForm: React.FC = () => {
                         id="datetime"
                         type="datetime-local"
                         aria-label="Masukkan waktu transfer"
-                        className={`h-[42px] ${
+                        className={`h-[42px] !bg-neutral-01 border-neutral-03 ${
                           errors.datetime
                             ? "border-2 border-secondary-red focus:outline-secondary-red"
                             : ""
@@ -300,6 +300,7 @@ const TransferForm: React.FC = () => {
         className="p-8"
         variant="danger"
         isOpen={isOpen}
+        autoDismiss={true}
         onClose={() => setIsOpen(false)}
         showCloseButton={true}
       >

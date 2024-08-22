@@ -217,7 +217,7 @@ const DataDiri = () => {
                   </div>
                 </div>
                 <div className="flex flex-col gap-y-2 items-center">
-                  <Button id="btnLanjut" aria-label="Tombol masuk">
+                  <Button id="btnLanjut" aria-label="Tombol lanjut">
                     Lanjut
                   </Button>
                 </div>
