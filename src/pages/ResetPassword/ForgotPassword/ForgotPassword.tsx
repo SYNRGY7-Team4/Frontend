@@ -9,6 +9,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { MdArrowBack } from "react-icons/md";
+import { useResetPasswordStore } from "@/store/ResetPasswordStore";
+import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
+import { useLoading } from "@/hooks/useLoading";
 
 // Define the schema for validation
 const ForgotPasswordSchema = z.object({
@@ -54,6 +58,9 @@ const sendOtp = async (email: string) => {
 };
 
 export default function ForgotPassword() {
+  const setField = useResetPasswordStore((state) => state.setField);
+
+  const { isLoading, withLoading } = useLoading();
   const navigate = useNavigate();
   const {
     register,
@@ -65,10 +72,13 @@ export default function ForgotPassword() {
   });
 
   const onSubmit = async (data: TForgotPasswordSchema) => {
+    setField("email", data.email);
     try {
-      await sendOtp(data.email);
-      reset();
-      navigate("/reset/otp"); // Redirect to OTP verification page
+      withLoading(async () => {
+        await sendOtp(data.email);
+        reset();
+        navigate("/reset/otp"); // Redirect to OTP verification page
+      });
     } catch (error) {
       // Display error to user
       if (error instanceof Error) {
@@ -83,66 +93,77 @@ export default function ForgotPassword() {
 
   return (
     <>
-      <Header />
-      <main
-        className="w-full min-h-[828px] h-[calc(100vh-73px-75px)] md:h-[calc(100vh-94px-75px)] bg-cover bg-center"
-        style={{ backgroundImage: `url(${bgAuth})` }}
-      >
-        <div className="container mx-auto px-6 flex items-center justify-center md:justify-end h-full">
-          <div className="bg-neutral-01 px-8 py-14 md:px-14 rounded-lg w-[450px] min-h-[480px]">
-            <div className="mb-8">
-              <h1 className="mb-2 text-3xl text-primary-blue font-bold">
-                Lupa Password
-              </h1>
-              <p>
-                Masukkan email Anda untuk proses verifikasi, kami akan
-                mengirimkan kode 4 digit ke email Anda.
-              </p>
-            </div>
-
-            <form
-              className="flex flex-col gap-y-8"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-              <div className="flex flex-col gap-y-3">
-                <div className="flex flex-col gap-y-1">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    type="email"
-                    id="email"
-                    placeholder="Email"
-                    aria-label="Email"
-                    {...register("email")}
-                    className={`${
-                      errors.email
-                        ? "focus:outline-secondary-red border-secondary-red"
-                        : ""
-                    }`}
-                  />
-                  {errors.email && (
-                    <span
-                      className="text-red-500 text-sm"
-                      aria-label={errors.email.message}
-                    >
-                      {errors.email.message}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="flex flex-col gap-y-2 items-center">
+      <SpinnerWrapper isLoading={isLoading}>
+        <Header />
+        <main
+          className="w-full min-h-[828px] h-[calc(100vh-73px-75px)] md:h-[calc(100vh-94px-75px)] bg-cover bg-center"
+          style={{ backgroundImage: `url(${bgAuth})` }}
+        >
+          <div className="container mx-auto px-6 flex items-center justify-center md:justify-end h-full">
+            <div className="bg-neutral-01 px-8 py-8 md:px-14 rounded-lg w-[450px] min-h-[480px]">
+              <div className="mb-8">
                 <Button
-                  id="btnForgotPasswordLanjut"
-                  aria-label="Tombol Lanjut"
-                  className="my-9"
+                  className="w-fit h-fit my-4 text-primary-darkBlue bg-transparent"
+                  aria-label="Tombol kembali"
+                  onClick={() => {
+                    navigate("/login");
+                  }}
                 >
-                  Lanjut
+                  <MdArrowBack size={22} />
                 </Button>
+                <h1 className="mb-2 text-3xl text-primary-blue font-bold">
+                  Lupa Password
+                </h1>
+                <p>
+                  Masukkan email Anda untuk proses verifikasi, kami akan
+                  mengirimkan kode 6 digit ke email Anda.
+                </p>
               </div>
-            </form>
+
+              <form
+                className="flex flex-col gap-y-8"
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                <div className="flex flex-col gap-y-3">
+                  <div className="flex flex-col gap-y-1">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      type="email"
+                      id="email"
+                      placeholder="Email"
+                      aria-label="Email"
+                      {...register("email")}
+                      className={`${
+                        errors.email
+                          ? "focus:outline-secondary-red border-secondary-red"
+                          : ""
+                      }`}
+                    />
+                    {errors.email && (
+                      <span
+                        className="text-red-500 text-sm"
+                        aria-label={errors.email.message}
+                      >
+                        {errors.email.message}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-col gap-y-2 items-center">
+                  <Button
+                    id="btnForgotPasswordLanjut"
+                    aria-label="Tombol Lanjut"
+                    className="my-9"
+                  >
+                    Lanjut
+                  </Button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      </main>
-      <Footer />
+        </main>
+        <Footer />
+      </SpinnerWrapper>
     </>
   );
 }
