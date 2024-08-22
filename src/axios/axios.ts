@@ -6,8 +6,26 @@ const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
-
 axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export const axiosNode = axios.create({
+  baseURL: "https://lumibank-api-fsw-edqo6jv53q-et.a.run.app/api",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+axiosNode.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
     if (token) {
