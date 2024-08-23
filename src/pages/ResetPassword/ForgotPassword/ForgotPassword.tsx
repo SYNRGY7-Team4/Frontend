@@ -78,7 +78,7 @@ export default function ForgotPassword() {
       }
     }
   };
-  //aria
+
   return (
     <>
       <Header />

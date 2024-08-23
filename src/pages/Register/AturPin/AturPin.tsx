@@ -108,6 +108,7 @@ export default function AturPin() {
                 className="w-fit h-fit my-4 text-primary-darkBlue bg-transparent"
                 onClick={() => setIsModalAlertOpen(true)}
                 type="button"
+                aria-label="Tombol kembali"
               >
                 <MdArrowBack size={22} />
               </Button>

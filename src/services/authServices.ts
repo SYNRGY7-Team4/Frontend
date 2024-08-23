@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { Response, RegisterFormData } from "./type";
+import { Response, RegisterFormData, ResetPasswordFormData } from "./type";
 import axiosInstance from "@/axios/axios";
 
 const handleError = (error: unknown): any => {
@@ -8,7 +8,7 @@ const handleError = (error: unknown): any => {
       console.error("API Error:", error.response.data);
       return error.response?.data;
     } else {
-      console.error("Error jaringan:", error.message);
+      console.log("Error jaringan:", error);
       return {
         message: "Terjadi kesalahan jaringan. Silakan coba lagi.",
       };
@@ -102,6 +102,61 @@ export const fetchUserQRCodeDataAPI = async () => {
     const response = await axiosInstance.get(`/qrcode/generate`, {
       responseType: "arraybuffer",
     });
+    return response.data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+export const SendOTPResetPasswordAPI = async (
+  formData: ResetPasswordFormData
+) => {
+  const form = new FormData();
+  form.append("email", formData.email);
+  form.append("otp", formData.otp);
+  form.append("newPassword", formData.newPassword);
+
+  try {
+    const response = await axiosInstance.post<Response>(
+      "/forget-password/send",
+      form
+    );
+    return response.data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+export const CheckOTPResetPasswordAPI = async (
+  formData: ResetPasswordFormData
+) => {
+  const form = new FormData();
+  form.append("email", formData.email);
+  form.append("otp", formData.otp);
+  form.append("newPassword", formData.newPassword);
+
+  try {
+    const response = await axiosInstance.post<Response>(
+      "/forget-password/validate",
+      form
+    );
+    return response.data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+export const ChangeNewPasswordAPI = async (formData: ResetPasswordFormData) => {
+  const form = new FormData();
+  form.append("email", formData.email);
+  form.append("otp", formData.otp);
+  form.append("newPassword", formData.newPassword);
+
+  try {
+    const response = await axiosInstance.post<Response>(
+      "/forget-password/change-password",
+      form
+    );
     return response.data;
   } catch (error) {
     return handleError(error);
