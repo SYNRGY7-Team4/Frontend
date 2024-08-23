@@ -35,8 +35,6 @@ const sendOtp = async (email: string) => {
       {
         headers: {
           "Content-Type": "application/json",
-          // Add Authorization header if needed
-          // "Authorization": `Bearer ${yourAuthToken}`,
         },
       }
     );
@@ -103,6 +101,7 @@ export default function ForgotPassword() {
             <form
               className="flex flex-col gap-y-8"
               onSubmit={handleSubmit(onSubmit)}
+              aria-live="assertive"
             >
               <div className="flex flex-col gap-y-3">
                 <div className="flex flex-col gap-y-1">
@@ -112,6 +111,9 @@ export default function ForgotPassword() {
                     id="email"
                     placeholder="Email"
                     aria-label="Email"
+                    aria-required="true"
+                    aria-invalid={errors.email ? "true" : "false"}
+                    aria-describedby={errors.email ? "email-error" : undefined}
                     {...register("email")}
                     className={`${
                       errors.email
@@ -121,8 +123,9 @@ export default function ForgotPassword() {
                   />
                   {errors.email && (
                     <span
+                      id="email-error"
                       className="text-red-500 text-sm"
-                      aria-label={errors.email.message}
+                      aria-live="polite"
                     >
                       {errors.email.message}
                     </span>
