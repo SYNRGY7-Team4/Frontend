@@ -1,6 +1,6 @@
-import noDocuments from '@/assets/no_documents.svg';
-import { useState } from 'react';
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import noDocuments from "@/assets/no_documents.svg";
+import { useState } from "react";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 export default function RiwayatTransaksiTable({
   transactions,
@@ -17,26 +17,26 @@ export default function RiwayatTransaksiTable({
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
 
-    const formattedDate = new Intl.DateTimeFormat('id-ID', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
+    const formattedDate = new Intl.DateTimeFormat("id-ID", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
     }).format(date);
 
-    const formattedTime = new Intl.DateTimeFormat('id-ID', {
-      hour: '2-digit',
-      minute: '2-digit',
+    const formattedTime = new Intl.DateTimeFormat("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit",
     })
       .format(date)
-      .replace(':', '.');
+      .replace(":", ".");
 
     return `${formattedDate} ${formattedTime} WIB`;
   };
 
   const formatRupiah = (amount: number) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
       minimumFractionDigits: 0,
     }).format(amount);
   };
@@ -64,17 +64,17 @@ export default function RiwayatTransaksiTable({
     } else {
       if (currentPage <= 2) {
         pages.push(1, 2, 3);
-        pages.push('...');
+        pages.push("...");
         pages.push(totalPages);
       } else if (currentPage >= totalPages - 1) {
         pages.push(1);
-        pages.push('...');
+        pages.push("...");
         pages.push(totalPages - 2, totalPages - 1, totalPages);
       } else {
         pages.push(1);
-        pages.push('...');
+        pages.push("...");
         pages.push(currentPage - 1, currentPage, currentPage + 1);
-        pages.push('...');
+        pages.push("...");
         pages.push(totalPages);
       }
     }
@@ -96,7 +96,7 @@ export default function RiwayatTransaksiTable({
               Mutasi
             </th>
             <th className="py-3 px-6 w-[200px] bg-neutral-100 text-left">
-              Saldo
+              Status
             </th>
           </tr>
         </thead>
@@ -116,17 +116,25 @@ export default function RiwayatTransaksiTable({
                 <td className="py-4 px-6">
                   <span
                     className={`${
-                      transaction.type === 'debit' ? 'text-secondary-green' : 'text-secondary-red'
+                      transaction.type === "debit"
+                        ? "text-secondary-green"
+                        : "text-secondary-red"
                     } font-bold`}
                   >
-                    {transaction.type === 'debit'
+                    {transaction.type === "debit"
                       ? `+ ${formatRupiah(transaction.amount)}`
                       : `- ${formatRupiah(transaction.amount)}`}
                   </span>
                 </td>
                 <td className="py-4 px-6">
-                  <span className="font-bold">
-                    {formatRupiah(transaction.amount)}
+                  <span
+                    className={`${
+                      transaction.status === "completed"
+                        ? "bg-secondary-green"
+                        : "bg-secondary-yellow"
+                    } rounded-full px-2 py-0.5 text-white`}
+                  >
+                    {transaction.status}
                   </span>
                 </td>
               </tr>
@@ -158,7 +166,7 @@ export default function RiwayatTransaksiTable({
               </button>
             </li>
             {generatePageNumbers().map((page, index) =>
-              typeof page === 'string' ? (
+              typeof page === "string" ? (
                 <li
                   key={index}
                   className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300"
@@ -171,8 +179,8 @@ export default function RiwayatTransaksiTable({
                     onClick={() => handlePageChange(page)}
                     className={`py-2 px-3 leading-tight ${
                       currentPage === page
-                        ? 'text-white bg-primary-blue'
-                        : 'text-gray-500 bg-white'
+                        ? "text-white bg-primary-blue"
+                        : "text-gray-500 bg-white"
                     } border border-gray-300 hover:bg-gray-100 hover:text-gray-700`}
                   >
                     {page}

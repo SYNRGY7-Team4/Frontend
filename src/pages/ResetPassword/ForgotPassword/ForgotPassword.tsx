@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { MdArrowBack } from "react-icons/md";
 
 // Define the schema for validation
 const ForgotPasswordSchema = z.object({
@@ -87,8 +88,17 @@ export default function ForgotPassword() {
         style={{ backgroundImage: `url(${bgAuth})` }}
       >
         <div className="container mx-auto px-6 flex items-center justify-center md:justify-end h-full">
-          <div className="bg-neutral-01 px-8 py-14 md:px-14 rounded-lg w-[450px] min-h-[480px]">
+          <div className="bg-neutral-01 px-8 py-8 md:px-14 rounded-lg w-[450px] min-h-[480px]">
             <div className="mb-8">
+              <Button
+                className="w-fit h-fit my-4 text-primary-darkBlue bg-transparent"
+                aria-label="Tombol kembali"
+                onClick={() => {
+                  navigate("/login");
+                }}
+              >
+                <MdArrowBack size={22} />
+              </Button>
               <h1 className="mb-2 text-3xl text-primary-blue font-bold">
                 Lupa Password
               </h1>
