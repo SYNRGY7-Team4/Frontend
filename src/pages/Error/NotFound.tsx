@@ -4,6 +4,7 @@ import notFound from "@/assets/404.svg";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import HeaderDashboard from "@/components/Header/HeaderDasboard";
+import Footer from "@/components/Footer/Footer";
 
 export default function NotFound() {
   const [token, setToken] = useState<string | null>(null);
@@ -31,7 +32,7 @@ export default function NotFound() {
           </Link>
         </div>
       </main>
-      <FooterDashboard />
+      {token ? <FooterDashboard /> : <Footer />}
     </>
   );
 }
