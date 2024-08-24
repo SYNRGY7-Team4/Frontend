@@ -4,12 +4,14 @@ const dateTiemFormat = (dateTime: Date) => {
     month: "long",
     year: "numeric",
   });
-  const formattedTime = dateTime.toLocaleTimeString("id-ID", {
+
+  const formattedTime = dateTime.toLocaleTimeString("it-IT", {
     hour: "2-digit",
     minute: "2-digit",
+    second: "2-digit",
   });
 
-  return `${formattedDate} ${formattedTime}`;
+  return `${formattedDate}, ${formattedTime}`;
 };
 
 export default dateTiemFormat;
