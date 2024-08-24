@@ -70,7 +70,6 @@ const InputPin = () => {
       return;
     }
 
-    console.log({ datetime: state.datetime });
     try {
       withLoading(async () => {
         const res = state.datetime
@@ -83,8 +82,6 @@ const InputPin = () => {
               pin: data.pin,
             });
 
-        console.log({ state });
-        console.log({ data: res.data.data });
         setDataSuccess(res.data.data);
         setBankTujuan(state.bankTo);
         setIsStatus("success");
@@ -203,7 +200,7 @@ const InputPin = () => {
                         No Referensi
                       </td>
                       <td className="text-neutral-09 text-right pb-2">
-                        {dataSucces?.id}
+                        {dataSucces?.referenceNumber}
                       </td>
                     </tr>
                     <tr className="align-top">
@@ -237,7 +234,8 @@ const InputPin = () => {
                       <td className="text-neutral-09 text-right pb-2">
                         {dataSucces?.status === "pending"
                           ? dateTiemFormat(new Date(dataSucces.datetime))
-                          : dateTiemFormat(new Date())}
+                          : dateTiemFormat(new Date())}{" "}
+                        WIB
                       </td>
                     </tr>
                     <tr className="align-top">
