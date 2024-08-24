@@ -20,3 +20,8 @@ export interface ResetPasswordFormData {
   otp: string;
   newPassword: string;
 }
+
+export interface OTPRegisterFormData {
+  email: string;
+  otp: string;
+}

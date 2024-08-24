@@ -139,7 +139,13 @@ export default function AturPin() {
                             type="text"
                             id="pin"
                             placeholder="Pin"
+                            autoComplete="off"
+                            aria-autocomplete="none"
                             aria-label="Pin"
+                            aria-invalid={errors.pin ? "true" : "false"}
+                            aria-describedby={
+                              errors.pin ? "pin-error" : undefined
+                            }
                             {...field}
                             className={`${
                               errors.pin
@@ -181,8 +187,10 @@ export default function AturPin() {
                     </div>
                     {errors.pin && (
                       <span
+                        id="pin-error"
                         className="text-red-500 text-sm"
                         aria-label={errors.pin.message}
+                        aria-live="polite"
                       >
                         {errors.pin.message}
                       </span>
@@ -209,6 +217,16 @@ export default function AturPin() {
                             id="konfirmasiPin"
                             placeholder="Konfirmasi Ulang Pin"
                             aria-label="Konfirmasi Ulang Pin"
+                            autoComplete="off"
+                            aria-autocomplete="none"
+                            aria-invalid={
+                              errors.konfirmasiPin ? "true" : "false"
+                            }
+                            aria-describedby={
+                              errors.konfirmasiPin
+                                ? "konfirmasiPin-error"
+                                : undefined
+                            }
                             {...field}
                             className={`[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
                               errors.konfirmasiPin
@@ -257,6 +275,7 @@ export default function AturPin() {
                     </div>
                     {errors.konfirmasiPin && (
                       <span
+                        id="konfirmasiPin-error"
                         className="text-red-500 text-sm"
                         aria-label={errors.konfirmasiPin.message}
                       >

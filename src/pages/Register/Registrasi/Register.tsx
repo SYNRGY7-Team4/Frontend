@@ -13,13 +13,17 @@ import { useRegistrationStore } from "@/store/RegisterStore";
 import { useLoading } from "@/hooks/useLoading";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 import { RegisterSchema, TRegisterSchema } from "./RegisterSchema";
-import { checkRegisterDataAPI } from "@/services/authServices";
+import {
+  checkRegisterDataAPI,
+  sendOTPRegisterAPI,
+} from "@/services/authServices";
 import { useState } from "react";
 import Alert from "@/components/Alert/Alert";
 
 export default function Register() {
   const { email, no_hp } = useRegistrationStore((state) => state);
   const setField = useRegistrationStore((state) => state.setField);
+
   const navigate = useNavigate();
   const { isLoading, withLoading } = useLoading();
 
@@ -70,6 +74,13 @@ export default function Register() {
         emailResponse?.success === true ||
         hpResponse?.success === true
       ) {
+        const resposnsee = await sendOTPRegisterAPI({
+          email: data.emailRegister,
+          otp: "",
+        });
+
+        console.log(resposnsee);
+
         navigate("/register/otp");
         reset();
       } else {
@@ -117,6 +128,12 @@ export default function Register() {
                           id="emailRegister"
                           placeholder="*****@email.com"
                           aria-label="Masukkan email Anda"
+                          aria-invalid={errors.emailRegister ? "true" : "false"}
+                          aria-describedby={
+                            errors.emailRegister
+                              ? "emailRegister-error"
+                              : undefined
+                          }
                           className={`${
                             errors.emailRegister
                               ? "focus:outline-secondary-red border-secondary-red"
@@ -128,6 +145,7 @@ export default function Register() {
                     />
                     {errors.emailRegister && (
                       <span
+                        id="emailRegister-error"
                         className="text-red-500 text-sm"
                         aria-label={errors.emailRegister.message}
                       >
@@ -170,6 +188,12 @@ export default function Register() {
                             id="phoneNumber"
                             placeholder="812 3456 7890"
                             aria-label="Masukkan nomor handphone anda!"
+                            aria-invalid={errors.phoneNumber ? "true" : "false"}
+                            aria-describedby={
+                              errors.phoneNumber
+                                ? "phoneNumber-error"
+                                : undefined
+                            }
                             className={`block pl-12 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
                               errors.phoneNumber
                                 ? "focus:outline-secondary-red border-secondary-red"
@@ -186,6 +210,7 @@ export default function Register() {
                       />
                       {errors.phoneNumber && (
                         <span
+                          id="phoneNumber-error"
                           className="text-red-500 text-sm"
                           aria-label={errors.phoneNumber.message}
                         >
