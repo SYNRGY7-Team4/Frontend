@@ -34,7 +34,7 @@ const TransferForm: React.FC = () => {
     defaultValues: {
       accountFrom: state.accountFrom || "",
       accountTo: state.accountTo || "",
-      amount: state.amount || "",
+      amount: state.amount.replace(/\B(?=(\d{3})+(?!\d))/g, ".") || "",
       description: state.description || "",
       datetime: state.datetime || "",
       bankTo: state.bankTo || "",
@@ -62,6 +62,8 @@ const TransferForm: React.FC = () => {
   }, [userData, balance]);
 
   const onSubmit: SubmitHandler<IFormTransfer> = (data) => {
+    const amountValue = data.amount.replace(/\./g, "");
+
     withLoading(async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       if (data.accountFrom === data.accountTo) {
@@ -73,17 +75,17 @@ const TransferForm: React.FC = () => {
       try {
         await axiosNode.get(`account/?accountNumber=${data.accountTo}`);
 
-        if (+data.amount > +saldo) {
+        if (+amountValue > +saldo) {
           setMsgError("Saldo Tidak Cukup");
           setIsOpen(true);
           return;
-        } else if (+data.amount < 10000) {
+        } else if (+amountValue < 10000) {
           setMsgError("Minimal Nominal Transfer Adalah 10 Ribu");
           setIsOpen(true);
           return;
         }
 
-        setField(data);
+        setField({ ...data, amount: amountValue });
         navigate("/transfer/input-pin");
       } catch (err) {
         if (err instanceof AxiosError) {
@@ -212,9 +214,13 @@ const TransferForm: React.FC = () => {
                             : ""
                         }`}
                         {...field}
-                        onChange={(e) =>
-                          field.onChange(e.target.value.replace(/[^0-9]/g, ""))
-                        }
+                        onChange={(e) => {
+                          field.onChange(
+                            e.target.value
+                              .replace(/[^0-9]/g, "")
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+                          );
+                        }}
                       />
                     )}
                     rules={{

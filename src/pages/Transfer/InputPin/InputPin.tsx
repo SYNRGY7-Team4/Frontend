@@ -70,7 +70,6 @@ const InputPin = () => {
       return;
     }
 
-    console.log({ datetime: state.datetime });
     try {
       withLoading(async () => {
         const res = state.datetime
@@ -83,8 +82,6 @@ const InputPin = () => {
               pin: data.pin,
             });
 
-        console.log({ state });
-        console.log({ data: res.data.data });
         setDataSuccess(res.data.data);
         setBankTujuan(state.bankTo);
         setIsStatus("success");
