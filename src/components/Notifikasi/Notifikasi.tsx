@@ -83,6 +83,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
             <button
               onClick={onMarkAllAsRead}
               className="border border-1 rounded-xl border-[#0066AE] text-[#0066AE] px-10 py-2"
+              aria-label="Tandai Sudah Baca"
             >
               Tandai Sudah Baca
             </button>
@@ -99,7 +100,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
                 compact ? "pl-4" : "px-6 md:pl-12"
               }`}
             >
-              <img src={transferIcon} alt="icon" className="w-10 h-10 mr-4" />
+              <img src={transferIcon} alt="Ikon Transfer" className="w-10 h-10 mr-4" />
               <div>
                 <h4
                   className={
@@ -128,7 +129,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
         </ul>
       ) : (
         <div className="flex justify-center items-center">
-          <img src={noDocuments} alt="No notifications" className="w-32 h-32" />
+          <img src={noDocuments} alt="Tidak Ada Notifikasi" className="w-32 h-32" />
         </div>
       )}
 
@@ -140,6 +141,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
                 className="py-2.5 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Sebelumnya"
               >
                 <IoIosArrowBack />
               </button>
@@ -161,6 +163,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
                         ? 'text-white bg-primary-blue'
                         : 'text-gray-500 bg-white'
                     } border border-gray-300 hover:bg-gray-100 hover:text-gray-700`}
+                    aria-label={`Halaman ${page}`}
                   >
                     {page}
                   </button>
@@ -172,6 +175,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
                 className="py-2.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Selanjutnya"
               >
                 <IoIosArrowForward />
               </button>
