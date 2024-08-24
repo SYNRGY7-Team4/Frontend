@@ -1,19 +1,23 @@
-import FooterDashboard from "@/components/Footer/FooterDasboard"
-import Header from "@/components/Header/HeaderDasboard"
-import notFound from "@/assets/404.svg"
-import { Link } from "react-router-dom"
+import FooterDashboard from "@/components/Footer/FooterDasboard";
+import Header from "@/components/Header/Header";
+import notFound from "@/assets/404.svg";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import HeaderDashboard from "@/components/Header/HeaderDasboard";
 
 export default function NotFound() {
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+  }, []);
+
   return (
     <>
-      <Header />
+      {token ? <HeaderDashboard /> : <Header />}
       <main className='w-full h-screen px-6 grid place-items-center'>
         <div className='flex flex-col items-center'>
-          <img
-            src={notFound}
-            className='mb-10'
-            alt='Ikon halaman tidak ditemukan'
-          />
+          <img src={notFound} className='mb-10' alt='alaman tidak ditemukan' />
           <h1 className='font-bold text-[32px] text-center mb-6'>
             Halaman tidak ditemukan
           </h1>
@@ -29,5 +33,5 @@ export default function NotFound() {
       </main>
       <FooterDashboard />
     </>
-  )
+  );
 }
