@@ -79,8 +79,8 @@ const TransferForm: React.FC = () => {
           setMsgError("Saldo Tidak Cukup");
           setIsOpen(true);
           return;
-        } else if (+amountValue < 10000) {
-          setMsgError("Minimal Nominal Transfer Adalah 10 Ribu");
+        } else if (+data.amount < 1000) {
+          setMsgError("Minimal Nominal Transfer Adalah 1 Ribu");
           setIsOpen(true);
           return;
         }
@@ -306,7 +306,7 @@ const TransferForm: React.FC = () => {
         className="p-8"
         variant="danger"
         isOpen={isOpen}
-        autoDismiss={true}
+        autoDismiss={false}
         onClose={() => setIsOpen(false)}
         showCloseButton={true}
       >

@@ -1,7 +1,7 @@
 import FooterDashboard from "@/components/Footer/FooterDasboard";
 import Header from "@/components/Header/HeaderDasboard";
 import SaldoCard from "@/components/SaldoCard/SaldoCard";
-import TransaksiTerbaruCard from "@/components/TransaksiTerbaruCard/TransaksiTerbaruCard";
+// import TransaksiTerbaruCard from "@/components/TransaksiTerbaruCard/TransaksiTerbaruCard";
 import BayarCard from "@/components/BayarCard/BayarCard";
 import RiwayatTransaksiTable from "@/components/RiwayatTransaksiTable/RiwayatTransaksiTable";
 import { useUserStore } from "@/store/UserStore";
@@ -10,7 +10,14 @@ import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 import { Link } from "react-router-dom";
 
 export default function Dashboard() {
-  const { userData, isLoading, fetchUserData, fetchBalance, fetchMutations, userMutations } = useUserStore();
+  const {
+    userData,
+    isLoading,
+    fetchUserData,
+    fetchBalance,
+    fetchMutations,
+    userMutations,
+  } = useUserStore();
   const [lastLogin, setLastLogin] = useState("");
 
   useEffect(() => {
@@ -50,16 +57,16 @@ export default function Dashboard() {
           </h1>
           <p className="mb-8">Terakhir Masuk: {lastLogin} </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[minmax(0,_1fr)_minmax(0,_1fr)_minmax(384px,_1fr)] gap-7">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[minmax(0,_1fr)_minmax(0,_1fr)_minmax(384px,_1fr)] gap-8">
             <div className="">
               <SaldoCard />
             </div>
 
-            <div className="">
+            {/* <div className="">
               <TransaksiTerbaruCard />
-            </div>
+            </div> */}
 
-            <div className="md:col-span-2 lg:col-span-1">
+            <div className="md:col-span-2 lg:col-span-2">
               <BayarCard />
             </div>
 
@@ -74,7 +81,10 @@ export default function Dashboard() {
                     Lihat Selengkapnya
                   </Link>
                 </div>
-                <RiwayatTransaksiTable maxRow={4} transactions={userMutations} />
+                <RiwayatTransaksiTable
+                  maxRow={4}
+                  transactions={userMutations}
+                />
               </div>
             </div>
           </div>

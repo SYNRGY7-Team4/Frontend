@@ -8,7 +8,10 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { MdArrowBack } from "react-icons/md";
 
+// Define the schema for validation
 const ForgotPasswordSchema = z.object({
   email: z
     .string()
@@ -19,6 +22,35 @@ const ForgotPasswordSchema = z.object({
 });
 
 type TForgotPasswordSchema = z.infer<typeof ForgotPasswordSchema>;
+
+// Define the API URL
+const apiUrl =
+  "https://lumibank-backend-edqo6jv53q-et.a.run.app/api/forget-password/send";
+
+// Define the function to send OTP
+const sendOtp = async (email: string) => {
+  try {
+    const response = await axios.post(
+      apiUrl,
+      { email },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Error response:", error.response?.data);
+      console.error("Status code:", error.response?.status); // Log status code
+      throw new Error(error.response?.data?.message || "An error occurred");
+    } else {
+      console.error("Unexpected error:", error);
+      throw new Error("An unexpected error occurred");
+    }
+  }
+};
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -31,10 +63,21 @@ export default function ForgotPassword() {
     resolver: zodResolver(ForgotPasswordSchema),
   });
 
-  const onSubmit = (data: TForgotPasswordSchema) => {
-    console.log(data);
-    reset();
-    navigate("/reset/otp");
+  const onSubmit = async (data: TForgotPasswordSchema) => {
+    try {
+      await sendOtp(data.email);
+      reset();
+      navigate("/reset/otp"); // Redirect to OTP verification page
+    } catch (error) {
+      // Display error to user
+      if (error instanceof Error) {
+        alert(`Error: ${error.message}`);
+        console.error(error.message);
+      } else {
+        alert("An unexpected error occurred");
+        console.error("An unexpected error occurred");
+      }
+    }
   };
 
   return (
@@ -45,8 +88,17 @@ export default function ForgotPassword() {
         style={{ backgroundImage: `url(${bgAuth})` }}
       >
         <div className="container mx-auto px-6 flex items-center justify-center md:justify-end h-full">
-          <div className="bg-neutral-01 px-8 py-14 md:px-14 rounded-lg w-[450px] min-h-[480px]">
+          <div className="bg-neutral-01 px-8 py-8 md:px-14 rounded-lg w-[450px] min-h-[480px]">
             <div className="mb-8">
+              <Button
+                className="w-fit h-fit my-4 text-primary-darkBlue bg-transparent"
+                aria-label="Tombol kembali"
+                onClick={() => {
+                  navigate("/login");
+                }}
+              >
+                <MdArrowBack size={22} />
+              </Button>
               <h1 className="mb-2 text-3xl text-primary-blue font-bold">
                 Lupa Password
               </h1>
@@ -59,15 +111,19 @@ export default function ForgotPassword() {
             <form
               className="flex flex-col gap-y-8"
               onSubmit={handleSubmit(onSubmit)}
+              aria-live="assertive"
             >
               <div className="flex flex-col gap-y-3">
                 <div className="flex flex-col gap-y-1">
-                  <Label htmlFor="pin">Email</Label>
+                  <Label htmlFor="email">Email</Label>
                   <Input
                     type="email"
                     id="email"
                     placeholder="Email"
                     aria-label="Email"
+                    aria-required="true"
+                    aria-invalid={errors.email ? "true" : "false"}
+                    aria-describedby={errors.email ? "email-error" : undefined}
                     {...register("email")}
                     className={`${
                       errors.email
@@ -77,8 +133,9 @@ export default function ForgotPassword() {
                   />
                   {errors.email && (
                     <span
+                      id="email-error"
                       className="text-red-500 text-sm"
-                      aria-label={errors.email.message}
+                      aria-live="polite"
                     >
                       {errors.email.message}
                     </span>
