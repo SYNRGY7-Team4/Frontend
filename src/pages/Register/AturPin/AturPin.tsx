@@ -240,7 +240,6 @@ export default function AturPin() {
                                 e.target.value.replace(/[^0-9]/g, "")
                               )
                             }
-                            autoComplete="off"
                           />
                         )}
                       />
