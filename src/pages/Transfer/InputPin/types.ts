@@ -6,6 +6,7 @@ export type TPinInput = {
 
 export interface IDataSuccess {
   id: string;
+  referenceNumber: string;
   accountFrom: string;
   accountTo: string;
   amount: number;
