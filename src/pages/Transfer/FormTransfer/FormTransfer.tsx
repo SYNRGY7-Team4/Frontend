@@ -79,7 +79,7 @@ const TransferForm: React.FC = () => {
           setMsgError("Saldo Tidak Cukup");
           setIsOpen(true);
           return;
-        } else if (+data.amount < 1000) {
+        } else if (+amountValue < 1000) {
           setMsgError("Minimal Nominal Transfer Adalah 1 Ribu");
           setIsOpen(true);
           return;
@@ -106,7 +106,7 @@ const TransferForm: React.FC = () => {
     <SpinnerWrapper isLoading={isLoading}>
       <Header />
       <main className="flex-grow w-[min(100%,1056px)] px-6 lg:mx-auto lg:px-0 py-10 mb-20">
-        <h1 className="text-4xl font-bold mb-8">Transfer ke BCA</h1>
+        <h1 className="text-4xl font-bold mb-8">Transfer</h1>
 
         <div className="w-full h-full bg-neutral-01 p-6 rounded-lg shadow-02 mb-8">
           <h2 className="text-2xl font-bold mb-3">

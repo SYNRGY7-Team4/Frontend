@@ -26,7 +26,6 @@ export default function Verification_E_KTP() {
   >(undefined);
   const [alertMessage, setAlertMessage] = useState("");
 
-  // const { ektp_photo } = useRegistrationStore((state) => state);
   const setField = useRegistrationStore((state) => state.setField);
   const navigate = useNavigate();
   const { isLoading, withLoading } = useLoading();
@@ -42,22 +41,6 @@ export default function Verification_E_KTP() {
     },
   });
 
-  // useEffect(() => {
-  //   const base64Data = ektp_photo;
-
-  //   if (base64Data) {
-  //     const [mimeType, base64String] = base64Data.split(",");
-  //     const blob = base64ToBlob(base64String, mimeType);
-  //     const objectUrl = URL.createObjectURL(blob);
-  //     console.log(blob);
-  //     setPreview(objectUrl);
-
-  //     return () => URL.revokeObjectURL(objectUrl);
-  //   } else {
-  //     setPreview(imgPreviewPlaceholder);
-  //   }
-  // }, [ektp_photo]);
-
   useEffect(() => {
     if (file) {
       const objectUrl = URL.createObjectURL(file);
@@ -71,9 +54,6 @@ export default function Verification_E_KTP() {
       setAlertVariant("danger");
       setAlertMessage((errors.fileEKTP?.message as string) || "Terjadi error");
       setIsAlertOpen(true);
-    } else {
-      setIsAlertOpen(false);
-      setAlertMessage("");
     }
   }, [errors]);
 
@@ -89,25 +69,11 @@ export default function Verification_E_KTP() {
     if (fileList && fileList.length > 0) {
       const selectedFile = fileList[0];
       setFile(selectedFile);
-      setIsAlertOpen(false);
-      setAlertMessage("");
     } else {
       setFile(null);
       setPreview(imgPreviewPlaceholder);
     }
   };
-
-  // function base64ToBlob(base64: string, mimeType: string): Blob {
-  //   const byteString = atob(base64);
-  //   const arrayBuffer = new ArrayBuffer(byteString.length);
-  //   const uint8Array = new Uint8Array(arrayBuffer);
-
-  //   for (let i = 0; i < byteString.length; i++) {
-  //     uint8Array[i] = byteString.charCodeAt(i);
-  //   }
-
-  //   return new Blob([uint8Array], { type: mimeType });
-  // }
 
   async function getBase64(file: Blob): Promise<string> {
     return new Promise((resolve, reject) => {
