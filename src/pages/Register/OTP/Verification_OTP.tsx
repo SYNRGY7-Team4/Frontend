@@ -77,6 +77,7 @@ export default function Verification_OTP() {
     if (formData.email) {
       sendOTPRegisterAPI({
         email: formData.email,
+        noHP: formData.no_hp,
         otp: "",
       });
     } else {
@@ -134,6 +135,7 @@ export default function Verification_OTP() {
     withLoading(async () => {
       const response = await ValidateOTPRegisterAPI({
         email: formData.email,
+        noHP: formData.no_hp,
         otp: userOTPInput,
       });
 
