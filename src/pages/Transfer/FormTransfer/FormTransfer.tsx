@@ -80,7 +80,7 @@ const TransferForm: React.FC = () => {
           setIsOpen(true);
           return;
         } else if (+amountValue < 1000 || +amountValue > 25000000) {
-          setMsgError("Nominal Transfer Hanya bole 1 Ribu Sampai 25 Juta");
+          setMsgError("Nominal Transfer Hanya Boleh 1 Ribu Sampai 25 Juta");
           setIsOpen(true);
           return;
         }
