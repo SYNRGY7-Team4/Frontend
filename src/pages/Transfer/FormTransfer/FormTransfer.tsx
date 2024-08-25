@@ -79,8 +79,8 @@ const TransferForm: React.FC = () => {
           setMsgError("Saldo Tidak Cukup");
           setIsOpen(true);
           return;
-        } else if (+data.amount < 1000) {
-          setMsgError("Minimal Nominal Transfer Adalah 1 Ribu");
+        } else if (+amountValue < 1000 || +amountValue > 25000000) {
+          setMsgError("Nominal Transfer Hanya bole 1 Ribu Sampai 25 Juta");
           setIsOpen(true);
           return;
         }
