@@ -1,7 +1,6 @@
 import HeaderDashboard from "@/components/Header/HeaderDasboard";
 import FooterDashboard from "@/components/Footer/FooterDasboard";
 import RiwayatTransaksiTable from "@/components/RiwayatTransaksiTable/RiwayatTransaksiTable";
-import Input from "@/components/Input/Input";
 import Button from "@/components/Button/Button";
 import Label from "@/components/Label/Label";
 import { useForm, Controller, FieldValues } from "react-hook-form";
@@ -10,6 +9,8 @@ import { TMutasi, mutasiSchema } from "./mutasiSchema";
 import { useEffect, useState } from "react";
 import Alert from "@/components/Alert/Alert";
 import { useUserStore } from "@/store/UserStore";
+import { DatePickerField } from "@/components/DatePickerField/DatePickerField";
+import "react-day-picker/dist/style.css";
 
 export default function Mutasi() {
   const { userData, fetchUserData, fetchMutations, userMutations } =
@@ -35,7 +36,6 @@ export default function Mutasi() {
   useEffect(() => {
     if (userMutations) {
       setFilteredTransactions(userMutations);
-      console.log(userMutations);
     }
   }, [userMutations]);
 
@@ -58,7 +58,7 @@ export default function Mutasi() {
 
       const isJenisTransaksiMatch =
         data.jenisTransaksi === "semua" ||
-        transaction.status.toLowerCase() === data.jenisTransaksi;
+        transaction.transactionDirection.toLowerCase() === data.jenisTransaksi;
 
       const isDariTanggalMatch =
         !data.dariTanggal ||
@@ -123,8 +123,8 @@ export default function Mutasi() {
                     aria-label="Jenis Transaksi"
                   >
                     <option value="semua">Semua</option>
-                    <option value="completed">Selesai</option>
-                    <option value="pending">Tertunda</option>
+                    <option value="debit">Uang Masuk</option>
+                    <option value="credit">Uang Keluar</option>
                   </select>
                 )}
               />
@@ -136,12 +136,10 @@ export default function Mutasi() {
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
-                  <Input
+                  <DatePickerField
+                    ariaLabel="Masukkan dari tanggal mutasi"
+                    idName="dariTanggal"
                     {...field}
-                    id="dariTanggal"
-                    type="date"
-                    aria-label="Masukkan dari tanggal mutasi"
-                    className="w-full h-[42px] !bg-neutral-01 border-primary-blue !py-2"
                   />
                 )}
               />
@@ -153,12 +151,10 @@ export default function Mutasi() {
                 control={control}
                 defaultValue=""
                 render={({ field }) => (
-                  <Input
+                  <DatePickerField
+                    ariaLabel="Masukkan sampai tanggal mutasi"
+                    idName="sampaiTanggal"
                     {...field}
-                    id="sampaiTanggal"
-                    type="date"
-                    aria-label="Masukkan sampai tanggal mutasi"
-                    className="w-full h-[42px] !bg-neutral-01 border-primary-blue !py-2"
                   />
                 )}
               />
