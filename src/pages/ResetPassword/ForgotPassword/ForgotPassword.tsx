@@ -13,6 +13,9 @@ import { MdArrowBack } from "react-icons/md";
 import { useResetPasswordStore } from "@/store/ResetPasswordStore";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 import { useLoading } from "@/hooks/useLoading";
+import Alert from "@/components/Alert/Alert";
+import { useState } from "react";
+import { SendOTPResetPasswordAPI } from "@/services/authServices";
 
 // Define the schema for validation
 const ForgotPasswordSchema = z.object({
@@ -26,36 +29,42 @@ const ForgotPasswordSchema = z.object({
 
 type TForgotPasswordSchema = z.infer<typeof ForgotPasswordSchema>;
 
-// Define the API URL
-const apiUrl =
-  "https://lumibank-backend-edqo6jv53q-et.a.run.app/api/forget-password/send";
+// // Define the API URL
+// const apiUrl =
+//   "https://lumibank-backend-edqo6jv53q-et.a.run.app/api/forget-password/send";
 
-// Define the function to send OTP
-const sendOtp = async (email: string) => {
-  try {
-    const response = await axios.post(
-      apiUrl,
-      { email },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Error response:", error.response?.data);
-      console.error("Status code:", error.response?.status); // Log status code
-      throw new Error(error.response?.data?.message || "An error occurred");
-    } else {
-      console.error("Unexpected error:", error);
-      throw new Error("An unexpected error occurred");
-    }
-  }
-};
+// // Define the function to send OTP
+// const sendOtp = async (email: string) => {
+//   try {
+//     const response = await axios.post(
+//       apiUrl,
+//       { email },
+//       {
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+//     return response.data;
+//   } catch (error) {
+//     if (axios.isAxiosError(error)) {
+// setErrorMsg("Email atau Password Salah");
+// setIsStatus("danger");
+// setIsOpen(true);
+//     } else {
+//       console.error("Unexpected error:", error);
+//       throw new Error("An unexpected error occurred");
+//     }
+//   }
+// };
 
 export default function ForgotPassword() {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isStatus, setIsStatus] = useState<
+    "success" | "danger" | "primary" | undefined
+  >(undefined);
+  const [errorMsg, setErrorMsg] = useState<string>("");
+
   const setField = useResetPasswordStore((state) => state.setField);
 
   const { isLoading, withLoading } = useLoading();
@@ -73,17 +82,26 @@ export default function ForgotPassword() {
     setField("email", data.email);
     try {
       withLoading(async () => {
-        await sendOtp(data.email);
-        reset();
-        navigate("/reset/otp"); // Redirect to OTP verification page
+        const response = await SendOTPResetPasswordAPI({
+          email: data.email,
+          otp: "",
+          newPassword: "",
+        });
+
+        if (response?.success == false) {
+          setErrorMsg("Email tidak terdaftar");
+          setIsStatus("danger");
+          setIsOpen(true);
+        } else {
+          reset();
+          navigate("/reset/otp"); // Redirect to OTP verification page
+        }
       });
     } catch (error) {
       // Display error to user
       if (error instanceof Error) {
-        alert(`Error: ${error.message}`);
         console.error(error.message);
       } else {
-        alert("An unexpected error occurred");
         console.error("An unexpected error occurred");
       }
     }
@@ -114,7 +132,7 @@ export default function ForgotPassword() {
                 </h1>
                 <p>
                   Masukkan email Anda untuk proses verifikasi, kami akan
-                  mengirimkan kode 4 digit ke email Anda.
+                  mengirimkan kode 6 digit ke email Anda.
                 </p>
               </div>
 
@@ -168,6 +186,15 @@ export default function ForgotPassword() {
           </div>
         </main>
         <Footer />
+        <Alert
+          variant={isStatus}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          showCloseButton={true}
+          autoDismiss={false}
+        >
+          {errorMsg}
+        </Alert>
       </SpinnerWrapper>
     </>
   );
