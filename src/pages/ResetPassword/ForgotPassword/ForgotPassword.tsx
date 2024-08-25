@@ -8,7 +8,6 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { MdArrowBack } from "react-icons/md";
 import { useResetPasswordStore } from "@/store/ResetPasswordStore";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
@@ -28,35 +27,6 @@ const ForgotPasswordSchema = z.object({
 });
 
 type TForgotPasswordSchema = z.infer<typeof ForgotPasswordSchema>;
-
-// // Define the API URL
-// const apiUrl =
-//   "https://lumibank-backend-edqo6jv53q-et.a.run.app/api/forget-password/send";
-
-// // Define the function to send OTP
-// const sendOtp = async (email: string) => {
-//   try {
-//     const response = await axios.post(
-//       apiUrl,
-//       { email },
-//       {
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     );
-//     return response.data;
-//   } catch (error) {
-//     if (axios.isAxiosError(error)) {
-// setErrorMsg("Email atau Password Salah");
-// setIsStatus("danger");
-// setIsOpen(true);
-//     } else {
-//       console.error("Unexpected error:", error);
-//       throw new Error("An unexpected error occurred");
-//     }
-//   }
-// };
 
 export default function ForgotPassword() {
   const [isOpen, setIsOpen] = useState<boolean>(false);

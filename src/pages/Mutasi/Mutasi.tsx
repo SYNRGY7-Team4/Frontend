@@ -1,15 +1,15 @@
-import HeaderDashboard from '@/components/Header/HeaderDasboard';
-import FooterDashboard from '@/components/Footer/FooterDasboard';
-import RiwayatTransaksiTable from '@/components/RiwayatTransaksiTable/RiwayatTransaksiTable';
-import Input from '@/components/Input/Input';
-import Button from '@/components/Button/Button';
-import Label from '@/components/Label/Label';
-import { useForm, Controller, FieldValues } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { TMutasi, mutasiSchema } from './mutasiSchema';
-import { useEffect, useState } from 'react';
-import Alert from '@/components/Alert/Alert';
-import { useUserStore } from '@/store/UserStore';
+import HeaderDashboard from "@/components/Header/HeaderDasboard";
+import FooterDashboard from "@/components/Footer/FooterDasboard";
+import RiwayatTransaksiTable from "@/components/RiwayatTransaksiTable/RiwayatTransaksiTable";
+import Input from "@/components/Input/Input";
+import Button from "@/components/Button/Button";
+import Label from "@/components/Label/Label";
+import { useForm, Controller, FieldValues } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TMutasi, mutasiSchema } from "./mutasiSchema";
+import { useEffect, useState } from "react";
+import Alert from "@/components/Alert/Alert";
+import { useUserStore } from "@/store/UserStore";
 
 export default function Mutasi() {
   const { userData, fetchUserData, fetchMutations, userMutations } =
@@ -48,13 +48,16 @@ export default function Mutasi() {
     setHasValidationErrors(false);
 
     const filteredData = userMutations.filter((transaction: any) => {
-      const sampaiTanggal = data.sampaiTanggal
+      const sampaiTanggal: Date | null = data.sampaiTanggal
         ? new Date(data.sampaiTanggal)
         : null;
-      if (sampaiTanggal) sampaiTanggal.setHours(23, 59, 59, 999);
+
+      if (sampaiTanggal) {
+        sampaiTanggal.setHours(23, 59, 59, 999);
+      }
 
       const isJenisTransaksiMatch =
-        data.jenisTransaksi === 'semua' ||
+        data.jenisTransaksi === "semua" ||
         transaction.status.toLowerCase() === data.jenisTransaksi;
 
       const isDariTanggalMatch =
@@ -62,10 +65,10 @@ export default function Mutasi() {
         new Date(transaction.datetime) >= new Date(data.dariTanggal);
 
       const isSampaiTanggalMatch =
-        !data.sampaiTanggal || new Date(transaction.datetime) <= sampaiTanggal;
+        !sampaiTanggal || new Date(transaction.datetime) <= sampaiTanggal;
 
       const isPendingInFuture =
-        transaction.status.toLowerCase() === 'pending' &&
+        transaction.status.toLowerCase() === "pending" &&
         new Date(transaction.datetime) < new Date();
 
       // Check all conditions together
