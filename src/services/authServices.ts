@@ -13,7 +13,7 @@ const handleError = (error: unknown): any => {
       console.error("API Error:", error.response.data);
       return error.response?.data;
     } else {
-      console.log("Error jaringan:", error);
+      console.error("Error jaringan:", error);
       return {
         message: "Terjadi kesalahan jaringan. Silakan coba lagi.",
       };

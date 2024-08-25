@@ -4,6 +4,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import noDocuments from "@/assets/no_documents.svg";
 import transferIconGray from "@/assets/vektor_transfer gray.png";
 import axiosInstance from "@/axios/axios";
+import dateTiemFormat from "@/utils/dateTimeFormat";
 
 export interface Notification {
   id: number;
@@ -28,7 +29,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
   pagination = false,
   onMarkAllAsRead,
 }) => {
-  console.log(notifications);
+  // console.log(notifications);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = pagination ? maxRow : notifications.length;
@@ -140,7 +141,11 @@ const NotificationList: React.FC<NotificationListProps> = ({
                 >
                   {notification.body}
                 </p>
-                {!compact && <p className="text-xs">{notification.sentAt}</p>}
+                {!compact && (
+                  <p className="text-xs">
+                    {dateTiemFormat(new Date(notification.sentAt))}
+                  </p>
+                )}
               </div>
             </li>
           ))}

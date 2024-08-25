@@ -36,7 +36,6 @@ export default function HeaderDashboard() {
       try {
         const response = await axiosInstance.get("/notification/");
         setNotifications(response.data);
-        console.log("sdsdsdsdsds");
       } catch (error) {
         console.error("Failed to fetch notifications", error);
       }
@@ -54,7 +53,7 @@ export default function HeaderDashboard() {
           read: true,
         }))
       );
-      alert("All notifications marked as read.");
+      // alert("All notifications marked as read.");
     } catch (error) {
       console.error("Failed to mark all notifications as read", error);
     }
@@ -196,6 +195,7 @@ export default function HeaderDashboard() {
                           <NotificationList
                             notifications={notifications}
                             compact={true}
+                            maxRow={3}
                             onMarkAllAsRead={handleMarkAllAsRead}
                           />
                         ) : (

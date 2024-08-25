@@ -75,26 +75,27 @@ export default function Verification_E_KTP() {
     }
   };
 
-  async function getBase64(file: Blob): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        if (typeof reader.result === "string") {
-          resolve(reader.result);
-        } else {
-          reject(new Error("Gagal membaca file sebagai string"));
-        }
-      };
-      reader.onerror = reject;
-    });
-  }
+  // async function getBase64(file: Blob): Promise<string> {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => {
+  //       if (typeof reader.result === "string") {
+  //         resolve(reader.result);
+  //       } else {
+  //         reject(new Error("Gagal membaca file sebagai string"));
+  //       }
+  //     };
+  //     reader.onerror = reject;
+  //   });
+  // }
 
   const onSubmit = async (data: eKTPInput) => {
     if (data) {
       try {
-        const base64Data = await getBase64(data.fileEKTP[0]);
-        setField("ektp_photo", base64Data);
+        // const base64Data = await getBase64(data.fileEKTP[0]);
+        // setField("ektp_photo", base64Data);
+        setField("ektp_photo", "data:image/png:base64,iVBORwBKGgoAAA");
 
         withLoading(async () => {
           await new Promise((resolve) => setTimeout(resolve, 1000));
