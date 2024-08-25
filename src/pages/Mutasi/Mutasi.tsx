@@ -12,11 +12,13 @@ import Alert from '@/components/Alert/Alert';
 import { useUserStore } from '@/store/UserStore';
 
 export default function Mutasi() {
-  const { userData, fetchUserData, fetchMutations, userMutations } = useUserStore();
+  const { userData, fetchUserData, fetchMutations, userMutations } =
+    useUserStore();
 
   const [formError, setFormError] = useState<string | null>(null);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
-  const [filteredTransactions, setFilteredTransactions] = useState(userMutations);
+  const [filteredTransactions, setFilteredTransactions] =
+    useState(userMutations);
 
   useEffect(() => {
     if (!userData) {
@@ -33,6 +35,7 @@ export default function Mutasi() {
   useEffect(() => {
     if (userMutations) {
       setFilteredTransactions(userMutations);
+      console.log(userMutations);
     }
   }, [userMutations]);
 
@@ -45,15 +48,33 @@ export default function Mutasi() {
     setHasValidationErrors(false);
 
     const filteredData = userMutations.filter((transaction: any) => {
-      const sampaiTanggal = new Date(data.sampaiTanggal);
-      sampaiTanggal.setHours(23, 59, 59, 999);
+      const sampaiTanggal = data.sampaiTanggal
+        ? new Date(data.sampaiTanggal)
+        : null;
+      if (sampaiTanggal) sampaiTanggal.setHours(23, 59, 59, 999);
 
-      const isJenisTransaksiMatch =data.jenisTransaksi === 'semua' || transaction.status.toLowerCase() === data.jenisTransaksi;
-      const isDariTanggalMatch = !data.dariTanggal || new Date(transaction.datetime) >= new Date(data.dariTanggal);
-      const isSampaiTanggalMatch =!data.sampaiTanggal || new Date(transaction.datetime) <= sampaiTanggal;
+      const isJenisTransaksiMatch =
+        data.jenisTransaksi === 'semua' ||
+        transaction.status.toLowerCase() === data.jenisTransaksi;
 
+      const isDariTanggalMatch =
+        !data.dariTanggal ||
+        new Date(transaction.datetime) >= new Date(data.dariTanggal);
+
+      const isSampaiTanggalMatch =
+        !data.sampaiTanggal || new Date(transaction.datetime) <= sampaiTanggal;
+
+      const isPendingInFuture =
+        transaction.status.toLowerCase() === 'pending' &&
+        new Date(transaction.datetime) > new Date();
+
+      // Check all conditions together
       return (
-        isJenisTransaksiMatch && isDariTanggalMatch && isSampaiTanggalMatch
+        isJenisTransaksiMatch &&
+        (isPendingInFuture ||
+          (data.dariTanggal && data.sampaiTanggal
+            ? isDariTanggalMatch && isSampaiTanggalMatch
+            : true))
       );
     });
 
@@ -73,7 +94,7 @@ export default function Mutasi() {
   const onClose = () => {
     setHasValidationErrors(false);
   };
-  
+
   return (
     <>
       <HeaderDashboard />
