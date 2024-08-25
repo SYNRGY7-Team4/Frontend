@@ -27,6 +27,8 @@ export default function NewPassword() {
     "success" | "danger" | undefined
   >(undefined);
   const [alertMessage, setAlertMessage] = useState("");
+  const [isModalAlertOpen, setIsModalAlertOpen] = useState(false);
+
   const navigate = useNavigate();
 
   const {
@@ -57,6 +59,15 @@ export default function NewPassword() {
     }));
   };
 
+  const confirmModalAction = () => {
+    if (!formData.otp) {
+      navigate("/reset/forgot-password");
+    } else {
+      navigate("/login");
+      reset();
+    }
+  };
+
   const handleCloseAlert = () => {
     setIsAlertOpen(false);
     if (alertStatus === "success") {
@@ -65,7 +76,6 @@ export default function NewPassword() {
   };
 
   const onSubmit: SubmitHandler<IPasswordInput> = (data) => {
-    console.log({ data });
     setField("password", data.password);
 
     withLoading(async () => {
@@ -100,9 +110,7 @@ export default function NewPassword() {
               <Button
                 className="w-fit h-fit my-4 text-primary-darkBlue bg-transparent"
                 aria-label="Tombol kembali"
-                onClick={() => {
-                  navigate("/reset/otp");
-                }}
+                onClick={() => setIsModalAlertOpen(true)}
               >
                 <MdArrowBack size={22} />
               </Button>
@@ -254,6 +262,41 @@ export default function NewPassword() {
           </div>
         </main>
         <Footer />
+        {isModalAlertOpen && (
+          <Alert
+            variant={"danger"}
+            isOpen={isModalAlertOpen}
+            autoDismiss={false}
+            onClose={handleCloseAlert}
+            showCloseButton={false}
+          >
+            <div>
+              <p className="text-lg mb-4">
+                Apakah anda yakin akan keluar dari halaman ini? Jika iya, maka
+                data Anda tidak akan tersimpan
+              </p>
+              <div className="flex justify-center gap-3">
+                <Button
+                  className="w-[45%] bg-transparent text-primary-blue border-2 border-primary-blue"
+                  type="button"
+                  aria-label="Tombol tidak"
+                  onClick={() => setIsModalAlertOpen(false)}
+                >
+                  Tidak
+                </Button>
+                <Button
+                  className="w-[45%] "
+                  type="button"
+                  aria-label="Tombol ya"
+                  onClick={confirmModalAction}
+                >
+                  Ya
+                </Button>
+              </div>
+            </div>
+          </Alert>
+        )}
+
         {alertStatus === "danger" ? (
           <Alert
             variant={alertStatus}

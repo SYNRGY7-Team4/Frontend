@@ -66,21 +66,11 @@ const TransferForm: React.FC = () => {
 
     withLoading(async () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      if (data.accountFrom === data.accountTo) {
-        setMsgError("Tidak Dapat Transfer Ke Rekening Anda");
-        setIsOpen(true);
-        return;
-      }
-
       try {
         await axiosNode.get(`account/?accountNumber=${data.accountTo}`);
 
         if (+amountValue > +saldo) {
           setMsgError("Saldo Tidak Cukup");
-          setIsOpen(true);
-          return;
-        } else if (+amountValue < 1000) {
-          setMsgError("Minimal Nominal Transfer Adalah 1 Ribu");
           setIsOpen(true);
           return;
         }
@@ -138,6 +128,13 @@ const TransferForm: React.FC = () => {
                   )}
                   rules={{
                     required: "Rekening tujuan tidak boleh kosong",
+                    validate: (value) => {
+                      if (value === userAccountNumber) {
+                        return "Tidak dapat transfer ke rekening anda";
+                      }
+
+                      return true;
+                    },
                   }}
                 />
                 {errors.accountTo && (
@@ -225,6 +222,24 @@ const TransferForm: React.FC = () => {
                     )}
                     rules={{
                       required: "Nominal tidak boleh kosong",
+                      validate: (value) => {
+                        // mengahpus titik
+                        const numericValue = parseInt(
+                          value.replace(/\./g, ""),
+                          10
+                        );
+
+                        if (isNaN(numericValue) || numericValue < 1000) {
+                          return "Minimal melakukan transaksi sebesar 1 ribu";
+                        } else if (
+                          isNaN(numericValue) ||
+                          numericValue > 25000000
+                        ) {
+                          return "Maksimal melakukan transaksi sebesar 25 juta";
+                        }
+
+                        return true;
+                      },
                     }}
                   />
                 </div>

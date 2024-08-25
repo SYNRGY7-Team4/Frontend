@@ -7,11 +7,13 @@ import { useEffect, useState } from "react";
 import NotificationList, { Notification } from "../Notifikasi/Notifikasi";
 import Button from "../Button/Button";
 import { useUserStore } from "@/store/UserStore";
+import useTransferStore, { selectReset } from "@/store/TransferStore";
 import axiosInstance from "@/axios/axios";
 
 export default function HeaderDashboard() {
   const navigate = useNavigate();
   const resetState = useUserStore((state) => state.resetState);
+  const resetTransfer = useTransferStore(selectReset);
 
   const [isOpenMobileMenu, setOpenMobileMenu] = useState(false);
   const [isOpenDropdownNotifikasi, setOpenDropdownNotifikasi] = useState(false);
@@ -61,6 +63,7 @@ export default function HeaderDashboard() {
   const handleLogout = () => {
     localStorage.clear();
     resetState();
+    resetTransfer();
 
     navigate("/login");
   };
