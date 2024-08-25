@@ -36,6 +36,7 @@ export default function Mutasi() {
   useEffect(() => {
     if (userMutations) {
       setFilteredTransactions(userMutations);
+      console.log(userMutations);
     }
   }, [userMutations]);
 
