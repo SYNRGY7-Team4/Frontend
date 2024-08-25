@@ -111,6 +111,10 @@ export default function Password() {
                         placeholder="Password"
                         aria-label="Masukkan Password Anda"
                         autoComplete="off"
+                        aria-invalid={errors.password ? "true" : "false"}
+                        aria-describedby={
+                          errors.password ? "password-error" : undefined
+                        }
                         {...register("password")}
                       />
                       <div className="absolute right-[15px] flex items-center h-full">
@@ -134,7 +138,10 @@ export default function Password() {
                       </div>
                     </div>
                     {errors.password && (
-                      <p className="text-secondary-red text-[12px]">
+                      <p
+                        id="password-error"
+                        className="text-secondary-red text-[12px]"
+                      >
                         {errors.password.message}
                       </p>
                     )}
@@ -162,6 +169,12 @@ export default function Password() {
                         placeholder="Konfirmasi Password"
                         aria-label="Masukkan Password Anda"
                         autoComplete="off"
+                        aria-invalid={errors.confirmPassword ? "true" : "false"}
+                        aria-describedby={
+                          errors.confirmPassword
+                            ? "confrimPassword-error"
+                            : undefined
+                        }
                         {...register("confirmPassword")}
                       />
                       <div className="absolute right-[15px] flex items-center h-full">
@@ -189,7 +202,10 @@ export default function Password() {
                       </div>
                     </div>
                     {errors.confirmPassword && (
-                      <p className="text-secondary-red text-[12px]">
+                      <p
+                        id="confirmPassword-error"
+                        className="text-secondary-red text-[12px]"
+                      >
                         {errors.confirmPassword.message}
                       </p>
                     )}

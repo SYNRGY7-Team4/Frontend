@@ -1,5 +1,10 @@
 import { AxiosError } from "axios";
-import { Response, RegisterFormData, ResetPasswordFormData } from "./type";
+import {
+  Response,
+  RegisterFormData,
+  ResetPasswordFormData,
+  OTPRegisterFormData,
+} from "./type";
 import axiosInstance from "@/axios/axios";
 
 const handleError = (error: unknown): any => {
@@ -36,8 +41,34 @@ export const checkRegisterDataAPI = async (
       "https://lumibank-api-fsw-edqo6jv53q-et.a.run.app/api/users",
       requestBody
     );
-    console.log(response);
 
+    return response.data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+export const sendOTPRegisterAPI = async (formData: OTPRegisterFormData) => {
+  const form = new FormData();
+  form.append("email", formData.email);
+  form.append("noHP", formData.noHP);
+  form.append("otp", formData.otp);
+
+  try {
+    const response = await axiosInstance.post<Response>("/send-otp", form);
+    return response.data;
+  } catch (error) {
+    return handleError(error);
+  }
+};
+
+export const ValidateOTPRegisterAPI = async (formData: OTPRegisterFormData) => {
+  const form = new FormData();
+  form.append("email", formData.email);
+  form.append("otp", formData.otp);
+
+  try {
+    const response = await axiosInstance.post<Response>("/verify-otp", form);
     return response.data;
   } catch (error) {
     return handleError(error);

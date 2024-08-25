@@ -12,22 +12,31 @@ import { otpSchema, OTPInput } from "@/pages/Register/OTP/OTPSchema";
 import { useLoading } from "@/hooks/useLoading";
 import SpinnerWrapper from "@/components/Spinner/SpinnerWrapper";
 import { MdArrowBack } from "react-icons/md";
+import {
+  sendOTPRegisterAPI,
+  ValidateOTPRegisterAPI,
+} from "@/services/authServices";
+import { useRegistrationStore } from "@/store/RegisterStore";
 
 let currentOTPIndex: number = 0;
 
 export default function Verification_OTP() {
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [activeOTPIndex, setActiveOTPIndex] = useState(0);
+
   const [minutes, setMinutes] = useState(1);
   const [seconds, setSeconds] = useState(0);
+
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertVariant, setAlertVariant] = useState<
     "success" | "danger" | undefined
   >(undefined);
   const [alertMessage, setAlertMessage] = useState("");
 
+  const { ...formData } = useRegistrationStore();
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
   const { isLoading, withLoading } = useLoading();
 
   const {
@@ -65,6 +74,18 @@ export default function Verification_OTP() {
   };
 
   const resendOTP = () => {
+    if (formData.email) {
+      sendOTPRegisterAPI({
+        email: formData.email,
+        noHP: formData.no_hp,
+        otp: "",
+      });
+    } else {
+      setAlertVariant("danger");
+      setAlertMessage("Silahkan masukkan ulang email anda");
+      setIsAlertOpen(true);
+    }
+
     setMinutes(1);
     setSeconds(0);
   };
@@ -103,20 +124,29 @@ export default function Verification_OTP() {
 
   const handleCloseAlert = () => {
     setIsAlertOpen(false);
+    if (alertMessage === "Silahkan masukkan ulang email anda") {
+      navigate("/register");
+    }
   };
 
   const onSubmit = (data: OTPInput) => {
-    const userOTPInput = parseInt(data.otp.join(""), 10);
-    if (userOTPInput == 222222) {
-      withLoading(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        navigate("/register/password");
+    const userOTPInput = data.otp.join("");
+
+    withLoading(async () => {
+      const response = await ValidateOTPRegisterAPI({
+        email: formData.email,
+        noHP: formData.no_hp,
+        otp: userOTPInput,
       });
-    } else {
-      setAlertVariant("danger");
-      setAlertMessage("Kode OTP Salah");
-      setIsAlertOpen(true);
-    }
+
+      if (response?.success === false) {
+        setAlertVariant("danger");
+        setAlertMessage("Kode OTP Salah");
+        setIsAlertOpen(true);
+      } else if (response?.success === true) {
+        navigate("/register/password");
+      }
+    });
   };
 
   return (
@@ -147,11 +177,11 @@ export default function Verification_OTP() {
               >
                 <div className="flex flex-col gap-y-3">
                   <div className="flex flex-col gap-y-8 sm:gap-y-6">
-                    <Label htmlFor="otp" className="text-black">
+                    <Label htmlFor="otpRegis" className="text-black">
                       Masukkan kode 6 digit yang Anda terima di email Anda
                     </Label>
                     <div
-                      id="otp"
+                      id="otpRegis"
                       className="flex justify-center items-center space-x-2"
                       aria-label="Masukkan OTP Anda"
                     >
@@ -180,7 +210,7 @@ export default function Verification_OTP() {
                       {seconds < 10 ? `0${seconds}` : seconds}
                     </p>
                     <Button
-                      typeof="button"
+                      type="button"
                       disabled={seconds > 0 || minutes > 0}
                       aria-label="Tombol kirim ulang kode OTP"
                       className={`border-0 outline-none bg-transparent text-sm ${
@@ -195,7 +225,7 @@ export default function Verification_OTP() {
                   </div>
                   <div>
                     <Button
-                      id="btnOTPLanjut"
+                      id="btnOTPRegisLanjut"
                       typeof="submit"
                       aria-label="Tombol lanjut"
                     >

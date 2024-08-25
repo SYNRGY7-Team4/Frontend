@@ -1,12 +1,21 @@
-import FooterDashboard from "@/components/Footer/FooterDasboard"
-import Header from "@/components/Header/HeaderDasboard"
-import underDev from "@/assets/under_development.svg"
-import { Link } from "react-router-dom"
+import FooterDashboard from "@/components/Footer/FooterDasboard";
+import Header from "@/components/Header/Header";
+import underDev from "@/assets/under_development.svg";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import HeaderDashboard from "@/components/Header/HeaderDasboard";
+import Footer from "@/components/Footer/Footer";
 
 export default function UnderDevelopment() {
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+  }, []);
+
   return (
     <>
-      <Header />
+      {token ? <HeaderDashboard /> : <Header />}
       <main className='w-full h-screen px-6 grid place-items-center'>
         <div className='flex flex-col items-center'>
           <img src={underDev} alt='Ikon fitur dalam tahap pengembangan' />
@@ -23,7 +32,7 @@ export default function UnderDevelopment() {
           </Link>
         </div>
       </main>
-      <FooterDashboard />
+      {token ? <FooterDashboard /> : <Footer />}
     </>
-  )
+  );
 }

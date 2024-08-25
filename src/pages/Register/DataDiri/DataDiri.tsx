@@ -111,6 +111,10 @@ const DataDiri = () => {
                             type="text"
                             placeholder="1234567891011"
                             aria-label="Masukkan no KTP Anda"
+                            aria-invalid={errors.noKtp ? "true" : "false"}
+                            aria-describedby={
+                              errors.noKtp ? "noKtp-error" : undefined
+                            }
                             className={`${
                               errors.noKtp
                                 ? "border-2 border-secondary-red focus:outline-secondary-red"
@@ -133,7 +137,7 @@ const DataDiri = () => {
                         }}
                       />
                       {errors.noKtp && (
-                        <p className="text-secondary-red">
+                        <p id="noKtp-error" className="text-secondary-red">
                           {errors.noKtp.message}
                         </p>
                       )}
@@ -158,6 +162,10 @@ const DataDiri = () => {
                             type="text"
                             placeholder="John Doe"
                             aria-label="Masukkan nama Anda"
+                            aria-invalid={errors.nama ? "true" : "false"}
+                            aria-describedby={
+                              errors.nama ? "nama-error" : undefined
+                            }
                             className={
                               errors.nama
                                 ? "border-2 border-secondary-red focus:outline-secondary-red"
@@ -171,7 +179,7 @@ const DataDiri = () => {
                         }}
                       />
                       {errors.nama && (
-                        <p className="text-secondary-red">
+                        <p id="nama-error" className="text-secondary-red">
                           {errors.nama.message}
                         </p>
                       )}
@@ -195,6 +203,14 @@ const DataDiri = () => {
                             id="tanggalLahir"
                             type="date"
                             aria-label="Masukkan tanggal lahir Anda"
+                            aria-invalid={
+                              errors.tanggalLahir ? "true" : "false"
+                            }
+                            aria-describedby={
+                              errors.tanggalLahir
+                                ? "tanggalLahir-error"
+                                : undefined
+                            }
                             className={
                               errors.tanggalLahir
                                 ? "border-2 border-secondary-red focus:outline-secondary-red"
@@ -209,7 +225,10 @@ const DataDiri = () => {
                         }}
                       />
                       {errors.tanggalLahir && (
-                        <p className="text-secondary-red">
+                        <p
+                          id="tanggalLahir-error"
+                          className="text-secondary-red"
+                        >
                           {errors.tanggalLahir.message}
                         </p>
                       )}

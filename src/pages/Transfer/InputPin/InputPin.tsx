@@ -109,7 +109,7 @@ const InputPin = () => {
       <div className="flex flex-col min-h-screen">
         <Header />
         <main className="flex-grow w-[min(100%,1056px)] px-6 lg:mx-auto lg:px-0 py-10 mb-20">
-          <h1 className="text-4xl font-bold mb-8">Transfer ke BCA</h1>
+          <h1 className="text-4xl font-bold mb-8">Transfer</h1>
 
           <div className="w-full h-full bg-neutral-01 p-6 pb-20 rounded-lg shadow-02 flex flex-col items-center gap-y-2.5">
             <h2 className="text-3xl font-bold text-primary-darkBlue">
