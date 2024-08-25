@@ -80,8 +80,6 @@ const TransferForm: React.FC = () => {
           setIsOpen(true);
           return;
         } else if (+amountValue < 1000) {
-          console.log(data.amount);
-          console.log(data.amount.replace(/\./g, "") || "");
           setMsgError("Minimal Nominal Transfer Adalah 1 Ribu");
           setIsOpen(true);
           return;
