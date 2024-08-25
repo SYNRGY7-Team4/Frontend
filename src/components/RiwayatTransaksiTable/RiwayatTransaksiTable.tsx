@@ -1,4 +1,5 @@
 import noDocuments from "@/assets/no_documents.svg";
+import currencyFormat from "@/utils/currencyFormat";
 import { useState } from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
@@ -30,15 +31,7 @@ export default function RiwayatTransaksiTable({
       .format(date)
       .replace(":", ".");
 
-    return `${formattedDate} ${formattedTime} WIB`;
-  };
-
-  const formatRupiah = (amount: number) => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      minimumFractionDigits: 0,
-    }).format(amount);
+    return `${formattedDate}, ${formattedTime}`;
   };
 
   const handlePageChange = (pageNumber: number) => {
@@ -93,7 +86,7 @@ export default function RiwayatTransaksiTable({
             </th>
             <th className="py-3 px-6 bg-neutral-100 text-left">Kategori</th>
             <th className="py-3 px-6 w-[200px] bg-neutral-100 text-left">
-              Mutasi
+              Saldo
             </th>
             <th className="py-3 px-6 w-[200px] bg-neutral-100 text-left">
               Status
@@ -115,15 +108,9 @@ export default function RiwayatTransaksiTable({
                 </td>
                 <td className="py-4 px-6">
                   <span
-                    className={`${
-                      transaction.type === "debit"
-                        ? "text-secondary-green"
-                        : "text-secondary-red"
-                    } font-bold`}
+                    className='font-bold'
                   >
-                    {transaction.type === "debit"
-                      ? `+ ${formatRupiah(transaction.amount)}`
-                      : `- ${formatRupiah(transaction.amount)}`}
+                    {currencyFormat(transaction.balance, "id-ID", "IDR")}
                   </span>
                 </td>
                 <td className="py-4 px-6">

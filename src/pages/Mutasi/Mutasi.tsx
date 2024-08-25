@@ -41,7 +41,6 @@ export default function Mutasi() {
   });
 
   const onSubmit = (data: TMutasi) => {
-    console.log(data);
     setFormError(null);
     setHasValidationErrors(false);
 
@@ -49,14 +48,9 @@ export default function Mutasi() {
       const sampaiTanggal = new Date(data.sampaiTanggal);
       sampaiTanggal.setHours(23, 59, 59, 999);
 
-      const isJenisTransaksiMatch =
-        data.jenisTransaksi === 'transfer' ||
-        transaction.type === data.jenisTransaksi;
-      const isDariTanggalMatch =
-        !data.dariTanggal ||
-        new Date(transaction.datetime) >= new Date(data.dariTanggal);
-      const isSampaiTanggalMatch =
-        !data.sampaiTanggal || new Date(transaction.datetime) <= sampaiTanggal;
+      const isJenisTransaksiMatch =data.jenisTransaksi === 'semua' || transaction.status.toLowerCase() === data.jenisTransaksi;
+      const isDariTanggalMatch = !data.dariTanggal || new Date(transaction.datetime) >= new Date(data.dariTanggal);
+      const isSampaiTanggalMatch =!data.sampaiTanggal || new Date(transaction.datetime) <= sampaiTanggal;
 
       return (
         isJenisTransaksiMatch && isDariTanggalMatch && isSampaiTanggalMatch
@@ -96,7 +90,7 @@ export default function Mutasi() {
               <Controller
                 name="jenisTransaksi"
                 control={control}
-                defaultValue="transfer"
+                defaultValue="semua"
                 render={({ field }) => (
                   <select
                     {...field}
@@ -105,8 +99,8 @@ export default function Mutasi() {
                     aria-label="Jenis Transaksi"
                   >
                     <option value="semua">Semua</option>
-                    <option value="debit">Uang Masuk</option>
-                    <option value="kredit">Uang Keluar</option>
+                    <option value="completed">Selesai</option>
+                    <option value="pending">Tertunda</option>
                   </select>
                 )}
               />
