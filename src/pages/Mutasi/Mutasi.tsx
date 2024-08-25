@@ -1,22 +1,24 @@
-import HeaderDashboard from '@/components/Header/HeaderDasboard';
-import FooterDashboard from '@/components/Footer/FooterDasboard';
-import RiwayatTransaksiTable from '@/components/RiwayatTransaksiTable/RiwayatTransaksiTable';
-import Input from '@/components/Input/Input';
-import Button from '@/components/Button/Button';
-import Label from '@/components/Label/Label';
-import { useForm, Controller, FieldValues } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { TMutasi, mutasiSchema } from './mutasiSchema';
-import { useEffect, useState } from 'react';
-import Alert from '@/components/Alert/Alert';
-import { useUserStore } from '@/store/UserStore';
+import HeaderDashboard from "@/components/Header/HeaderDasboard";
+import FooterDashboard from "@/components/Footer/FooterDasboard";
+import RiwayatTransaksiTable from "@/components/RiwayatTransaksiTable/RiwayatTransaksiTable";
+import Input from "@/components/Input/Input";
+import Button from "@/components/Button/Button";
+import Label from "@/components/Label/Label";
+import { useForm, Controller, FieldValues } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TMutasi, mutasiSchema } from "./mutasiSchema";
+import { useEffect, useState } from "react";
+import Alert from "@/components/Alert/Alert";
+import { useUserStore } from "@/store/UserStore";
 
 export default function Mutasi() {
-  const { userData, fetchUserData, fetchMutations, userMutations } = useUserStore();
+  const { userData, fetchUserData, fetchMutations, userMutations } =
+    useUserStore();
 
   const [formError, setFormError] = useState<string | null>(null);
   const [hasValidationErrors, setHasValidationErrors] = useState(false);
-  const [filteredTransactions, setFilteredTransactions] = useState(userMutations);
+  const [filteredTransactions, setFilteredTransactions] =
+    useState(userMutations);
 
   useEffect(() => {
     if (!userData) {
@@ -33,6 +35,7 @@ export default function Mutasi() {
   useEffect(() => {
     if (userMutations) {
       setFilteredTransactions(userMutations);
+      console.log(userMutations);
     }
   }, [userMutations]);
 
@@ -41,25 +44,40 @@ export default function Mutasi() {
   });
 
   const onSubmit = (data: TMutasi) => {
-    console.log(data);
     setFormError(null);
     setHasValidationErrors(false);
 
     const filteredData = userMutations.filter((transaction: any) => {
-      const sampaiTanggal = new Date(data.sampaiTanggal);
-      sampaiTanggal.setHours(23, 59, 59, 999);
+      const sampaiTanggal: Date | null = data.sampaiTanggal
+        ? new Date(data.sampaiTanggal)
+        : null;
+
+      if (sampaiTanggal) {
+        sampaiTanggal.setHours(23, 59, 59, 999);
+      }
 
       const isJenisTransaksiMatch =
-        data.jenisTransaksi === 'transfer' ||
-        transaction.type === data.jenisTransaksi;
+        data.jenisTransaksi === "semua" ||
+        transaction.status.toLowerCase() === data.jenisTransaksi;
+
       const isDariTanggalMatch =
         !data.dariTanggal ||
         new Date(transaction.datetime) >= new Date(data.dariTanggal);
-      const isSampaiTanggalMatch =
-        !data.sampaiTanggal || new Date(transaction.datetime) <= sampaiTanggal;
 
+      const isSampaiTanggalMatch =
+        !sampaiTanggal || new Date(transaction.datetime) <= sampaiTanggal;
+
+      const isPendingInFuture =
+        transaction.status.toLowerCase() === "pending" &&
+        new Date(transaction.datetime) < new Date();
+
+      // Check all conditions together
       return (
-        isJenisTransaksiMatch && isDariTanggalMatch && isSampaiTanggalMatch
+        isJenisTransaksiMatch &&
+        (isPendingInFuture ||
+          (data.dariTanggal && data.sampaiTanggal
+            ? isDariTanggalMatch && isSampaiTanggalMatch
+            : true))
       );
     });
 
@@ -79,7 +97,7 @@ export default function Mutasi() {
   const onClose = () => {
     setHasValidationErrors(false);
   };
-  
+
   return (
     <>
       <HeaderDashboard />
@@ -96,7 +114,7 @@ export default function Mutasi() {
               <Controller
                 name="jenisTransaksi"
                 control={control}
-                defaultValue="transfer"
+                defaultValue="semua"
                 render={({ field }) => (
                   <select
                     {...field}
@@ -105,8 +123,8 @@ export default function Mutasi() {
                     aria-label="Jenis Transaksi"
                   >
                     <option value="semua">Semua</option>
-                    <option value="debit">Uang Masuk</option>
-                    <option value="kredit">Uang Keluar</option>
+                    <option value="completed">Selesai</option>
+                    <option value="pending">Tertunda</option>
                   </select>
                 )}
               />
