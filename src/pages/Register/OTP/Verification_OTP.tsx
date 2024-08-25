@@ -23,17 +23,20 @@ let currentOTPIndex: number = 0;
 export default function Verification_OTP() {
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [activeOTPIndex, setActiveOTPIndex] = useState(0);
+
   const [minutes, setMinutes] = useState(1);
   const [seconds, setSeconds] = useState(0);
+
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [alertVariant, setAlertVariant] = useState<
     "success" | "danger" | undefined
   >(undefined);
   const [alertMessage, setAlertMessage] = useState("");
-  const { ...formData } = useRegistrationStore();
 
+  const { ...formData } = useRegistrationStore();
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
   const { isLoading, withLoading } = useLoading();
 
   const {
