@@ -66,7 +66,7 @@ export default function Mutasi() {
 
       const isPendingInFuture =
         transaction.status.toLowerCase() === 'pending' &&
-        new Date(transaction.datetime) > new Date();
+        new Date(transaction.datetime) < new Date();
 
       // Check all conditions together
       return (
