@@ -3,11 +3,13 @@ import notifikasiEmptyState from "@/assets/no_notification.svg";
 import { NavLink, useNavigate } from "react-router-dom";
 import { MaterialSymbol } from "react-material-symbols";
 import "react-material-symbols/rounded";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NotificationList, { Notification } from "../Notifikasi/Notifikasi";
 import Button from "../Button/Button";
 import { useUserStore } from "@/store/UserStore";
 import useTransferStore, { selectReset } from "@/store/TransferStore";
+import axiosInstance from "@/axios/axios";
+
 
 export default function HeaderDashboard() {
   const navigate = useNavigate();
@@ -28,32 +30,34 @@ export default function HeaderDashboard() {
     }
   };
 
-  const notifications: Notification[] = [
-    {
-      id: 1,
-      title: "Transfer Berhasil",
-      description:
-        "Kamu berhasil melakukan transfer ke BCA dengan nominal sebesar Rp. 10.000.",
-      date: "19 Juli 2024 23:58 WIB",
-    },
-    {
-      id: 2,
-      title: "Transfer Berhasil",
-      description:
-        "Kamu berhasil melakukan transfer ke BCA dengan nominal sebesar Rp. 10.000.",
-      date: "19 Juli 2024 23:58 WIB",
-    },
-    {
-      id: 3,
-      title: "Transfer Berhasil",
-      description:
-        "Kamu berhasil melakukan transfer ke BCA dengan nominal sebesar Rp. 10.000.",
-      date: "19 Juli 2024 23:58 WIB",
-    },
-  ];
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const handleMarkAllAsRead = () => {
-    alert("All notifications marked as read.");
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const response = await axiosInstance.get("/notification/");
+        setNotifications(response.data);
+      } catch (error) {
+        console.error("Failed to fetch notifications", error);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  const handleMarkAllAsRead = async () => {
+    try {
+      await axiosInstance.put("/notification/read/all");
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((notification) => ({
+          ...notification,
+          read: true,
+        }))
+      );
+      // alert("All notifications marked as read.");
+    } catch (error) {
+      console.error("Failed to mark all notifications as read", error);
+    }
   };
 
   const handleLogout = () => {
@@ -192,6 +196,7 @@ export default function HeaderDashboard() {
                           <NotificationList
                             notifications={notifications}
                             compact={true}
+                            maxRow={3}
                             onMarkAllAsRead={handleMarkAllAsRead}
                           />
                         ) : (

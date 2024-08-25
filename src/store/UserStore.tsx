@@ -53,7 +53,7 @@ export const useUserStore = create<UserState>((set) => ({
     set({ isLoading: true });
     try {
       const response = await fetchUserDataAPI();
-      // console.log("fetchUserDataAPI response:", response);
+
       const data = response?.data as UserData;
       if (data) {
         set({ userData: data, isLoading: false });
@@ -69,7 +69,7 @@ export const useUserStore = create<UserState>((set) => ({
     set({ isLoading: true });
     try {
       const response = await fetchUserBalanceDataAPI(accountNumber);
-      // console.log("fetchUserBalanceDataAPI response:", response);
+
       if (response && typeof response.data === "number") {
         set({ balance: response.data, isLoading: false });
       } else {
@@ -84,7 +84,7 @@ export const useUserStore = create<UserState>((set) => ({
     set({ isLoading: true });
     try {
       const response = await fetchUserMutationDataAPI(accountNumber);
-      // console.log("fetchUserMutationDataAPI response:", response);
+
       const data = response?.data as UserMutation[];
       if (data) {
         set({ userMutations: data, isLoading: false });

@@ -63,11 +63,6 @@ export default function AturPin() {
     }
   };
 
-  const extractMessage = (fullMessage: string): string => {
-    const match = fullMessage.match(/"([^"]+)"/);
-    return match ? match[1] : "";
-  };
-
   const onSubmit = async (data: TPinSchema) => {
     setField("pin", data.pin);
     await withLoading(async () => {
@@ -78,7 +73,7 @@ export default function AturPin() {
 
       if (response?.success === false) {
         setAlertVariant("danger");
-        setAlertMessage(extractMessage(response.message));
+        setAlertMessage(response.errors);
         setIsAlertOpen(true);
         reset();
       } else if (response?.success === true) {

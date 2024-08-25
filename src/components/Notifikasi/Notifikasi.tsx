@@ -1,13 +1,17 @@
 import React, { useState } from "react";
 import transferIcon from "@/assets/vektor_transfer.png";
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-import noDocuments from '@/assets/no_documents.svg';
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import noDocuments from "@/assets/no_documents.svg";
+import transferIconGray from "@/assets/vektor_transfer gray.png";
+import axiosInstance from "@/axios/axios";
+import dateTiemFormat from "@/utils/dateTimeFormat";
 
 export interface Notification {
   id: number;
   title: string;
-  description: string;
-  date: string;
+  body: string;
+  sentAt: any;
+  read: boolean;
 }
 
 interface NotificationListProps {
@@ -25,8 +29,8 @@ const NotificationList: React.FC<NotificationListProps> = ({
   pagination = false,
   onMarkAllAsRead,
 }) => {
-  console.log(notifications);
-  
+  // console.log(notifications);
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = pagination ? maxRow : notifications.length;
 
@@ -34,12 +38,17 @@ const NotificationList: React.FC<NotificationListProps> = ({
     setCurrentPage(pageNumber);
   };
 
+  const sortedNotifications = notifications.sort((a, b) => {
+    if (a.read === b.read) return 0;
+    return a.read ? 1 : -1;
+  });
+
   const paginatedNotifications = pagination
-    ? notifications.slice(
+    ? sortedNotifications.slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
       )
-    : notifications.slice(0, maxRow);
+    : sortedNotifications.slice(0, maxRow);
 
   const totalPages = Math.ceil(notifications.length / itemsPerPage);
 
@@ -53,22 +62,30 @@ const NotificationList: React.FC<NotificationListProps> = ({
     } else {
       if (currentPage <= 2) {
         pages.push(1, 2, 3);
-        pages.push('...');
+        pages.push("...");
         pages.push(totalPages);
       } else if (currentPage >= totalPages - 1) {
         pages.push(1);
-        pages.push('...');
+        pages.push("...");
         pages.push(totalPages - 2, totalPages - 1, totalPages);
       } else {
         pages.push(1);
-        pages.push('...');
+        pages.push("...");
         pages.push(currentPage - 1, currentPage, currentPage + 1);
-        pages.push('...');
+        pages.push("...");
         pages.push(totalPages);
       }
     }
 
     return pages;
+  };
+
+  const markAsRead = async (notificationId: number) => {
+    try {
+      await axiosInstance.put(`/notification/${notificationId}/read`);
+    } catch (error) {
+      console.error("Failed to mark notification as read", error);
+    }
   };
 
   return (
@@ -98,15 +115,19 @@ const NotificationList: React.FC<NotificationListProps> = ({
               key={notification.id}
               className={`flex items-center justify-start text-left border-b pb-4 ${
                 compact ? "pl-4" : "px-6 md:pl-12"
-              }`}
+              } ${notification.read ? "text-gray-300" : ""}`}
+              onClick={() => markAsRead(notification.id)}
+              style={{ cursor: "pointer" }}
             >
-              <img src={transferIcon} alt="Ikon Transfer" className="w-10 h-10 mr-4" />
+              <img
+                src={notification.read ? transferIconGray : transferIcon}
+                alt="Ikon Transfer"
+                className="w-10 h-10 mr-4"
+              />
               <div>
                 <h4
                   className={
-                    compact
-                      ? "text-sm font-medium text-black"
-                      : "text-[16px] font-bold"
+                    compact ? "text-sm font-medium" : "text-[16px] font-bold"
                   }
                 >
                   {notification.title}
@@ -114,14 +135,16 @@ const NotificationList: React.FC<NotificationListProps> = ({
                 <p
                   className={
                     compact
-                      ? "text-[10px] font-light leading-[10px] text-gray-400"
-                      : "text-sm text-gray-600"
+                      ? "text-[10px] font-light leading-[10px]"
+                      : "text-sm"
                   }
                 >
-                  {notification.description}
+                  {notification.body}
                 </p>
                 {!compact && (
-                  <p className="text-xs text-gray-400">{notification.date}</p>
+                  <p className="text-xs">
+                    {dateTiemFormat(new Date(notification.sentAt))}
+                  </p>
                 )}
               </div>
             </li>
@@ -129,12 +152,19 @@ const NotificationList: React.FC<NotificationListProps> = ({
         </ul>
       ) : (
         <div className="flex justify-center items-center">
-          <img src={noDocuments} alt="Tidak Ada Notifikasi" className="w-32 h-32" />
+          <img
+            src={noDocuments}
+            alt="Tidak Ada Notifikasi"
+            className="w-32 h-32"
+          />
         </div>
       )}
 
       {pagination && totalPages > 1 && (
-        <nav aria-label="Page navigation" className="flex justify-end mt-4 mr-5">
+        <nav
+          aria-label="Page navigation"
+          className="flex justify-end mt-4 mr-5"
+        >
           <ul className="inline-flex items-center -space-x-px">
             <li>
               <button
@@ -147,7 +177,7 @@ const NotificationList: React.FC<NotificationListProps> = ({
               </button>
             </li>
             {generatePageNumbers().map((page, index) =>
-              typeof page === 'string' ? (
+              typeof page === "string" ? (
                 <li
                   key={index}
                   className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300"
@@ -160,8 +190,8 @@ const NotificationList: React.FC<NotificationListProps> = ({
                     onClick={() => handlePageChange(page)}
                     className={`py-2 px-3 leading-tight ${
                       currentPage === page
-                        ? 'text-white bg-primary-blue'
-                        : 'text-gray-500 bg-white'
+                        ? "text-white bg-primary-blue"
+                        : "text-gray-500 bg-white"
                     } border border-gray-300 hover:bg-gray-100 hover:text-gray-700`}
                     aria-label={`Halaman ${page}`}
                   >

@@ -16,6 +16,7 @@ import { checkRegisterDataAPI } from "@/services/authServices";
 import { useState } from "react";
 import Alert from "@/components/Alert/Alert";
 import { MdArrowBack } from "react-icons/md";
+import { DatePickerField } from "@/components/DatePickerField/DatePickerField";
 
 const DataDiri = () => {
   const { no_ktp, name, date_of_birth } = useRegistrationStore(
@@ -199,10 +200,14 @@ const DataDiri = () => {
                         name="tanggalLahir"
                         control={control}
                         render={({ field }) => (
-                          <Input
-                            id="tanggalLahir"
-                            type="date"
-                            aria-label="Masukkan tanggal lahir Anda"
+                          <DatePickerField
+                            className={`${
+                              errors.tanggalLahir
+                                ? "border-2 !border-secondary-red focus:outline-secondary-red"
+                                : ""
+                            } !bg-neutral-02 !h-auto !border-inherit`}
+                            ariaLabel="Masukkan tanggal lahir Anda"
+                            idName="tanggalLahir"
                             aria-invalid={
                               errors.tanggalLahir ? "true" : "false"
                             }
@@ -211,13 +216,7 @@ const DataDiri = () => {
                                 ? "tanggalLahir-error"
                                 : undefined
                             }
-                            className={
-                              errors.tanggalLahir
-                                ? "border-2 border-secondary-red focus:outline-secondary-red"
-                                : ""
-                            }
                             {...field}
-                            max={`${new Date().toLocaleDateString("en-ca")}`}
                           />
                         )}
                         rules={{
