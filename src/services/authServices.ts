@@ -51,6 +51,7 @@ export const checkRegisterDataAPI = async (
 export const sendOTPRegisterAPI = async (formData: OTPRegisterFormData) => {
   const form = new FormData();
   form.append("email", formData.email);
+  form.append("noHP", formData.noHP);
   form.append("otp", formData.otp);
 
   try {

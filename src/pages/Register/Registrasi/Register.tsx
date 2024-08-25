@@ -74,12 +74,11 @@ export default function Register() {
         emailResponse?.success === true ||
         hpResponse?.success === true
       ) {
-        const resposnsee = await sendOTPRegisterAPI({
+        await sendOTPRegisterAPI({
           email: data.emailRegister,
+          noHP: data.phoneNumber,
           otp: "",
         });
-
-        console.log(resposnsee);
 
         navigate("/register/otp");
         reset();
