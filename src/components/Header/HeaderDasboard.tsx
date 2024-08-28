@@ -10,7 +10,6 @@ import { useUserStore } from "@/store/UserStore";
 import useTransferStore, { selectReset } from "@/store/TransferStore";
 import axiosInstance from "@/axios/axios";
 
-
 export default function HeaderDashboard() {
   const navigate = useNavigate();
   const resetState = useUserStore((state) => state.resetState);
@@ -194,7 +193,11 @@ export default function HeaderDashboard() {
                       <div className="flex items-start justify-start">
                         {notifications ? (
                           <NotificationList
-                            notifications={notifications}
+                            notifications={notifications.sort(
+                              (a: any, b: any) =>
+                                new Date(b.sentAt).getTime() -
+                                new Date(a.sentAt).getTime()
+                            )}
                             compact={true}
                             maxRow={3}
                             onMarkAllAsRead={handleMarkAllAsRead}

@@ -102,7 +102,10 @@ const Notifikasi: React.FC = () => {
         <h1 className="text-4xl font-bold mb-8">Notifikasi</h1>
         <div className="mx-auto py-8 bg-white flex-grow w-[min(100%,1056px)] rounded-[10px] shadow-03">
           <NotificationList
-            notifications={notifications}
+            notifications={notifications.sort(
+              (a: any, b: any) =>
+                new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime()
+            )}
             onMarkAllAsRead={handleMarkAllAsRead}
             maxRow={5}
             pagination

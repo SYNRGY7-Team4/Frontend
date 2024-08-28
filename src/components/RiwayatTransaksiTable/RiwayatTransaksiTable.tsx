@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { FaSortDown, FaSortUp } from "react-icons/fa";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
-
 export default function RiwayatTransaksiTable({
   transactions,
   pagination = false,
@@ -16,7 +15,7 @@ export default function RiwayatTransaksiTable({
   maxRow?: number;
 }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [sortedTransactions, setSortedTransactions] = useState<any[]>([]);
 
   useEffect(() => {
@@ -32,13 +31,13 @@ export default function RiwayatTransaksiTable({
   const itemsPerPage = pagination ? maxRow : transactions.length;
 
   const handleSort = () => {
-    const newSortOrder = sortOrder === "asc" ? "desc" : "asc";
+    const newSortOrder = sortOrder === "desc" ? "asc" : "desc";
     setSortOrder(newSortOrder);
 
     const sortedData = [...transactions].sort((a, b) => {
       const dateA = new Date(a.datetime).getTime();
       const dateB = new Date(b.datetime).getTime();
-      return newSortOrder === "asc" ? dateA - dateB : dateB - dateA;
+      return newSortOrder === "desc" ? dateB - dateA : dateA - dateB;
     });
 
     setSortedTransactions(sortedData);
@@ -68,17 +67,17 @@ export default function RiwayatTransaksiTable({
     } else {
       if (currentPage <= 2) {
         pages.push(1, 2, 3);
-        pages.push('...');
+        pages.push("...");
         pages.push(totalPages);
       } else if (currentPage >= totalPages - 1) {
         pages.push(1);
-        pages.push('...');
+        pages.push("...");
         pages.push(totalPages - 2, totalPages - 1, totalPages);
       } else {
         pages.push(1);
-        pages.push('...');
+        pages.push("...");
         pages.push(currentPage - 1, currentPage, currentPage + 1);
-        pages.push('...');
+        pages.push("...");
         pages.push(totalPages);
       }
     }
@@ -102,7 +101,7 @@ export default function RiwayatTransaksiTable({
               onClick={handleSort}
             >
               Tanggal
-              {sortOrder === "asc" ? (
+              {sortOrder === "desc" ? (
                 <FaSortUp className="ml-2" />
               ) : (
                 <FaSortDown className="ml-2" />
@@ -152,9 +151,9 @@ export default function RiwayatTransaksiTable({
                 <td className="py-4 px-6">
                   <span
                     className={`${
-                      transaction.status === 'completed'
-                        ? 'bg-secondary-green'
-                        : 'bg-secondary-yellow'
+                      transaction.status === "completed"
+                        ? "bg-secondary-green"
+                        : "bg-secondary-yellow"
                     } rounded-full px-2 py-0.5 text-white`}
                   >
                     {toFirstWordCapitalized(transaction.status)}
@@ -189,7 +188,7 @@ export default function RiwayatTransaksiTable({
               </button>
             </li>
             {generatePageNumbers().map((page, index) =>
-              typeof page === 'string' ? (
+              typeof page === "string" ? (
                 <li
                   key={index}
                   className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300"
@@ -202,8 +201,8 @@ export default function RiwayatTransaksiTable({
                     onClick={() => handlePageChange(page)}
                     className={`py-2 px-3 leading-tight ${
                       currentPage === page
-                        ? 'text-white bg-primary-blue'
-                        : 'text-gray-500 bg-white'
+                        ? "text-white bg-primary-blue"
+                        : "text-gray-500 bg-white"
                     } border border-gray-300 hover:bg-gray-100 hover:text-gray-700`}
                   >
                     {page}
