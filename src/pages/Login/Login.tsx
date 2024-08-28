@@ -130,7 +130,7 @@ export default function Login() {
                         errors.password
                           ? "focus:outline-secondary-red border-secondary-red"
                           : ""
-                      }`}
+                      }pl-5 pr-9`}
                     />
                     <Button
                       className="w-fit h-fit bg-transparent absolute right-[15px] cursor-pointer"
