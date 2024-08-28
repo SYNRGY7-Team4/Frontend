@@ -131,7 +131,7 @@ export default function AturPin() {
                         defaultValue=""
                         render={({ field }) => (
                           <Input
-                            type="text"
+                            type="password"
                             id="pin"
                             placeholder="Pin"
                             autoComplete="off"
@@ -146,7 +146,7 @@ export default function AturPin() {
                               errors.pin
                                 ? "focus:outline-secondary-red border-secondary-red"
                                 : ""
-                            } ${isPinVisibility ? "" : "text-security-disc"}`}
+                            } pl-5 pr-9`}
                             onChange={(e) =>
                               field.onChange(
                                 e.target.value.replace(/[^0-9]/g, "")
@@ -208,7 +208,7 @@ export default function AturPin() {
                         defaultValue=""
                         render={({ field }) => (
                           <Input
-                            type="text"
+                            type="password"
                             id="konfirmasiPin"
                             placeholder="Konfirmasi Ulang Pin"
                             aria-label="Konfirmasi Ulang Pin"
@@ -227,9 +227,7 @@ export default function AturPin() {
                               errors.konfirmasiPin
                                 ? "focus:outline-secondary-red border-secondary-red"
                                 : ""
-                            } ${
-                              isConfirmPinVisibility ? "" : "text-security-disc"
-                            }`}
+                            } pl-5 pr-9`}
                             onChange={(e) =>
                               field.onChange(
                                 e.target.value.replace(/[^0-9]/g, "")

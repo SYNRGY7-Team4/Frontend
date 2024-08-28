@@ -55,11 +55,6 @@ export default function Qris() {
                 <div>Kode QRIS tidak tersedia</div>
               )}
             </div>
-            <div className="text-center">
-              <p className="text-sm md:text-xl font-semibold">
-                QR hanya berlaku untuk 1 kali transaksi
-              </p>
-            </div>
           </div>
         </main>
         <FooterDashboard />
