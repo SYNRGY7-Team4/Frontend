@@ -124,7 +124,7 @@ const InputPin = () => {
                     <div className="w-64 flex relative">
                       <Input
                         id="pin"
-                        type="text"
+                        type={visibility ? "text" : "password"}
                         placeholder="Pin"
                         aria-label="Pin"
                         className={`
@@ -132,8 +132,7 @@ const InputPin = () => {
                           errors.pin
                             ? "border-2 border-secondary-red focus:outline-secondary-red"
                             : ""
-                        }
-                          ${visibility ? "" : "text-security-disc"}
+                        }pl-5 pr-9
                       `}
                         {...field}
                         onChange={(e) =>
@@ -145,6 +144,9 @@ const InputPin = () => {
                           id="visiblePin"
                           onClick={(event) => toggleVisibility(event)}
                           className=" w-fit h-fit hover:shadow-none bg-transparent"
+                          aria-label={
+                            visibility ? "Sembunyikan pin" : "Tampilkan pin"
+                          }
                         >
                           <IconContext.Provider
                             value={{ color: "#B7B9C8", size: "25px" }}

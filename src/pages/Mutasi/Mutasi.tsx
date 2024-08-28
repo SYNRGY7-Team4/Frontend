@@ -121,6 +121,8 @@ export default function Mutasi() {
                     id="jenisTransaksi"
                     className="w-full h-[42px] bg-neutral-01 px-5 rounded-lg focus:outline-primary-blue border border-primary-blue appearance-none focus:ring-primary-blue focus:border-primary-blue block"
                     aria-label="Jenis Transaksi"
+                    value="semua"
+                    role="region"
                   >
                     <option value="semua">Semua</option>
                     <option value="debit">Uang Masuk</option>
