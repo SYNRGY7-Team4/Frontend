@@ -156,7 +156,8 @@ const TransferForm: React.FC = () => {
                           ? "border-2 border-secondary-red focus:outline-secondary-red"
                           : " focus:outline-primary-blue border appearance-none focus:ring-primary-blue focus:border-primary-blue block"
                       }`}
-                      aria-label="Jenis Transaksi"
+                      aria-label="Bank Tujuan"
+                      role="region"
                       {...field}
                     >
                       <option value="" disabled>

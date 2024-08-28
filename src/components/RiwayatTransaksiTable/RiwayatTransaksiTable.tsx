@@ -142,10 +142,15 @@ export default function RiwayatTransaksiTable({
                         : "text-secondary-red"
                     }`}
                   >
-                    {transaction.transactionDirection.toUpperCase() === "DEBIT"
-                      ? "+"
-                      : "-"}
-                    {currencyFormat(transaction.amount, "id-ID", "IDR")}
+                    <span>
+                      {transaction.transactionDirection.toUpperCase() ===
+                      "DEBIT" ? (
+                        <span>+</span>
+                      ) : (
+                        <span>&minus;</span>
+                      )}
+                      {currencyFormat(transaction.amount, "id-ID", "IDR")}
+                    </span>
                   </span>
                 </td>
                 <td className="py-4 px-6">
